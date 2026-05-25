@@ -1,25 +1,11 @@
 # Conversation log
 
-## [HH:MM] Inicio de sesión
+## [2026-05-25 19:10] Preparacion del protocolo de sesiones con IA
 
-**Prompt:** *(lo que le dijo al AI para arrancar el proyecto)*
+**Prompt:** El usuario pidio revisar `QUE_HACE.md`, `conversation-log.md` y las instrucciones del profesor para automatizar el inicio y cierre de sesiones con palabras clave.
 
-**Resultado:** *(lo que produjo)*
+**Resultado:** Se identifico que el alcance del sistema debe mantenerse alineado con `QUE_HACE.md` y que el log debe ser completo, honesto y cronologico. Se definio un protocolo documentado para usar `recopilacion` al iniciar una sesion y `cierre` al terminarla.
 
-**Decisión:** *(qué aceptó, qué rechazó, qué modificó, y por qué)*
+**Decision:** Se acepta trabajar con esas dos palabras clave. `recopilacion` servira para revisar contexto y preparar la sesion; `cierre` servira para completar el log, verificar el estado del proyecto y preparar el commit.
 
 ---
-
-> El log no se reescribe. Se escribe mientras ocurre.
->
-> Para cada intercambio relevante con el AI, añada una entrada con este formato:
->
-> ```
-> ## [HH:MM] Título breve de lo que se pidió
->
-> **Prompt:** lo que le dijo al AI (textual o resumido fielmente)
->
-> **Resultado:** lo que produjo
->
-> **Decisión:** qué aceptó, qué rechazó, qué modificó, y por qué
-> ```
