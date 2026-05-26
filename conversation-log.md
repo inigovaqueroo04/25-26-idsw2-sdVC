@@ -99,3 +99,13 @@
 **Decision:** Se documento el caso como una accion destructiva reservada al `Administrador`, no como una gestion compartida con `Miembro Administrador`. El flujo alternativo da peso a la cancelacion porque SdR la modela explicitamente, y se anadieron fallos necesarios para cerrar el comportamiento: usuario sin sesion, falta de permisos, grupo inexistente y error al borrar. La observacion se centro en el principal hueco de requisitos: SdR no dice que pasa con tareas, miembros o invitaciones vinculadas al grupo si se confirma la eliminacion.
 
 ---
+
+## [2026-05-26 22:00] Analisis del caso de uso invitarUsuario()
+
+**Prompt:** El usuario pidio analizar `invitarUsuario()` desde SdR, creando un Markdown breve en `documentos/analisis/invitarUsuario.md` y manteniendo fuera cualquier referencia funcional al repo `sdVC`.
+
+**Resultado:** Se localizo el detalle de `invitarUsuario()` en la carpeta de gestion de grupos y usuarios. El PUML parte de `GRUPO_ABIERTO`, presenta un formulario de invitacion y pide introducir identificador y fecha antes de enviar; si se cancela, tambien vuelve a `GRUPO_ABIERTO`. El detalle menciona al `Administrador`, pero el diagrama de organizacion asigna el caso a `Miembro Administrador` y los diagramas de contexto permiten `invitarUsuario()` desde `GRUPO_ABIERTO` tanto para administrador como para miembro administrador. Ademas, el diagrama de objetos de invitacion confirma que la invitacion queda relacionada con un usuario emisor y un grupo al que se quiere unir el invitado.
+
+**Decision:** El analisis se enfoco como gestion de incorporaciones al grupo, no como edicion de invitaciones ya recibidas por un miembro. Se incluyeron alternativas que SdR no detalla pero que son necesarias para que el caso sea defendible: invitacion duplicada, usuario ya miembro, identificador invalido, grupo inexistente y fallo al registrar o enviar. En observaciones se dejo abierta la duda de requisitos sobre que significa exactamente la fecha de la invitacion y que tipo de identificador usa el sistema.
+
+---

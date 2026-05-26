@@ -12,3 +12,4 @@ del repositorio de requisitado SdR.
 - [`crearGrupo()`](./crearGrupo.md)
 - [`editarGrupo()`](./editarGrupo.md)
 - [`eliminarGrupo()`](./eliminarGrupo.md)
+- [`invitarUsuario()`](./invitarUsuario.md)
