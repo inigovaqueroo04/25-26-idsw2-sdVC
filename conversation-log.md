@@ -42,7 +42,7 @@
 
 ## [2026-05-26 15:19] Analisis del caso de uso cerrarSesion()
 
-**Prompt:** El usuario inicio una sesion con `recopilacion` y pidio analizar `cerrarSesion()` tomando SdR como referencia principal, con un formato breve y sin modificar codigo fuente.
+**Prompt:** El usuario inicio una sesion con `recopilacion` y pidio analizar `cerrarSesion()` con un formato breve de caso de uso, creando su Markdown en `documentos/analisis/` sin modificar codigo fuente.
 
 **Resultado:** Se localizaron en SdR los documentos, diagramas y prototipos relacionados con `cerrarSesion()`. Se creo `documentos/analisis/cerrarSesion.md` y se actualizo el indice de analisis.
 
@@ -52,7 +52,7 @@
 
 ## [2026-05-26 16:05] Analisis del caso de uso completarGestion()
 
-**Prompt:** El usuario pidio analizar `completarGestion()` desde SdR, sin usar `sdVC` como fuente principal, creando `documentos/analisis/completarGestion.md` con una estructura breve de objetivo, actor, precondiciones, flujo, alternativas, postcondiciones, elementos relacionados y observaciones.
+**Prompt:** El usuario pidio analizar `completarGestion()`, creando `documentos/analisis/completarGestion.md` con una estructura breve de objetivo, actor, precondiciones, flujo, alternativas, postcondiciones, elementos relacionados y observaciones.
 
 **Resultado:** Se reviso el PUML especifico de `completarGestion()`, su documento Markdown, el prototipo, el diagrama general de gestion de sesion y los diagramas de contexto por actor. Se creo `documentos/analisis/completarGestion.md` y se anadio el caso al indice de analisis.
 
@@ -62,7 +62,7 @@
 
 ## [2026-05-26 20:49] Analisis del caso de uso abrirGrupos()
 
-**Prompt:** El usuario inicio una sesion con `recopilacion` y pidio analizar `abrirGrupos()` usando el repositorio SdR como referencia principal, sin usar `sdVC` ni modificar codigo fuente.
+**Prompt:** El usuario inicio una sesion con `recopilacion` y pidio analizar `abrirGrupos()`, localizar elementos relacionados y generar `documentos/analisis/abrirGrupos.md` sin modificar codigo fuente.
 
 **Resultado:** Se localizaron en SdR la carpeta especifica de `abrirGrupos()`, su documento Markdown, el diagrama PUML, el SVG, el prototipo, el indice de gestion de grupos y usuarios, el diagrama de organizacion y grupos, los diagramas de contexto y el modelo de dominio. Se creo `documentos/analisis/abrirGrupos.md` y se actualizo `documentos/analisis/README.md`.
 
@@ -72,7 +72,7 @@
 
 ## [2026-05-26 21:06] Analisis del caso de uso crearGrupo()
 
-**Prompt:** El usuario inicio una sesion con `recopilacion` y pidio documentar `crearGrupo()` con el mismo formato breve de los casos anteriores, dejando claro que la referencia valida era el repositorio SdR y no `sdVC`.
+**Prompt:** El usuario inicio una sesion con `recopilacion` y pidio documentar `crearGrupo()` con el mismo formato breve de los casos anteriores, incluyendo precondiciones, flujo principal, alternativas, postcondiciones y elementos relacionados.
 
 **Resultado:** Se comprobo que SdR contiene un caso detallado para `crearGrupo()` en `documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/crearGrupo/`. El PUML situa el caso desde `GRUPOS_ABIERTO`, muestra al `Administrador` como iniciador, pide nombre obligatorio y descripcion, permite volver a modificar los datos introducidos, y separa dos salidas: creacion correcta hacia `GRUPO_ABIERTO` y cancelacion hacia `GRUPOS_ABIERTO`. Tambien se reviso el diagrama de organizacion y grupos, donde `crearGrupo()` aparece asociado al `Administrador`, y el diagrama de contexto de administrador, que confirma la transicion desde la lista de grupos al grupo abierto. Con esa base se creo `documentos/analisis/crearGrupo.md` y se enlazo desde `documentos/analisis/README.md`.
 
@@ -82,7 +82,7 @@
 
 ## [2026-05-26 21:24] Analisis del caso de uso editarGrupo()
 
-**Prompt:** El usuario inicio una nueva recopilacion y pidio analizar `editarGrupo()` exclusivamente desde SdR, creando `documentos/analisis/editarGrupo.md` con el formato breve acordado y sin modificar codigo fuente.
+**Prompt:** El usuario inicio una nueva recopilacion y pidio analizar `editarGrupo()`, creando `documentos/analisis/editarGrupo.md` con el formato breve acordado y sin modificar codigo fuente.
 
 **Resultado:** Se reviso el caso detallado de SdR en `documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/editarGrupo/`. El PUML no lo presenta como una edicion que solo nace desde la lista de grupos: permite entrar desde `GRUPOS_ABIERTO`, `GRUPO_ABIERTO`, `TAREAS_ABIERTO` y `MIEMBRO_ABIERTO`, muestra primero los datos actuales del grupo, permite modificar campos, guardar o cancelar, y en ambos finales vuelve a `GRUPO_ABIERTO`. Tambien se contrasto con el diagrama de organizacion y grupos, donde `editarGrupo()` aparece asociado a `Miembro Administrador`, y con los diagramas de contexto de administrador y miembro administrador, que confirman que ambos perfiles llegan a la edicion del grupo.
 
@@ -92,7 +92,7 @@
 
 ## [2026-05-26 21:41] Analisis del caso de uso eliminarGrupo()
 
-**Prompt:** El usuario pidio una nueva recopilacion para `eliminarGrupo()`, manteniendo SdR como unica fuente funcional del analisis y generando solo documentacion en `documentos/analisis/eliminarGrupo.md`.
+**Prompt:** El usuario pidio una nueva recopilacion para `eliminarGrupo()`, generando solo documentacion en `documentos/analisis/eliminarGrupo.md` con flujos alternativos como cancelacion, falta de permisos o fallo al borrar.
 
 **Resultado:** La busqueda en SdR llevo al detalle de `eliminarGrupo()` dentro de gestion de grupos y usuarios. A diferencia de `editarGrupo()`, aqui no hay varios estados de entrada: el PUML parte de `GRUPOS_ABIERTO`, presenta una confirmacion y solo permite dos decisiones, confirmar o cancelar la eliminacion. En ambos casos el flujo termina de nuevo en `GRUPOS_ABIERTO`, lo que encaja con el diagrama de contexto de administrador, donde `eliminarGrupo()` es una transicion autorreflexiva sobre la lista de grupos. El diagrama de organizacion asigna el caso al `Administrador`, y el README de contexto refuerza que el miembro administrador gestiona grupos pero no crea ni elimina grupos.
 
@@ -102,10 +102,22 @@
 
 ## [2026-05-26 22:00] Analisis del caso de uso invitarUsuario()
 
-**Prompt:** El usuario pidio analizar `invitarUsuario()` desde SdR, creando un Markdown breve en `documentos/analisis/invitarUsuario.md` y manteniendo fuera cualquier referencia funcional al repo `sdVC`.
+**Prompt:** El usuario pidio analizar `invitarUsuario()`, creando un Markdown breve en `documentos/analisis/invitarUsuario.md` e incluyendo alternativas como usuario ya invitado, usuario ya miembro o fallo al registrar la invitacion.
 
 **Resultado:** Se localizo el detalle de `invitarUsuario()` en la carpeta de gestion de grupos y usuarios. El PUML parte de `GRUPO_ABIERTO`, presenta un formulario de invitacion y pide introducir identificador y fecha antes de enviar; si se cancela, tambien vuelve a `GRUPO_ABIERTO`. El detalle menciona al `Administrador`, pero el diagrama de organizacion asigna el caso a `Miembro Administrador` y los diagramas de contexto permiten `invitarUsuario()` desde `GRUPO_ABIERTO` tanto para administrador como para miembro administrador. Ademas, el diagrama de objetos de invitacion confirma que la invitacion queda relacionada con un usuario emisor y un grupo al que se quiere unir el invitado.
 
 **Decision:** El analisis se enfoco como gestion de incorporaciones al grupo, no como edicion de invitaciones ya recibidas por un miembro. Se incluyeron alternativas que SdR no detalla pero que son necesarias para que el caso sea defendible: invitacion duplicada, usuario ya miembro, identificador invalido, grupo inexistente y fallo al registrar o enviar. En observaciones se dejo abierta la duda de requisitos sobre que significa exactamente la fecha de la invitacion y que tipo de identificador usa el sistema.
+
+---
+
+## [2026-05-27 00:14] Analisis del caso de uso editarMiembro()
+
+**Prompt:** El usuario pidio recopilar el caso de uso `editarMiembro()`, crear `documentos/analisis/editarMiembro.md` y cubrir errores como grupo o miembro inexistente, falta de permisos, rol invalido y fallo al guardar.
+
+**Trabajo realizado:** Antes de escribir el analisis revise el material de SdR relacionado con gestion de grupos y miembros. El diagrama especifico de `editarMiembro()` fue la pieza central porque describe dos puntos de entrada, `GRUPO_ABIERTO` y `MIEMBRO_ABIERTO`, y diferencia el resultado segun se guarden cambios o se cancele la edicion. Tambien use los diagramas de contexto de Administrador y Miembro Administrador para confirmar que la edicion puede iniciarse desde la gestion del grupo o desde la ficha de un miembro, y el diagrama de organizacion para situar el caso dentro de la gestion de usuarios y grupos.
+
+**Criterio aplicado:** Documente el caso como una operacion de administracion interna del grupo centrada en cambiar rol o permisos, no como una edicion generica de perfil de usuario. En los flujos alternativos se incluyeron errores que salen directamente del comportamiento esperado del caso: falta de autenticacion, grupo o miembro no disponible, permisos insuficientes, rol invalido, fallo al guardar y cancelacion. Tambien se dejo reflejada la diferencia de retorno entre cancelar desde `MIEMBRO_ABIERTO` y cancelar desde `GRUPO_ABIERTO`, porque ese matiz aparece en el diagrama de actividad y evita que el analisis quede demasiado plano.
+
+**Resultado:** Se creo `documentos/analisis/editarMiembro.md` y se anadio el enlace correspondiente al indice de analisis. La observacion final senala una duda concreta de diseno detectada en SdR: aunque el modelo habla de roles y permisos, no define el catalogo exacto de roles ni restricciones como evitar que un grupo quede sin administrador.
 
 ---
