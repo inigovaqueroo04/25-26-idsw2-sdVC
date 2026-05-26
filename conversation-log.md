@@ -39,3 +39,13 @@
 **Decision:** Se commitearan y subiran los cambios de documentacion generados durante la sesion usando la convencion de commits acordada.
 
 ---
+
+## [2026-05-26 15:19] Analisis del caso de uso cerrarSesion()
+
+**Prompt:** El usuario inicio una sesion con `recopilacion` y pidio analizar `cerrarSesion()` tomando SdR como referencia principal, con un formato breve y sin modificar codigo fuente.
+
+**Resultado:** Se localizaron en SdR los documentos, diagramas y prototipos relacionados con `cerrarSesion()`. Se creo `documentos/analisis/cerrarSesion.md` y se actualizo el indice de analisis.
+
+**Decision:** Se mantiene SdR como fuente de verdad para los analisis de casos de uso y se conserva el formato breve usado para `iniciarSesion()`.
+
+---

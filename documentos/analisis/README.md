@@ -6,3 +6,4 @@ del repositorio de requisitado SdR.
 ## Casos analizados
 
 - [`iniciarSesion()`](./iniciarSesion.md)
+- [`cerrarSesion()`](./cerrarSesion.md)
