@@ -9,3 +9,4 @@ del repositorio de requisitado SdR.
 - [`cerrarSesion()`](./cerrarSesion.md)
 - [`completarGestion()`](./completarGestion.md)
 - [`abrirGrupos()`](./abrirGrupos.md)
+- [`crearGrupo()`](./crearGrupo.md)

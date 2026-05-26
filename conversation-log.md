@@ -69,3 +69,13 @@
 **Decision:** Se documento `abrirGrupos()` como punto de entrada a `GRUPOS_ABIERTO`, con lista de grupos, filtrado y salidas hacia crear, editar, eliminar o completar la gestion. Se dejo constancia de que no hay implementacion directa localizada y de que existe una diferencia menor entre el actor indicado en el detalle y los perfiles permitidos en los diagramas de contexto.
 
 ---
+
+## [2026-05-26 21:06] Analisis del caso de uso crearGrupo()
+
+**Prompt:** El usuario inicio una sesion con `recopilacion` y pidio documentar `crearGrupo()` con el mismo formato breve de los casos anteriores, dejando claro que la referencia valida era el repositorio SdR y no `sdVC`.
+
+**Resultado:** Se comprobo que SdR contiene un caso detallado para `crearGrupo()` en `documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/crearGrupo/`. El PUML situa el caso desde `GRUPOS_ABIERTO`, muestra al `Administrador` como iniciador, pide nombre obligatorio y descripcion, permite volver a modificar los datos introducidos, y separa dos salidas: creacion correcta hacia `GRUPO_ABIERTO` y cancelacion hacia `GRUPOS_ABIERTO`. Tambien se reviso el diagrama de organizacion y grupos, donde `crearGrupo()` aparece asociado al `Administrador`, y el diagrama de contexto de administrador, que confirma la transicion desde la lista de grupos al grupo abierto. Con esa base se creo `documentos/analisis/crearGrupo.md` y se enlazo desde `documentos/analisis/README.md`.
+
+**Decision:** El analisis no trata `crearGrupo()` como una pantalla aislada, sino como una accion que nace dentro de la gestion de grupos abierta previamente con `abrirGrupos()`. Se incluyeron alternativas que SdR no desarrolla en detalle pero que son necesarias para completar el comportamiento esperado: usuario sin sesion, falta de permisos, nombre vacio, datos invalidos y fallo al guardar. En observaciones se dejo la duda concreta que queda pendiente en SdR: no se especifican reglas de validacion como nombres duplicados, longitud maxima o mensajes de error.
+
+---
