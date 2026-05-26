@@ -49,3 +49,13 @@
 **Decision:** Se mantiene SdR como fuente de verdad para los analisis de casos de uso y se conserva el formato breve usado para `iniciarSesion()`.
 
 ---
+
+## [2026-05-26 16:05] Analisis del caso de uso completarGestion()
+
+**Prompt:** El usuario pidio analizar `completarGestion()` desde SdR, sin usar `sdVC` como fuente principal, creando `documentos/analisis/completarGestion.md` con una estructura breve de objetivo, actor, precondiciones, flujo, alternativas, postcondiciones, elementos relacionados y observaciones.
+
+**Resultado:** Se reviso el PUML especifico de `completarGestion()`, su documento Markdown, el prototipo, el diagrama general de gestion de sesion y los diagramas de contexto por actor. Se creo `documentos/analisis/completarGestion.md` y se anadio el caso al indice de analisis.
+
+**Decision:** El caso se documento como un mecanismo de retorno al hub `SISTEMA_DISPONIBLE`, no como cierre de sesion ni como guardado automatico. Las dudas sobre datos pendientes o validaciones se dejaron en flujos alternativos y observaciones porque SdR no concreta ese comportamiento.
+
+---
