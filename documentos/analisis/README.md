@@ -10,3 +10,4 @@ del repositorio de requisitado SdR.
 - [`completarGestion()`](./completarGestion.md)
 - [`abrirGrupos()`](./abrirGrupos.md)
 - [`crearGrupo()`](./crearGrupo.md)
+- [`editarGrupo()`](./editarGrupo.md)

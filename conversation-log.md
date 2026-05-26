@@ -79,3 +79,13 @@
 **Decision:** El analisis no trata `crearGrupo()` como una pantalla aislada, sino como una accion que nace dentro de la gestion de grupos abierta previamente con `abrirGrupos()`. Se incluyeron alternativas que SdR no desarrolla en detalle pero que son necesarias para completar el comportamiento esperado: usuario sin sesion, falta de permisos, nombre vacio, datos invalidos y fallo al guardar. En observaciones se dejo la duda concreta que queda pendiente en SdR: no se especifican reglas de validacion como nombres duplicados, longitud maxima o mensajes de error.
 
 ---
+
+## [2026-05-26 21:24] Analisis del caso de uso editarGrupo()
+
+**Prompt:** El usuario inicio una nueva recopilacion y pidio analizar `editarGrupo()` exclusivamente desde SdR, creando `documentos/analisis/editarGrupo.md` con el formato breve acordado y sin modificar codigo fuente.
+
+**Resultado:** Se reviso el caso detallado de SdR en `documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/editarGrupo/`. El PUML no lo presenta como una edicion que solo nace desde la lista de grupos: permite entrar desde `GRUPOS_ABIERTO`, `GRUPO_ABIERTO`, `TAREAS_ABIERTO` y `MIEMBRO_ABIERTO`, muestra primero los datos actuales del grupo, permite modificar campos, guardar o cancelar, y en ambos finales vuelve a `GRUPO_ABIERTO`. Tambien se contrasto con el diagrama de organizacion y grupos, donde `editarGrupo()` aparece asociado a `Miembro Administrador`, y con los diagramas de contexto de administrador y miembro administrador, que confirman que ambos perfiles llegan a la edicion del grupo.
+
+**Decision:** El analisis se redacto tratando `editarGrupo()` como una accion de mantenimiento de un grupo ya seleccionado, no como creacion ni como navegacion general. En el actor principal se reflejo la tension de SdR: el detalle nombra al `Administrador`, pero el diagrama general asigna el caso al `Miembro Administrador` y la jerarquia hace razonable incluir ambos perfiles. Las alternativas cubren huecos no desarrollados en el PUML, como grupo inexistente, falta de permisos, datos invalidos y fallo al guardar; en observaciones se dejo pendiente concretar campos editables y reglas de validacion.
+
+---
