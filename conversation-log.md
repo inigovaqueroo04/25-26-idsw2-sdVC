@@ -59,3 +59,13 @@
 **Decision:** El caso se documento como un mecanismo de retorno al hub `SISTEMA_DISPONIBLE`, no como cierre de sesion ni como guardado automatico. Las dudas sobre datos pendientes o validaciones se dejaron en flujos alternativos y observaciones porque SdR no concreta ese comportamiento.
 
 ---
+
+## [2026-05-26 20:49] Analisis del caso de uso abrirGrupos()
+
+**Prompt:** El usuario inicio una sesion con `recopilacion` y pidio analizar `abrirGrupos()` usando el repositorio SdR como referencia principal, sin usar `sdVC` ni modificar codigo fuente.
+
+**Resultado:** Se localizaron en SdR la carpeta especifica de `abrirGrupos()`, su documento Markdown, el diagrama PUML, el SVG, el prototipo, el indice de gestion de grupos y usuarios, el diagrama de organizacion y grupos, los diagramas de contexto y el modelo de dominio. Se creo `documentos/analisis/abrirGrupos.md` y se actualizo `documentos/analisis/README.md`.
+
+**Decision:** Se documento `abrirGrupos()` como punto de entrada a `GRUPOS_ABIERTO`, con lista de grupos, filtrado y salidas hacia crear, editar, eliminar o completar la gestion. Se dejo constancia de que no hay implementacion directa localizada y de que existe una diferencia menor entre el actor indicado en el detalle y los perfiles permitidos en los diagramas de contexto.
+
+---
