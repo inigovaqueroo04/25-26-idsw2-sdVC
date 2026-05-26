@@ -89,3 +89,13 @@
 **Decision:** El analisis se redacto tratando `editarGrupo()` como una accion de mantenimiento de un grupo ya seleccionado, no como creacion ni como navegacion general. En el actor principal se reflejo la tension de SdR: el detalle nombra al `Administrador`, pero el diagrama general asigna el caso al `Miembro Administrador` y la jerarquia hace razonable incluir ambos perfiles. Las alternativas cubren huecos no desarrollados en el PUML, como grupo inexistente, falta de permisos, datos invalidos y fallo al guardar; en observaciones se dejo pendiente concretar campos editables y reglas de validacion.
 
 ---
+
+## [2026-05-26 21:41] Analisis del caso de uso eliminarGrupo()
+
+**Prompt:** El usuario pidio una nueva recopilacion para `eliminarGrupo()`, manteniendo SdR como unica fuente funcional del analisis y generando solo documentacion en `documentos/analisis/eliminarGrupo.md`.
+
+**Resultado:** La busqueda en SdR llevo al detalle de `eliminarGrupo()` dentro de gestion de grupos y usuarios. A diferencia de `editarGrupo()`, aqui no hay varios estados de entrada: el PUML parte de `GRUPOS_ABIERTO`, presenta una confirmacion y solo permite dos decisiones, confirmar o cancelar la eliminacion. En ambos casos el flujo termina de nuevo en `GRUPOS_ABIERTO`, lo que encaja con el diagrama de contexto de administrador, donde `eliminarGrupo()` es una transicion autorreflexiva sobre la lista de grupos. El diagrama de organizacion asigna el caso al `Administrador`, y el README de contexto refuerza que el miembro administrador gestiona grupos pero no crea ni elimina grupos.
+
+**Decision:** Se documento el caso como una accion destructiva reservada al `Administrador`, no como una gestion compartida con `Miembro Administrador`. El flujo alternativo da peso a la cancelacion porque SdR la modela explicitamente, y se anadieron fallos necesarios para cerrar el comportamiento: usuario sin sesion, falta de permisos, grupo inexistente y error al borrar. La observacion se centro en el principal hueco de requisitos: SdR no dice que pasa con tareas, miembros o invitaciones vinculadas al grupo si se confirma la eliminacion.
+
+---
