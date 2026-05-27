@@ -121,3 +121,15 @@
 **Resultado:** Se creo `documentos/analisis/editarMiembro.md` y se anadio el enlace correspondiente al indice de analisis. La observacion final senala una duda concreta de diseno detectada en SdR: aunque el modelo habla de roles y permisos, no define el catalogo exacto de roles ni restricciones como evitar que un grupo quede sin administrador.
 
 ---
+
+## [2026-05-27 15:05] Analisis del caso de uso eliminarMiembro()
+
+**Prompt:** El usuario pidio recopilar el caso de uso `eliminarMiembro()`, crear `documentos/analisis/eliminarMiembro.md` y cubrir errores como usuario no autenticado, grupo o miembro inexistente, falta de permisos, ultimo administrador y fallo al guardar.
+
+**Trabajo realizado:** Se localizo el detalle de `eliminarMiembro()` en la carpeta de gestion de grupos y usuarios de SdR. El PUML parte de `MIEMBRO_ABIERTO`, no de la lista general de grupos, y reduce la interaccion a una confirmacion: el sistema pide confirmar o cancelar la eliminacion. Los diagramas de contexto de Administrador y Miembro Administrador muestran `eliminarMiembro()` como una transicion autorreflexiva dentro de `MIEMBRO_ABIERTO`, mientras que el diagrama de organizacion asigna el caso a `Miembro Administrador`, con herencia desde `Administrador`.
+
+**Criterio aplicado:** El analisis se documento como retirada de pertenencia del miembro al grupo, no como eliminacion global de la cuenta de usuario. Esto encaja mejor con el modelo de dominio, donde los usuarios pueden pertenecer a varios grupos y el grupo organiza miembros para coordinar tareas. Se anadio como alternativa el bloqueo de la eliminacion del ultimo administrador porque el modelo de roles y permisos exige mantener capacidad de gestion, aunque SdR no detalla esa regla.
+
+**Resultado:** Se creo `documentos/analisis/eliminarMiembro.md` y se enlazo en el indice. La observacion principal recoge una ambiguedad real del PUML: el comentario dice que tras eliminar se volveria a la lista del grupo, pero la salida dibujada queda en `MIEMBRO_ABIERTO`, por lo que ese destino deberia aclararse antes de implementar el caso.
+
+---
