@@ -143,3 +143,13 @@
 **Decision:** Se mantiene `documents/` como carpeta documental del proyecto porque coincide con la plantilla de entrega original. Las menciones historicas a `documentos/analisis/` en entradas anteriores del log no se reescriben, ya que describen el estado real del repositorio en esas sesiones.
 
 ---
+
+## [2026-05-29 18:18] Analisis del caso de uso abrirInvitaciones()
+
+**Prompt:** Se pidio analizar `abrirInvitaciones()` usando SdR como fuente de requisitos, prestando atencion a su actor, estados de navegacion y relacion con el modelo de invitaciones.
+
+**Resultado:** Se localizaron en SdR el detalle y PUML de `abrirInvitaciones()`, el diagrama de organizacion y grupos, el diagrama de contexto de miembro y los modelos de dominio relacionados con `Invitacion`. El PUML situa el caso como carga de una lista con identificador y estado, con opcion de filtrado y salida hacia `editarInvitacion()` o `completarGestion()`. Con esa base se creo `documents/analisis/abrirInvitaciones.md` y se actualizo el indice de analisis.
+
+**Decision:** El caso se documento como una consulta de invitaciones propia del `Miembro`, con entrada desde `SISTEMA_DISPONIBLE` o recarga desde `INVITACIONES_ABIERTO`, lista filtrable y salida hacia `editarInvitacion()` o `completarGestion()`. Como criterio de diseno, la vista principal deberia priorizar invitaciones `Pendiente`, dejando `Aceptada`, `Rechazada`, `Cancelada` y `Caducada` para filtros o historial.
+
+---
