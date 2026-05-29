@@ -153,3 +153,13 @@
 **Decision:** El caso se documento como una consulta de invitaciones propia del `Miembro`, con entrada desde `SISTEMA_DISPONIBLE` o recarga desde `INVITACIONES_ABIERTO`, lista filtrable y salida hacia `editarInvitacion()` o `completarGestion()`. Como criterio de diseno, la vista principal deberia priorizar invitaciones `Pendiente`, dejando `Aceptada`, `Rechazada`, `Cancelada` y `Caducada` para filtros o historial.
 
 ---
+
+## [2026-05-29 18:36] Analisis del caso de uso editarInvitacion()
+
+**Prompt:** Se pidio analizar `editarInvitacion()` usando SdR como fuente de requisitos, atendiendo a la gestion del estado de la invitacion y a su encaje con el flujo de miembro.
+
+**Resultado:** Se localizaron en SdR el detalle y PUML de `editarInvitacion()`, el diagrama de contexto de miembro, el diagrama de organizacion y grupos y el modelo de estados de invitacion. El PUML muestra entrada desde `INVITACIONES_ABIERTO` o `INVITACION_ABIERTO`, visualizacion de datos, cambio de estado a aceptar o rechazar, guardado y cancelacion. Con esa base se creo `documents/analisis/editarInvitacion.md` y se actualizo el indice de analisis.
+
+**Decision:** El caso se documento como una validacion de invitacion propia del `Miembro`, no como una edicion libre. Como criterio de diseno, solo las invitaciones `Pendiente` deberian admitir aceptacion o rechazo; los estados `Aceptada`, `Rechazada`, `Cancelada` y `Caducada` se tratan como finales.
+
+---
