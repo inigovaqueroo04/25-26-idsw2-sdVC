@@ -133,3 +133,13 @@
 **Resultado:** Se creo `documentos/analisis/eliminarMiembro.md` y se enlazo en el indice. La observacion principal recoge una ambiguedad real del PUML: el comentario dice que tras eliminar se volveria a la lista del grupo, pero la salida dibujada queda en `MIEMBRO_ABIERTO`, por lo que ese destino deberia aclararse antes de implementar el caso.
 
 ---
+
+## [2026-05-29 18:10] Normalizacion de carpetas documentales
+
+**Prompt:** El usuario pidio corregir la duplicidad entre `documents/` y `documentos/`, subir un commit con el arreglo y leer el protocolo de sesiones con IA para poder aplicarlo en adelante.
+
+**Resultado:** Se reviso el protocolo de sesiones con IA y se confirmo que las palabras clave `recopilacion` y `cierre` definen el inicio y final de las sesiones. Se movieron los analisis de casos de uso desde `documentos/analisis/` a `documents/analisis/`, dejando una unica carpeta documental principal. Tambien se actualizaron `README.md` y `documents/README.md` para enlazar el protocolo y el indice de analisis desde la nueva ubicacion.
+
+**Decision:** Se mantiene `documents/` como carpeta documental del proyecto porque coincide con la plantilla de entrega original. Las menciones historicas a `documentos/analisis/` en entradas anteriores del log no se reescriben, ya que describen el estado real del repositorio en esas sesiones.
+
+---
