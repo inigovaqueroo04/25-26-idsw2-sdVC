@@ -1,6 +1,6 @@
-# Analisis de casos de uso
+# Análisis de casos de uso
 
-Esta carpeta contiene los analisis breves de casos de uso elaborados a partir
+Esta carpeta contiene los análisis breves de casos de uso elaborados a partir
 del repositorio de requisitado SdR.
 
 ## Casos analizados

@@ -1,0 +1,179 @@
+# Pendientes de diseño e implementación
+
+Este documento recoge decisiones y ajustes que habrá que tener presentes cuando
+los análisis de casos de uso pasen a diseño e implementación. No cambia el
+planteamiento del sistema: sigue siendo una herramienta para que familias y
+grupos coordinen, asignen y sigan tareas compartidas. Su función es evitar que
+los casos analizados queden correctos por separado pero no encajen entre sí.
+
+## Alcance actual revisado
+
+Los criterios salen de los casos ya analizados:
+
+- Gestión de sesión: `iniciarSesion()`, `cerrarSesion()`,
+  `completarGestion()`.
+- Gestión de grupos y usuarios: `abrirGrupos()`, `crearGrupo()`,
+  `editarGrupo()`, `eliminarGrupo()`, `invitarUsuario()`,
+  `editarMiembro()`, `eliminarMiembro()`.
+- Gestión de invitaciones: `abrirInvitaciones()`, `editarInvitacion()`.
+
+## Reglas transversales
+
+### Autenticación y sesión
+
+- Todo caso salvo `iniciarSesion()` exige sesión iniciada.
+- `SISTEMA_DISPONIBLE` debe funcionar como hub común tras iniciar sesión.
+- `cerrarSesion()` debe invalidar la sesión y devolver a `SESION_CERRADA`.
+- `completarGestion()` no debe guardar cambios por sorpresa. Si hay datos sin
+  guardar, debe avisar o impedir la salida hasta que el flujo quede resuelto.
+
+### Estados de navegación
+
+- Los estados de contexto deben conservarse como contrato de navegación:
+  `GRUPOS_ABIERTO`, `GRUPO_ABIERTO`, `MIEMBRO_ABIERTO`,
+  `INVITACIONES_ABIERTO` e `INVITACION_ABIERTO`.
+- Las cancelaciones deben volver al estado desde el que el usuario entró cuando
+  SdR distingue ese origen. Esto ya aparece en `editarMiembro()` y
+  `editarInvitacion()`.
+- Si un flujo elimina el elemento que se está visualizando, no debe quedarse en
+  un detalle inexistente. En especial, `eliminarMiembro()` necesita cerrar su
+  destino final antes de implementarse.
+
+## Roles y permisos
+
+SdR mezcla en algunos puntos actor detallado, diagrama de organización y
+diagramas de contexto. Para implementar sin romper el sistema, conviene fijar
+esta matriz operativa:
+
+| Acción | Perfil recomendado |
+| --- | --- |
+| Iniciar/cerrar sesión | Cualquier usuario |
+| Abrir gestión de grupos | Administrador o Miembro Administrador |
+| Crear grupo | Administrador |
+| Eliminar grupo | Administrador |
+| Editar grupo | Administrador o Miembro Administrador |
+| Invitar usuario | Administrador o Miembro Administrador |
+| Editar/eliminar miembro | Administrador o Miembro Administrador |
+| Abrir invitaciones | Miembro |
+| Aceptar/rechazar invitación | Miembro destinatario |
+
+Esta matriz no cambia la jerarquía del SdR: la concreta. Si se quiere que un
+`Miembro` consulte grupos, debería definirse como vista de lectura, no como la
+misma gestión administrativa de `abrirGrupos()`.
+
+## Modelo de datos que habrá que cuidar
+
+### Pertenencia a grupo
+
+El modelo de dominio indica que un usuario puede pertenecer a varios grupos de
+forma independiente. Por tanto, en diseño conviene representar la pertenencia
+como relación propia entre usuario y grupo, no como un dato plano del usuario.
+
+Recomendación de diseño:
+
+- `Usuario`
+- `Grupo`
+- `Pertenencia` o `MiembroGrupo`
+- `RolEnGrupo`
+
+Esto permite que una misma persona sea administradora en un grupo y miembro en
+otro, sin contradecir el planteamiento del SdR.
+
+### Roles
+
+Hay que cerrar el catálogo mínimo de roles antes de implementar permisos:
+
+- `Administrador`
+- `Miembro Administrador`
+- `Miembro`
+
+También debe existir la regla de integridad: un grupo no puede quedarse sin
+ningún perfil capaz de administrarlo.
+
+### Invitaciones
+
+La invitación debe enlazar como mínimo:
+
+- grupo de destino,
+- usuario emisor,
+- usuario destinatario o identificador invitado,
+- estado,
+- fecha relevante.
+
+La fecha de `invitarUsuario()` debe concretarse. Para que encaje con el modelo
+de estados, la interpretación más útil es tratarla como fecha límite o
+caducidad de la invitación.
+
+## Decisiones por módulo
+
+### Grupos
+
+- `crearGrupo()` exige nombre obligatorio. Faltan reglas de longitud, nombres
+  duplicados y mensajes de validación.
+- `editarGrupo()` necesita definir qué campos son editables. Como mínimo debe
+  mantener coherencia con `crearGrupo()`: nombre y descripción.
+- `eliminarGrupo()` no debe borrar en cascada de forma silenciosa. Antes de
+  implementar hay que decidir si se bloquea cuando hay tareas, miembros o
+  invitaciones asociadas, o si se pide confirmación reforzada.
+- Las listas (`abrirGrupos()`) deben soportar lista vacía, error de carga y
+  filtro sin resultados.
+
+### Miembros
+
+- `editarMiembro()` debe limitarse a datos de gestión dentro del grupo,
+  especialmente rol o permisos, no a editar el perfil global del usuario.
+- `eliminarMiembro()` debe retirar la pertenencia al grupo, no borrar la cuenta
+  del usuario.
+- No se debe permitir eliminar al último administrador o último gestor efectivo
+  del grupo.
+- El destino tras eliminar miembro debe aclararse: lo funcional es volver a
+  `GRUPO_ABIERTO` o a una lista de miembros, no permanecer en un
+  `MIEMBRO_ABIERTO` que ya no existe.
+
+### Invitaciones
+
+- `invitarUsuario()` debe impedir invitaciones pendientes duplicadas para el
+  mismo usuario y grupo.
+- Si el usuario ya pertenece al grupo, no debe generarse invitación.
+- `abrirInvitaciones()` debería mostrar por defecto invitaciones `Pendiente`.
+  Los estados `Aceptada`, `Rechazada`, `Cancelada` y `Caducada` deben quedar
+  accesibles por filtro o historial.
+- `editarInvitacion()` debe tratarse como validación de invitación, no como
+  edición libre. Solo `Pendiente` debería permitir aceptar o rechazar.
+- Aceptar una invitación debe crear o activar la pertenencia del usuario al
+  grupo. Rechazarla no debe modificar la composición del grupo.
+- El estado `Cancelada` aparece en el modelo como acción de administrador, pero
+  todavía no hay un caso de uso administrativo claro para cancelar
+  invitaciones. Habrá que cubrirlo más adelante o dejarlo fuera del alcance de
+  la primera implementación.
+
+### Sesión y salida de flujos
+
+- `cerrarSesion()` debería avisar si existen cambios no guardados en una vista
+  secundaria.
+- `completarGestion()` debe ser retorno de navegación, no sustituto de guardar.
+- Si una sesión expira, cualquier caso interno debe redirigir a
+  `SESION_CERRADA` sin ejecutar cambios parciales.
+
+## Criterios de implementación futura
+
+- Toda mutación debe validar autenticación, permisos y existencia del recurso.
+- Las operaciones destructivas requieren confirmación.
+- Las pantallas de lista deben contemplar tres estados: cargando/error, vacío y
+  con resultados.
+- Los estados finales de invitación no deben volver a abrirse para edición sin
+  un caso de uso específico.
+- Los cambios de rol o pertenencia deben revisarse contra reglas de integridad
+  del grupo.
+
+## Puntos que conviene resolver antes de codificar
+
+1. Identificador de usuario: decidir si el sistema usa email, nombre de usuario
+   o ambos para login e invitaciones.
+2. Fecha de invitación: confirmar que representa caducidad.
+3. Campos editables de grupo.
+4. Política de eliminación de grupos con datos asociados.
+5. Destino final de `eliminarMiembro()` tras confirmar.
+6. Catálogo exacto de roles y permisos.
+7. Tratamiento de cambios no guardados en `cerrarSesion()` y
+   `completarGestion()`.

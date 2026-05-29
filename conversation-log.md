@@ -118,7 +118,7 @@
 
 **Criterio aplicado:** Documente el caso como una operacion de administracion interna del grupo centrada en cambiar rol o permisos, no como una edicion generica de perfil de usuario. En los flujos alternativos se incluyeron errores que salen directamente del comportamiento esperado del caso: falta de autenticacion, grupo o miembro no disponible, permisos insuficientes, rol invalido, fallo al guardar y cancelacion. Tambien se dejo reflejada la diferencia de retorno entre cancelar desde `MIEMBRO_ABIERTO` y cancelar desde `GRUPO_ABIERTO`, porque ese matiz aparece en el diagrama de actividad y evita que el analisis quede demasiado plano.
 
-**Resultado:** Se creo `documentos/analisis/editarMiembro.md` y se anadio el enlace correspondiente al indice de analisis. La observacion final senala una duda concreta de diseno detectada en SdR: aunque el modelo habla de roles y permisos, no define el catalogo exacto de roles ni restricciones como evitar que un grupo quede sin administrador.
+**Resultado:** Se creo `documentos/analisis/editarMiembro.md` y se anadio el enlace correspondiente al indice de analisis. La observacion final senala una duda concreta de diseño detectada en SdR: aunque el modelo habla de roles y permisos, no define el catalogo exacto de roles ni restricciones como evitar que un grupo quede sin administrador.
 
 ---
 
@@ -150,7 +150,7 @@
 
 **Resultado:** Se localizaron en SdR el detalle y PUML de `abrirInvitaciones()`, el diagrama de organizacion y grupos, el diagrama de contexto de miembro y los modelos de dominio relacionados con `Invitacion`. El PUML situa el caso como carga de una lista con identificador y estado, con opcion de filtrado y salida hacia `editarInvitacion()` o `completarGestion()`. Con esa base se creo `documents/analisis/abrirInvitaciones.md` y se actualizo el indice de analisis.
 
-**Decision:** El caso se documento como una consulta de invitaciones propia del `Miembro`, con entrada desde `SISTEMA_DISPONIBLE` o recarga desde `INVITACIONES_ABIERTO`, lista filtrable y salida hacia `editarInvitacion()` o `completarGestion()`. Como criterio de diseno, la vista principal deberia priorizar invitaciones `Pendiente`, dejando `Aceptada`, `Rechazada`, `Cancelada` y `Caducada` para filtros o historial.
+**Decision:** El caso se documento como una consulta de invitaciones propia del `Miembro`, con entrada desde `SISTEMA_DISPONIBLE` o recarga desde `INVITACIONES_ABIERTO`, lista filtrable y salida hacia `editarInvitacion()` o `completarGestion()`. Como criterio de diseño, la vista principal deberia priorizar invitaciones `Pendiente`, dejando `Aceptada`, `Rechazada`, `Cancelada` y `Caducada` para filtros o historial.
 
 ---
 
@@ -160,6 +160,16 @@
 
 **Resultado:** Se localizaron en SdR el detalle y PUML de `editarInvitacion()`, el diagrama de contexto de miembro, el diagrama de organizacion y grupos y el modelo de estados de invitacion. El PUML muestra entrada desde `INVITACIONES_ABIERTO` o `INVITACION_ABIERTO`, visualizacion de datos, cambio de estado a aceptar o rechazar, guardado y cancelacion. Con esa base se creo `documents/analisis/editarInvitacion.md` y se actualizo el indice de analisis.
 
-**Decision:** El caso se documento como una validacion de invitacion propia del `Miembro`, no como una edicion libre. Como criterio de diseno, solo las invitaciones `Pendiente` deberian admitir aceptacion o rechazo; los estados `Aceptada`, `Rechazada`, `Cancelada` y `Caducada` se tratan como finales.
+**Decision:** El caso se documento como una validacion de invitacion propia del `Miembro`, no como una edicion libre. Como criterio de diseño, solo las invitaciones `Pendiente` deberian admitir aceptacion o rechazo; los estados `Aceptada`, `Rechazada`, `Cancelada` y `Caducada` se tratan como finales.
+
+---
+
+## [2026-05-29 18:45] Pendientes de diseño e implementación
+
+**Prompt:** Se pidio revisar los analisis existentes y los casos de uso de SdR asociados para documentar que decisiones habra que tener presentes cuando el análisis pase a diseño e implementación.
+
+**Resultado:** Se revisaron los casos analizados de sesion, grupos, miembros e invitaciones, junto con los diagramas de contexto, organizacion, modelo de dominio y estados de invitacion. Se creo `documents/criterios-integracion.md` y se enlazo desde `documents/README.md`.
+
+**Decision:** Se documento una capa de criterios transversales sin cambiar el planteamiento del sistema: permisos por rol, navegacion por estados, pertenencia usuario-grupo, reglas de integridad, tratamiento de invitaciones, borrados y validaciones pendientes. El objetivo es que los futuros casos de uso y la implementación encajen en un unico comportamiento coherente.
 
 ---
