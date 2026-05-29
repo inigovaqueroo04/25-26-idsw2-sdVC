@@ -16,6 +16,7 @@ Los criterios salen de los casos ya analizados:
   `editarGrupo()`, `eliminarGrupo()`, `invitarUsuario()`,
   `editarMiembro()`, `eliminarMiembro()`.
 - Gestión de invitaciones: `abrirInvitaciones()`, `editarInvitacion()`.
+- Gestión de tareas: `abrirTareas()`.
 
 ## Reglas transversales
 
@@ -56,6 +57,9 @@ esta matriz operativa:
 | Editar/eliminar miembro | Administrador o Miembro Administrador |
 | Abrir invitaciones | Miembro |
 | Aceptar/rechazar invitación | Miembro destinatario |
+| Abrir tareas | Miembro, Miembro Administrador o Administrador |
+| Crear/editar/eliminar tareas | Miembro Administrador o Administrador |
+| Marcar tarea completada | Miembro asignado o perfil administrador |
 
 Esta matriz no cambia la jerarquía del SdR: la concreta. Si se quiere que un
 `Miembro` consulte grupos, debería definirse como vista de lectura, no como la
@@ -147,6 +151,21 @@ caducidad de la invitación.
   invitaciones. Habrá que cubrirlo más adelante o dejarlo fuera del alcance de
   la primera implementación.
 
+### Tareas
+
+- `abrirTareas()` debe separar consulta y gestión: el `Miembro` puede consultar
+  y marcar tareas, mientras que la creación, edición y eliminación requieren
+  perfil administrador.
+- La lista debe poder abrirse desde `SISTEMA_DISPONIBLE`, desde una tarea
+  concreta y desde un grupo. Si llega desde `GRUPO_ABIERTO`, el filtro por grupo
+  debería conservarse.
+- La lista necesita como datos mínimos identificador, título y estado. Para
+  implementación conviene prever también grupo, asignados y horario, porque el
+  resto del modelo depende de esos datos.
+- El PUML de SdR para `abrirTareas()` contiene marcadores de conflicto de merge.
+  Hasta corregirlo, la implementación tomará la navegación de los diagramas de
+  contexto como referencia operativa.
+
 ### Sesión y salida de flujos
 
 - `cerrarSesion()` debería avisar si existen cambios no guardados en una vista
@@ -177,3 +196,4 @@ caducidad de la invitación.
 6. Catálogo exacto de roles y permisos.
 7. Tratamiento de cambios no guardados en `cerrarSesion()` y
    `completarGestion()`.
+8. Corregir en SdR el conflicto de merge pendiente del PUML de `abrirTareas()`.

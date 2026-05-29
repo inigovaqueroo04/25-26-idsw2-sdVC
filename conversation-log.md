@@ -173,3 +173,13 @@
 **Decision:** Se documento una capa de criterios transversales sin cambiar el planteamiento del sistema: permisos por rol, navegacion por estados, pertenencia usuario-grupo, reglas de integridad, tratamiento de invitaciones, borrados y validaciones pendientes. El objetivo es que los futuros casos de uso y la implementación encajen en un unico comportamiento coherente.
 
 ---
+
+## [2026-05-29 19:18] Análisis de abrirTareas()
+
+**Prompt:** El usuario pidió analizar `abrirTareas()`, atendiendo a quién consulta las tareas, qué lista queda disponible, qué ocurre si no hay grupo seleccionado o no hay tareas, y qué salidas permite el caso.
+
+**Resultado:** Se localizaron en SdR el detalle y PUML de `abrirTareas()`, los diagramas de contexto de Administrador, Miembro Administrador y Miembro, el diagrama de gestión de tareas, el modelo de dominio y el diagrama de estados de tarea. Con esa base se creó `documents/analisis/abrirTareas.md`, se añadió al índice de análisis y se actualizó `documents/criterios-integracion.md` con criterios mínimos para la futura integración de tareas.
+
+**Decision:** El caso se documentó como entrada a la lista de tareas y no como edición directa. El `Miembro` puede consultar y marcar tareas, mientras que crear, editar y eliminar queda reservado a perfiles administradores. Como el PUML de SdR contiene marcadores de conflicto de merge, para la futura implementación se tomará la navegación de los diagramas de contexto como referencia operativa hasta que ese artefacto quede corregido.
+
+---

@@ -17,3 +17,4 @@ del repositorio de requisitado SdR.
 - [`eliminarMiembro()`](./eliminarMiembro.md)
 - [`abrirInvitaciones()`](./abrirInvitaciones.md)
 - [`editarInvitacion()`](./editarInvitacion.md)
+- [`abrirTareas()`](./abrirTareas.md)
