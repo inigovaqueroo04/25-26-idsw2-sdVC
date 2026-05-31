@@ -21,3 +21,4 @@ del repositorio de requisitado SdR.
 - [`crearTarea()`](./crearTarea.md)
 - [`editarTarea()`](./editarTarea.md)
 - [`relacionarTareas()`](./relacionarTareas.md)
+- [`eliminarTarea()`](./eliminarTarea.md)

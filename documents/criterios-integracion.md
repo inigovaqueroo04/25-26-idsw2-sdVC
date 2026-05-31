@@ -17,7 +17,7 @@ Los criterios salen de los casos ya analizados:
   `editarMiembro()`, `eliminarMiembro()`.
 - Gestión de invitaciones: `abrirInvitaciones()`, `editarInvitacion()`.
 - Gestión de tareas: `abrirTareas()`, `crearTarea()`, `editarTarea()`,
-  `relacionarTareas()`.
+  `relacionarTareas()`, `eliminarTarea()`.
 
 ## Reglas transversales
 
@@ -200,6 +200,17 @@ caducidad de la invitación.
 - Las relaciones de precedencia no se mezclarán automáticamente con la
   jerarquía recursiva de subtareas. La implementación rechazará autorrelaciones,
   duplicados y ciclos incoherentes.
+- `eliminarTarea()` partirá de `TAREA_ABIERTO`: al confirmar volverá a
+  `TAREAS_ABIERTO` y al cancelar mantendrá el detalle abierto.
+- La eliminación de una tarea padre borrará también sus subtareas descendientes
+  de forma recursiva, pero no afectará a sus tareas hermanas. La confirmación
+  deberá advertir expresamente del alcance de la cascada.
+- El borrado retirará relaciones y datos auxiliares exclusivos de las tareas
+  eliminadas. Los conflictos afectados se reevaluarán dentro del módulo
+  independiente del usuario, sin eliminarlos en cascada de forma automática.
+- El estado `Cancelada` y `eliminarTarea()` no serán equivalentes: cancelar
+  conservará el registro de la tarea y eliminar lo retirará de forma
+  irreversible.
 
 ### Sesión y salida de flujos
 

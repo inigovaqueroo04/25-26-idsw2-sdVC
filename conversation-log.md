@@ -203,3 +203,23 @@
 **Decision:** `editarTarea()` se implementará como coordinador de los datos base y las operaciones relacionadas con asignación, horario, localización, recordatorios y relaciones. Aunque el PUML devuelve a edición al detectar conflicto, prevalecerá la aclaración posterior del cliente: los cambios válidos se guardarán y el conflicto del usuario se registrará para notificación y resolución independiente. Queda pendiente concretar qué modificaciones se permiten sobre tareas `Finalizada` o `Cancelada`.
 
 ---
+
+## [2026-05-31 20:53] Análisis de relacionarTareas()
+
+**Prompt:** El usuario pidió analizar `relacionarTareas()`, atendiendo a quién puede vincular tareas, qué tipos de relación admite el flujo y qué ocurre ante una relación inválida, tareas incompatibles, cancelación o fallo de guardado.
+
+**Resultado:** Se revisaron el detalle, PUML y prototipo de `relacionarTareas()`, su acceso desde `editarTarea()`, los diagramas de contexto y gestión de tareas, el modelo de dominio y las aclaraciones sobre subtareas. Se creó `documents/analisis/relacionarTareas.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `relacionarTareas()` se implementará como una operación asociada a la edición que parte y termina en `TAREA_ABIERTO`. La primera implementación registrará relaciones de precedencia `predecesora` o `sucesora` y rechazará autorrelaciones, duplicados y ciclos incoherentes. No se mezclará automáticamente con la jerarquía recursiva de subtareas: queda pendiente aclarar si el mismo flujo debe cubrir también reestructuración de subtareas y los vínculos de bloqueo o apoyo mencionados por el modelo.
+
+---
+
+## [2026-05-31 21:04] Análisis de eliminarTarea()
+
+**Prompt:** El usuario pidió analizar `eliminarTarea()`, atendiendo a quién puede borrar una tarea, qué ocurre al confirmar o cancelar y cómo debe tratarse la eliminación de una tarea con subtareas.
+
+**Resultado:** Se revisaron el detalle, PUML y prototipo de `eliminarTarea()`, los diagramas de contexto y gestión de tareas, el modelo recursivo de subtareas, los datos auxiliares asociados y las aclaraciones de la segunda reunión. Se creó `documents/analisis/eliminarTarea.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `eliminarTarea()` se implementará como una operación irreversible que parte de `TAREA_ABIERTO`: al confirmar volverá a `TAREAS_ABIERTO` y al cancelar mantendrá el detalle abierto. Si se elimina una tarea padre, también se eliminarán recursivamente sus subtareas descendientes, pero no sus tareas hermanas. Se retirarán las referencias auxiliares que queden inválidas y se reevaluarán los conflictos como componente independiente del usuario. El estado `Cancelada` conservará el registro de la tarea y no será equivalente al borrado.
+
+---
