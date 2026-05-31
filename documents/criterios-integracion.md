@@ -16,9 +16,20 @@ Los criterios salen de los casos ya analizados:
   `editarGrupo()`, `eliminarGrupo()`, `invitarUsuario()`,
   `editarMiembro()`, `eliminarMiembro()`.
 - Gestión de invitaciones: `abrirInvitaciones()`, `editarInvitacion()`.
-- Gestión de tareas: `abrirTareas()`.
+- Gestión de tareas: `abrirTareas()`, `crearTarea()`.
 
 ## Reglas transversales
+
+### Metodología RUP
+
+- El proyecto mantendrá trazabilidad entre requisitos, casos de uso, diseño,
+  implementación y verificación.
+- Cada cambio funcional deberá partir de un caso de uso o requisito analizado.
+- Si los artefactos de SdR presentan contradicciones, se documentará el criterio
+  operativo adoptado antes de implementar.
+- La implementación se organizará de forma incremental: primero el flujo
+  principal defendible y después las variantes, validaciones y mejoras
+  justificadas por los requisitos.
 
 ### Autenticación y sesión
 
@@ -32,7 +43,8 @@ Los criterios salen de los casos ya analizados:
 
 - Los estados de contexto deben conservarse como contrato de navegación:
   `GRUPOS_ABIERTO`, `GRUPO_ABIERTO`, `MIEMBRO_ABIERTO`,
-  `INVITACIONES_ABIERTO` e `INVITACION_ABIERTO`.
+  `INVITACIONES_ABIERTO`, `INVITACION_ABIERTO`, `TAREAS_ABIERTO` y
+  `TAREA_ABIERTO`.
 - Las cancelaciones deben volver al estado desde el que el usuario entró cuando
   SdR distingue ese origen. Esto ya aparece en `editarMiembro()` y
   `editarInvitacion()`.
@@ -165,6 +177,14 @@ caducidad de la invitación.
 - El PUML de SdR para `abrirTareas()` contiene marcadores de conflicto de merge.
   Hasta corregirlo, la implementación tomará la navegación de los diagramas de
   contexto como referencia operativa.
+- `crearTarea()` partirá de `TAREAS_ABIERTO` y terminará en `TAREA_ABIERTO` si
+  se guarda o en `TAREAS_ABIERTO` si se cancela.
+- Para crear una tarea se exigirán título, fecha, hora de inicio y hora de fin.
+  La implementación validará que el inicio sea anterior al fin aunque el
+  detalle y el prototipo de SdR todavía no reflejen todos esos campos.
+- Un solapamiento horario no bloqueará la creación ni cambiará el ciclo de vida
+  de la tarea. Se registrará como conflicto paralelo del usuario afectado y se
+  generará el aviso correspondiente.
 
 ### Sesión y salida de flujos
 
@@ -197,3 +217,5 @@ caducidad de la invitación.
 7. Tratamiento de cambios no guardados en `cerrarSesion()` y
    `completarGestion()`.
 8. Corregir en SdR el conflicto de merge pendiente del PUML de `abrirTareas()`.
+9. Concretar si una tarea creada con horario obligatorio queda inicialmente en
+   estado `Creada` o `Programada`.

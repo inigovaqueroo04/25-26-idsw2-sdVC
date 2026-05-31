@@ -183,3 +183,13 @@
 **Decision:** El caso se documentó como entrada a la lista de tareas y no como edición directa. El `Miembro` puede consultar y marcar tareas, mientras que crear, editar y eliminar queda reservado a perfiles administradores. Como el PUML de SdR contiene marcadores de conflicto de merge, para la futura implementación se tomará la navegación de los diagramas de contexto como referencia operativa hasta que ese artefacto quede corregido.
 
 ---
+
+## [2026-05-31 20:34] Análisis de crearTarea()
+
+**Prompt:** El usuario pidió analizar `crearTarea()`, atendiendo a quién puede crearla, qué datos iniciales necesita, cómo se valida el horario y qué ocurre ante cancelación, solapamiento o fallo de guardado.
+
+**Resultado:** Se revisaron el detalle, PUML y prototipo de `crearTarea()`, los diagramas de contexto y gestión de tareas, el modelo de dominio, el ciclo de vida de tarea y las aclaraciones de la segunda reunión. Se creó `documents/analisis/crearTarea.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** La futura implementación exigirá título, fecha, hora de inicio y hora de fin, validará que el inicio sea anterior al fin y asociará la tarea a un grupo seleccionado. Si existe solapamiento, registrará o notificará el conflicto al usuario afectado sin bloquear la creación. Queda pendiente concretar si una tarea creada con horario obligatorio parte de estado `Creada` o `Programada`. Para el conjunto del proyecto se aplicará la metodología RUP, manteniendo trazabilidad entre requisitos, casos de uso, diseño, implementación y verificación.
+
+---
