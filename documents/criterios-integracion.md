@@ -16,7 +16,8 @@ Los criterios salen de los casos ya analizados:
   `editarGrupo()`, `eliminarGrupo()`, `invitarUsuario()`,
   `editarMiembro()`, `eliminarMiembro()`.
 - Gestión de invitaciones: `abrirInvitaciones()`, `editarInvitacion()`.
-- Gestión de tareas: `abrirTareas()`, `crearTarea()`, `editarTarea()`.
+- Gestión de tareas: `abrirTareas()`, `crearTarea()`, `editarTarea()`,
+  `relacionarTareas()`.
 
 ## Reglas transversales
 
@@ -71,6 +72,7 @@ esta matriz operativa:
 | Aceptar/rechazar invitación | Miembro destinatario |
 | Abrir tareas | Miembro, Miembro Administrador o Administrador |
 | Crear/editar/eliminar tareas | Miembro Administrador o Administrador |
+| Relacionar tareas | Miembro Administrador o Administrador |
 | Marcar tarea completada | Miembro asignado o perfil administrador |
 
 Esta matriz no cambia la jerarquía del SdR: la concreta. Si se quiere que un
@@ -192,6 +194,12 @@ caducidad de la invitación.
   válidos y registrará o actualizará el conflicto del usuario para su
   notificación y resolución independiente. La aclaración posterior del cliente
   prevalecerá sobre el bloqueo dibujado en el PUML de `editarTarea()`.
+- `relacionarTareas()` partirá y terminará en `TAREA_ABIERTO` como operación
+  asociada a la edición. La primera implementación registrará relaciones de
+  precedencia `predecesora` o `sucesora`.
+- Las relaciones de precedencia no se mezclarán automáticamente con la
+  jerarquía recursiva de subtareas. La implementación rechazará autorrelaciones,
+  duplicados y ciclos incoherentes.
 
 ### Sesión y salida de flujos
 
@@ -228,3 +236,5 @@ caducidad de la invitación.
    estado `Creada` o `Programada`.
 10. Concretar qué modificaciones se permiten sobre tareas `Finalizada` o
     `Cancelada`.
+11. Aclarar si `relacionarTareas()` también debe reestructurar subtareas y si
+    los vínculos de bloqueo o apoyo del modelo se exponen en el mismo flujo.
