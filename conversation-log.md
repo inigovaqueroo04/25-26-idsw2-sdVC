@@ -193,3 +193,13 @@
 **Decision:** La futura implementación exigirá título, fecha, hora de inicio y hora de fin, validará que el inicio sea anterior al fin y asociará la tarea a un grupo seleccionado. Si existe solapamiento, registrará o notificará el conflicto al usuario afectado sin bloquear la creación. Queda pendiente concretar si una tarea creada con horario obligatorio parte de estado `Creada` o `Programada`. Para el conjunto del proyecto se aplicará la metodología RUP, manteniendo trazabilidad entre requisitos, casos de uso, diseño, implementación y verificación.
 
 ---
+
+## [2026-05-31 20:43] Análisis de editarTarea()
+
+**Prompt:** El usuario pidió analizar `editarTarea()`, atendiendo a quién puede modificar una tarea, qué datos y operaciones incluye la edición, cómo se validan los cambios y qué ocurre ante conflicto horario, cancelación o fallo de guardado.
+
+**Resultado:** Se revisaron el detalle, PUML y prototipo de `editarTarea()`, los diagramas de contexto y gestión de tareas, el modelo de dominio, los estados de tarea y conflicto horario y las aclaraciones de la segunda reunión. Se creó `documents/analisis/editarTarea.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `editarTarea()` se implementará como coordinador de los datos base y las operaciones relacionadas con asignación, horario, localización, recordatorios y relaciones. Aunque el PUML devuelve a edición al detectar conflicto, prevalecerá la aclaración posterior del cliente: los cambios válidos se guardarán y el conflicto del usuario se registrará para notificación y resolución independiente. Queda pendiente concretar qué modificaciones se permiten sobre tareas `Finalizada` o `Cancelada`.
+
+---

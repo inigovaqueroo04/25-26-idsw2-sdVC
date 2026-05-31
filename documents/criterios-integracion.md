@@ -16,7 +16,7 @@ Los criterios salen de los casos ya analizados:
   `editarGrupo()`, `eliminarGrupo()`, `invitarUsuario()`,
   `editarMiembro()`, `eliminarMiembro()`.
 - Gestión de invitaciones: `abrirInvitaciones()`, `editarInvitacion()`.
-- Gestión de tareas: `abrirTareas()`, `crearTarea()`.
+- Gestión de tareas: `abrirTareas()`, `crearTarea()`, `editarTarea()`.
 
 ## Reglas transversales
 
@@ -185,6 +185,13 @@ caducidad de la invitación.
 - Un solapamiento horario no bloqueará la creación ni cambiará el ciclo de vida
   de la tarea. Se registrará como conflicto paralelo del usuario afectado y se
   generará el aviso correspondiente.
+- `editarTarea()` coordinará la edición de datos base y las operaciones
+  relacionadas de asignación, horario, localización, recordatorios y
+  relaciones entre tareas.
+- Si una edición provoca solapamiento, la implementación guardará los cambios
+  válidos y registrará o actualizará el conflicto del usuario para su
+  notificación y resolución independiente. La aclaración posterior del cliente
+  prevalecerá sobre el bloqueo dibujado en el PUML de `editarTarea()`.
 
 ### Sesión y salida de flujos
 
@@ -219,3 +226,5 @@ caducidad de la invitación.
 8. Corregir en SdR el conflicto de merge pendiente del PUML de `abrirTareas()`.
 9. Concretar si una tarea creada con horario obligatorio queda inicialmente en
    estado `Creada` o `Programada`.
+10. Concretar qué modificaciones se permiten sobre tareas `Finalizada` o
+    `Cancelada`.

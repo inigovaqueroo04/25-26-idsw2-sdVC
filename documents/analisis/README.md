@@ -19,3 +19,4 @@ del repositorio de requisitado SdR.
 - [`editarInvitacion()`](./editarInvitacion.md)
 - [`abrirTareas()`](./abrirTareas.md)
 - [`crearTarea()`](./crearTarea.md)
+- [`editarTarea()`](./editarTarea.md)
