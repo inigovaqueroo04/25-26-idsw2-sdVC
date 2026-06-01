@@ -19,7 +19,8 @@ Los criterios salen de los casos ya analizados:
 - Gestión de tareas: `abrirTareas()`, `crearTarea()`, `editarTarea()`,
   `relacionarTareas()`, `eliminarTarea()`, `marcarCompletada()`,
   `validarConflicto()`.
-- Planificación y configuración: `abrirPlanificacion()`.
+- Planificación y configuración: `abrirPlanificacion()`,
+  `establecerHorario()`.
 
 ## Reglas transversales
 
@@ -77,6 +78,7 @@ esta matriz operativa:
 | Relacionar tareas | Miembro Administrador o Administrador |
 | Marcar tarea completada | Miembro asignado o perfil administrador |
 | Abrir planificación | Miembro Administrador o Administrador |
+| Establecer horario | Miembro Administrador o Administrador |
 
 Esta matriz no cambia la jerarquía del SdR: la concreta. Si se quiere que un
 `Miembro` consulte grupos, debería definirse como vista de lectura, no como la
@@ -247,6 +249,13 @@ caducidad de la invitación.
   `configurarRecordatorio()` o `asignarTareaAUsuario()`.
 - Si todavía no hay datos planificados, la vista vacía debe seguir permitiendo
   iniciar las operaciones de configuración.
+- `establecerHorario()` partirá y terminará en `PLANIFICACION_ABIERTO`.
+- El horario de una tarea incluirá fecha, hora de inicio y hora de fin. El
+  inicio deberá ser anterior al fin.
+- Antes de guardar se comprobará la disponibilidad de los usuarios asignados.
+  Un solapamiento válido registrará o actualizará el conflicto y generará una
+  notificación, pero no bloqueará el horario.
+- Si el usuario cancela o falla el guardado, se conservará el horario anterior.
 
 ### Sesión y salida de flujos
 
@@ -293,3 +302,5 @@ caducidad de la invitación.
     ya registrado siga pendiente tras una nueva validación.
 15. Definir si `abrirPlanificacion()` muestra una agenda global del usuario o
     una planificación filtrada por grupo.
+16. Concretar si `establecerHorario()` debe soportar horarios flexibles,
+    repeticiones o solo intervalos cerrados con fecha, inicio y fin.

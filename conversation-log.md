@@ -253,3 +253,13 @@
 **Decision:** `abrirPlanificacion()` se implementará como acceso desde `SISTEMA_DISPONIBLE` a `PLANIFICACION_ABIERTO` para `Miembro Administrador` y `Administrador`. La vista mantendrá disponibles las operaciones de horario, localización, recordatorios y asignación incluso cuando todavía no existan datos planificados. Queda pendiente concretar si la planificación es global para el usuario o filtrada por grupo.
 
 ---
+
+## [2026-06-01 19:31] Análisis de establecerHorario()
+
+**Prompt:** El usuario inició una sesión con `recopilacion` y pidió analizar `establecerHorario()`, atendiendo a quién define o modifica el horario y qué ocurre ante tarea inexistente, intervalo inválido, solapamiento o fallo al guardar.
+
+**Resultado:** Se revisaron el detalle, PUML y prototipo de `establecerHorario()`, el diagrama de planificación y detalles, los diagramas de contexto, el modelo de dominio y las aclaraciones de la segunda reunión. Se creó `documents/analisis/establecerHorario.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `establecerHorario()` se implementará como operación autorreflexiva sobre `PLANIFICACION_ABIERTO` para perfiles administradores. Exigirá fecha, hora de inicio y hora de fin, validará que el inicio sea anterior al fin y comprobará solapamientos antes de guardar. Un horario válido con conflicto se conservará y generará el aviso correspondiente. Queda pendiente concretar el soporte de horarios flexibles o repetitivos.
+
+---

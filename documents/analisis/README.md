@@ -25,3 +25,4 @@ del repositorio de requisitado SdR.
 - [`marcarCompletada()`](./marcarCompletada.md)
 - [`validarConflicto()`](./validarConflicto.md)
 - [`abrirPlanificacion()`](./abrirPlanificacion.md)
+- [`establecerHorario()`](./establecerHorario.md)
