@@ -17,7 +17,7 @@ Los criterios salen de los casos ya analizados:
   `editarMiembro()`, `eliminarMiembro()`.
 - Gestión de invitaciones: `abrirInvitaciones()`, `editarInvitacion()`.
 - Gestión de tareas: `abrirTareas()`, `crearTarea()`, `editarTarea()`,
-  `relacionarTareas()`, `eliminarTarea()`.
+  `relacionarTareas()`, `eliminarTarea()`, `marcarCompletada()`.
 
 ## Reglas transversales
 
@@ -211,6 +211,15 @@ caducidad de la invitación.
 - El estado `Cancelada` y `eliminarTarea()` no serán equivalentes: cancelar
   conservará el registro de la tarea y eliminar lo retirará de forma
   irreversible.
+- `marcarCompletada()` se ejecutará desde `TAREAS_ABIERTO` y mantendrá la lista
+  abierta. Solo permitirá la transición de `En ejecución` a `Finalizada` y
+  registrará la fecha de finalización.
+- Un `Miembro` solo podrá completar tareas asignadas. Los perfiles
+  administradores podrán hacerlo dentro de su ámbito de gestión.
+- La finalización no se propagará en cascada a las subtareas. Una tarea padre
+  no podrá finalizar mientras tenga descendientes pendientes.
+- Al finalizar una tarea se desactivarán sus recordatorios vigentes. Los
+  conflictos del usuario seguirán tratándose como información independiente.
 
 ### Sesión y salida de flujos
 
@@ -249,3 +258,7 @@ caducidad de la invitación.
     `Cancelada`.
 11. Aclarar si `relacionarTareas()` también debe reestructurar subtareas y si
     los vínculos de bloqueo o apoyo del modelo se exponen en el mismo flujo.
+12. Concretar si una tarea padre se finaliza automáticamente cuando todas sus
+    subtareas quedan resueltas o si requiere confirmación explícita.
+13. Completar en SdR el ciclo de vida de recordatorio para reflejar su
+    finalización cuando la tarea asociada ya está `Finalizada`.

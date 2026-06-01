@@ -223,3 +223,13 @@
 **Decision:** `eliminarTarea()` se implementará como una operación irreversible que parte de `TAREA_ABIERTO`: al confirmar volverá a `TAREAS_ABIERTO` y al cancelar mantendrá el detalle abierto. Si se elimina una tarea padre, también se eliminarán recursivamente sus subtareas descendientes, pero no sus tareas hermanas. Se retirarán las referencias auxiliares que queden inválidas y se reevaluarán los conflictos como componente independiente del usuario. El estado `Cancelada` conservará el registro de la tarea y no será equivalente al borrado.
 
 ---
+
+## [2026-06-01 18:55] Análisis de marcarCompletada()
+
+**Prompt:** El usuario pidió analizar `marcarCompletada()`, atendiendo a quién puede finalizar una tarea, qué estado y fecha quedan registrados y qué ocurre ante falta de permisos, tarea inexistente, tarea ya completada o fallo de actualización.
+
+**Resultado:** Se revisaron el detalle, PUML y prototipo de `marcarCompletada()`, su acceso desde `abrirTareas()` y `editarTarea()`, los diagramas de contexto y gestión de tareas, el ciclo de vida de tarea y las aclaraciones sobre subtareas y conflictos. Se creó `documents/analisis/marcarCompletada.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `marcarCompletada()` se implementará como una operación autorreflexiva sobre `TAREAS_ABIERTO`. Permitirá pasar una tarea asignada de `En ejecución` a `Finalizada`, registrará la fecha de finalización y desactivará sus recordatorios pendientes. No cerrará subtareas en cascada ni permitirá finalizar una tarea padre con descendientes pendientes. Los conflictos permanecerán independientes del ciclo de vida de la tarea. Queda pendiente decidir si una tarea padre se finaliza automáticamente al quedar resueltas todas sus subtareas o si requiere confirmación explícita.
+
+---
