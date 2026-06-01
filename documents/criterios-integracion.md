@@ -20,7 +20,7 @@ Los criterios salen de los casos ya analizados:
   `relacionarTareas()`, `eliminarTarea()`, `marcarCompletada()`,
   `validarConflicto()`.
 - Planificación y configuración: `abrirPlanificacion()`,
-  `establecerHorario()`.
+  `establecerHorario()`, `definirLocalizacion()`.
 
 ## Reglas transversales
 
@@ -79,6 +79,7 @@ esta matriz operativa:
 | Marcar tarea completada | Miembro asignado o perfil administrador |
 | Abrir planificación | Miembro Administrador o Administrador |
 | Establecer horario | Miembro Administrador o Administrador |
+| Definir localización | Miembro Administrador o Administrador |
 
 Esta matriz no cambia la jerarquía del SdR: la concreta. Si se quiere que un
 `Miembro` consulte grupos, debería definirse como vista de lectura, no como la
@@ -256,6 +257,10 @@ caducidad de la invitación.
   Un solapamiento válido registrará o actualizará el conflicto y generará una
   notificación, pero no bloqueará el horario.
 - Si el usuario cancela o falla el guardado, se conservará el horario anterior.
+- `definirLocalizacion()` partirá y terminará en `PLANIFICACION_ABIERTO`.
+- La localización se asociará a una tarea concreta y se validará antes de
+  guardar. Si el usuario cancela o falla el guardado, se conservará el valor
+  anterior.
 
 ### Sesión y salida de flujos
 
@@ -304,3 +309,6 @@ caducidad de la invitación.
     una planificación filtrada por grupo.
 16. Concretar si `establecerHorario()` debe soportar horarios flexibles,
     repeticiones o solo intervalos cerrados con fecha, inicio y fin.
+17. Definir el formato mínimo de `Localizacion`. La optimización por proximidad
+    geográfica, la integración con mapas y el cálculo de rutas quedan fuera del
+    alcance del proyecto.

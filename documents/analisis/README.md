@@ -26,3 +26,4 @@ del repositorio de requisitado SdR.
 - [`validarConflicto()`](./validarConflicto.md)
 - [`abrirPlanificacion()`](./abrirPlanificacion.md)
 - [`establecerHorario()`](./establecerHorario.md)
+- [`definirLocalizacion()`](./definirLocalizacion.md)

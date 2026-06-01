@@ -263,3 +263,13 @@
 **Decision:** `establecerHorario()` se implementará como operación autorreflexiva sobre `PLANIFICACION_ABIERTO` para perfiles administradores. Exigirá fecha, hora de inicio y hora de fin, validará que el inicio sea anterior al fin y comprobará solapamientos antes de guardar. Un horario válido con conflicto se conservará y generará el aviso correspondiente. Queda pendiente concretar el soporte de horarios flexibles o repetitivos.
 
 ---
+
+## [2026-06-01 19:39] Análisis de definirLocalizacion()
+
+**Prompt:** El usuario inició una sesión con `recopilacion` y pidió analizar `definirLocalizacion()`, atendiendo a quién define o modifica la ubicación y qué ocurre ante tarea inexistente, localización inválida, falta de permisos o fallo al guardar.
+
+**Resultado:** Se revisaron el detalle, PUML y prototipo de `definirLocalizacion()`, el diagrama de planificación y detalles, los diagramas de contexto, el modelo de dominio y las minutas sobre ubicación. Se creó `documents/analisis/definirLocalizacion.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `definirLocalizacion()` se implementará como operación autorreflexiva sobre `PLANIFICACION_ABIERTO` para perfiles administradores. La ubicación se asociará a una tarea concreta, se validará antes de guardar y conservará el valor anterior si se cancela o falla el registro. Queda pendiente definir el formato mínimo de `Localizacion`. La optimización por proximidad geográfica, la integración con mapas y el cálculo de rutas quedan fuera del alcance del proyecto.
+
+---
