@@ -28,3 +28,4 @@ del repositorio de requisitado SdR.
 - [`establecerHorario()`](./establecerHorario.md)
 - [`definirLocalizacion()`](./definirLocalizacion.md)
 - [`configurarRecordatorio()`](./configurarRecordatorio.md)
+- [`asignarTareaAUsuario()`](./asignarTareaAUsuario.md)

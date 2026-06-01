@@ -20,7 +20,8 @@ Los criterios salen de los casos ya analizados:
   `relacionarTareas()`, `eliminarTarea()`, `marcarCompletada()`,
   `validarConflicto()`.
 - Planificación y configuración: `abrirPlanificacion()`,
-  `establecerHorario()`, `definirLocalizacion()`, `configurarRecordatorio()`.
+  `establecerHorario()`, `definirLocalizacion()`, `configurarRecordatorio()`,
+  `asignarTareaAUsuario()`.
 
 ## Reglas transversales
 
@@ -81,6 +82,7 @@ esta matriz operativa:
 | Establecer horario | Miembro Administrador o Administrador |
 | Definir localización | Miembro Administrador o Administrador |
 | Configurar recordatorio | Miembro Administrador o Administrador |
+| Asignar tarea a usuario | Miembro Administrador o Administrador |
 
 Esta matriz no cambia la jerarquía del SdR: la concreta. Si se quiere que un
 `Miembro` consulte grupos, debería definirse como vista de lectura, no como la
@@ -276,6 +278,14 @@ caducidad de la invitación.
   registros repetidos.
 - Si el usuario cancela o falla el guardado, se conservará la configuración
   anterior.
+- `asignarTareaAUsuario()` partirá y terminará en `PLANIFICACION_ABIERTO`.
+- La asignación enlazará una tarea con usuarios existentes que pertenezcan al
+  grupo responsable de esa tarea.
+- No se crearán asignaciones duplicadas. Si cambia la asignación de una tarea
+  con horario, se reevaluarán los conflictos de los usuarios afectados sin
+  bloquear una asignación válida.
+- Si el usuario cancela o falla el guardado, se conservarán las asignaciones
+  anteriores.
 
 ### Sesión y salida de flujos
 
@@ -331,3 +341,6 @@ caducidad de la invitación.
     contiene el flujo de `definirLocalizacion()`, sin trasladar ese acoplamiento
     al desarrollo, y concretar qué tipos de aviso admite la primera
     implementación.
+19. Concretar cómo se representa una tarea compartida entre varios usuarios o
+    disponible para cualquiera del grupo. El prototipo de
+    `asignarTareaAUsuario()` solo muestra un destinatario.

@@ -283,3 +283,13 @@
 **Decision:** `configurarRecordatorio()` se implementará como operación autorreflexiva sobre `PLANIFICACION_ABIERTO` para perfiles administradores. El recordatorio se asociará a una tarea concreta, incluirá como mínimo tipo de aviso y antelación, y quedará en estado `Creado` tras guardar. Se evitarán duplicados y se conservará la configuración anterior si se cancela o falla el registro. El flujo de localización incluido por error en el PUML de SdR se ignorará durante el desarrollo: los recordatorios no dependerán de localización, mapas, rutas ni proximidad geográfica. Queda pendiente corregir ese PUML y concretar los tipos de aviso admitidos.
 
 ---
+
+## [2026-06-01 19:51] Análisis de asignarTareaAUsuario()
+
+**Prompt:** El usuario inició una sesión con `recopilacion` y pidió analizar `asignarTareaAUsuario()`, atendiendo a quién asigna la tarea y qué ocurre ante tarea inexistente, usuario inexistente, usuario ajeno al grupo, falta de permisos o fallo al guardar.
+
+**Resultado:** Se revisaron el detalle, PUML y prototipo de `asignarTareaAUsuario()`, el diagrama de planificación y detalles, los diagramas de contexto, su relación con `editarTarea()`, el modelo de dominio y las minutas sobre tareas individuales y compartidas. Se creó `documents/analisis/asignarTareaAUsuario.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `asignarTareaAUsuario()` se implementará como operación autorreflexiva sobre `PLANIFICACION_ABIERTO` para perfiles administradores. Solo permitirá asignar una tarea a usuarios existentes que pertenezcan al grupo responsable, evitará duplicados y conservará las asignaciones anteriores si se cancela o falla el registro. Si cambia una asignación con horario, se reevaluarán los conflictos de los usuarios afectados sin bloquear una asignación válida. Queda pendiente concretar cómo representar tareas compartidas o disponibles para cualquiera del grupo.
+
+---
