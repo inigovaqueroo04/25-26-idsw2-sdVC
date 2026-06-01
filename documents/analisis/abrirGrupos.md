@@ -8,15 +8,17 @@ punto de entrada para crear, editar, eliminar o filtrar grupos.
 
 ## Actor principal
 
-`Administrador` o `Miembro Administrador`, segun los diagramas de contexto. El
-diagrama detallado de SdR muestra al `Administrador` como actor que solicita
-abrir grupos.
+`Miembro`, `Miembro Administrador` o `Administrador`. El diagrama general
+asigna `abrirGrupos()` al `Miembro`, mientras que los diagramas de contexto
+solo dibujan la gestión administrativa. Para integrar ambas vistas, cualquier
+usuario autenticado podrá consultar sus grupos y las mutaciones dependerán de
+sus permisos.
 
 ## Precondiciones
 
 - El usuario ha iniciado sesion.
 - El sistema esta en `SISTEMA_DISPONIBLE`.
-- El usuario tiene permisos para consultar la gestion de grupos.
+- El usuario pertenece a algún grupo o puede recibir una lista vacía.
 - Existen datos de grupos que el sistema puede cargar o, al menos, una vista
   preparada para mostrar una lista vacia.
 
@@ -26,8 +28,8 @@ abrir grupos.
 2. El sistema entra en el caso de uso `abrirGrupos()`.
 3. El sistema presenta la lista de grupos con identificador y nombre.
 4. El usuario puede filtrar la lista o seleccionar una accion relacionada.
-5. El sistema permite continuar hacia crear, editar, eliminar grupo o volver al
-   sistema disponible mediante `completarGestion()`.
+5. El sistema permite volver mediante `completarGestion()` y, si el perfil
+   tiene permisos, continuar hacia crear, editar o eliminar grupo.
 
 ## Flujos alternativos
 
@@ -79,7 +81,6 @@ prototipos, diagramas de contexto y modelo de dominio.
 
 ## Observaciones
 
-SdR no concreta como se gestionan los errores de carga ni el mensaje exacto para
-listas vacias. Tambien convendria unificar el actor del caso, porque el detalle
-menciona `Administrador` y los diagramas de contexto permiten el acceso desde
-perfiles con permisos de administracion de grupos.
+SdR no alinea el diagrama general con los diagramas de contexto. Para diseño se
+adopta una lista de grupos propios visible para cualquier usuario autenticado,
+con acciones administrativas visibles solo para quien tenga permisos.

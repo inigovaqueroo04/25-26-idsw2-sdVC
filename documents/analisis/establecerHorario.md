@@ -79,5 +79,6 @@ SdR, nunca desde `sdvc`.
 ## Observaciones
 
 El prototipo solo muestra `Fecha` y `Hora`, pero la aclaración posterior exige
-inicio y fin. Antes de implementar conviene concretar además si se admitirán
-horarios flexibles o repetitivos, mencionados en la documentación de SdR.
+inicio y fin. Para el primer diseño solo se admitirán intervalos cerrados con
+fecha, inicio y fin. Los horarios flexibles o repetitivos quedan fuera del
+primer incremento.

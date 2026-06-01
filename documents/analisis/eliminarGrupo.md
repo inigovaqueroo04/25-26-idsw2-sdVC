@@ -78,7 +78,6 @@ prototipos, diagramas de contexto y modelo de dominio.
 
 ## Observaciones
 
-SdR no concreta que ocurre con las tareas, miembros o invitaciones asociadas al
-grupo eliminado. Conviene definir si se borran en cascada, se bloquea la
-eliminacion o se pide una confirmacion reforzada cuando el grupo tiene datos
-relacionados.
+SdR no concreta qué ocurre con los datos asociados. Para el primer diseño, la
+eliminación se bloqueará mientras existan tareas. Si no las hay, la operación
+confirmada retirará pertenencias y cancelará invitaciones pendientes.

@@ -293,3 +293,13 @@
 **Decision:** `asignarTareaAUsuario()` se implementará como operación autorreflexiva sobre `PLANIFICACION_ABIERTO` para perfiles administradores. Solo permitirá asignar una tarea a usuarios existentes que pertenezcan al grupo responsable, evitará duplicados y conservará las asignaciones anteriores si se cancela o falla el registro. Si cambia una asignación con horario, se reevaluarán los conflictos de los usuarios afectados sin bloquear una asignación válida. Queda pendiente concretar cómo representar tareas compartidas o disponibles para cualquiera del grupo.
 
 ---
+
+## [2026-06-01 20:12] Revisión de coherencia previa al diseño
+
+**Prompt:** El usuario pidió revisar todo el análisis realizado, comprobar que los casos de uso están conectados y valorar los criterios de integración antes de comenzar el diseño, corrigiendo los problemas que pudieran entorpecer la implementación.
+
+**Resultado:** Se auditaron los 24 análisis, `QUE_HACE.md`, los criterios transversales y los artefactos de SdR sobre actores, estados, subtareas, asignaciones, recordatorios y conflictos. Se creó `documents/revision-pre-diseno.md`, se reforzó `documents/criterios-integracion.md` y se alinearon los análisis afectados por decisiones ya cerradas.
+
+**Decision:** El diseño puede comenzar sobre un primer incremento acotado: consulta de grupos propios para cualquier miembro, identidad global y rol operativo en `MiembroGrupo`, tareas guardadas como `Programada` con inicio automático por horario, subtareas separadas de relaciones de precedencia, asignaciones múltiples o `CUALQUIERA_DEL_GRUPO`, conflictos idempotentes no bloqueantes, planificación global filtrable, localización textual y recordatorios internos. Mapas, rutas, horarios flexibles, repeticiones, canales externos y pantallas nuevas no justificadas por casos de uso quedan fuera del primer diseño.
+
+---

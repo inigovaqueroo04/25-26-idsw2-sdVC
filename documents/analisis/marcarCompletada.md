@@ -8,16 +8,17 @@ visible la lista de tareas.
 
 ## Actor principal
 
-`Miembro` asignado a la tarea. Los perfiles `Miembro Administrador` y
-`Administrador` heredan esta capacidad y pueden aplicarla dentro de su ámbito
-de gestión.
+`Miembro` asignado a la tarea o habilitado por el modo
+`CUALQUIERA_DEL_GRUPO`. Los perfiles `Miembro Administrador` y `Administrador`
+heredan esta capacidad y pueden aplicarla dentro de su ámbito de gestión.
 
 ## Precondiciones
 
 - El usuario ha iniciado sesión.
 - El sistema está en `TAREAS_ABIERTO`.
 - Existe una tarea seleccionada.
-- El usuario está asignado a la tarea o tiene permisos de gestión sobre ella.
+- El usuario está asignado, pertenece al grupo de una tarea abierta a
+  `CUALQUIERA_DEL_GRUPO` o tiene permisos de gestión sobre ella.
 - La tarea está en estado `En ejecución`.
 - Si es una tarea padre, no tiene subtareas descendientes pendientes.
 
@@ -78,6 +79,7 @@ diagramas, el prototipo y la documentación del SdR.
 SdR no concreta cómo calcular el estado de una tarea padre a partir de sus
 subtareas. Para evitar cierres inconsistentes, la futura implementación no
 finalizará subtareas en cascada ni permitirá cerrar una tarea padre con
-descendientes pendientes. Queda por decidir si el padre se finaliza
-automáticamente cuando todas sus subtareas quedan resueltas o si exige
-confirmación explícita.
+descendientes pendientes. Cuando todas estén resueltas, el padre seguirá
+requiriendo confirmación explícita. El paso previo de `Programada` a
+`En ejecución` se aplicará al alcanzar la hora de inicio, ya que SdR no define
+un caso de uso manual para iniciarlo.

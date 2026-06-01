@@ -1,4 +1,4 @@
-# Pendientes de diseño e implementación
+# Criterios de integración para diseño e implementación
 
 Este documento recoge decisiones y ajustes que habrá que tener presentes cuando
 los análisis de casos de uso pasen a diseño e implementación. No cambia el
@@ -54,8 +54,8 @@ Los criterios salen de los casos ya analizados:
   SdR distingue ese origen. Esto ya aparece en `editarMiembro()` y
   `editarInvitacion()`.
 - Si un flujo elimina el elemento que se está visualizando, no debe quedarse en
-  un detalle inexistente. En especial, `eliminarMiembro()` necesita cerrar su
-  destino final antes de implementarse.
+  un detalle inexistente. Tras `eliminarMiembro()` se volverá a
+  `GRUPO_ABIERTO`.
 
 ## Roles y permisos
 
@@ -66,56 +66,59 @@ esta matriz operativa:
 | Acción | Perfil recomendado |
 | --- | --- |
 | Iniciar/cerrar sesión | Cualquier usuario |
-| Abrir gestión de grupos | Administrador o Miembro Administrador |
+| Consultar grupos propios | Cualquier usuario autenticado |
 | Crear grupo | Administrador |
 | Eliminar grupo | Administrador |
 | Editar grupo | Administrador o Miembro Administrador |
 | Invitar usuario | Administrador o Miembro Administrador |
 | Editar/eliminar miembro | Administrador o Miembro Administrador |
-| Abrir invitaciones | Miembro |
-| Aceptar/rechazar invitación | Miembro destinatario |
+| Abrir invitaciones | Cualquier usuario autenticado |
+| Aceptar/rechazar invitación | Usuario destinatario |
 | Abrir tareas | Miembro, Miembro Administrador o Administrador |
 | Crear/editar/eliminar tareas | Miembro Administrador o Administrador |
 | Relacionar tareas | Miembro Administrador o Administrador |
-| Marcar tarea completada | Miembro asignado o perfil administrador |
+| Marcar tarea completada | Usuario asignado, miembro habilitado por modo grupal o perfil administrador |
 | Abrir planificación | Miembro Administrador o Administrador |
 | Establecer horario | Miembro Administrador o Administrador |
 | Definir localización | Miembro Administrador o Administrador |
 | Configurar recordatorio | Miembro Administrador o Administrador |
 | Asignar tarea a usuario | Miembro Administrador o Administrador |
 
-Esta matriz no cambia la jerarquía del SdR: la concreta. Si se quiere que un
-`Miembro` consulte grupos, debería definirse como vista de lectura, no como la
-misma gestión administrativa de `abrirGrupos()`.
+Esta matriz no cambia la jerarquía del SdR: la concreta. `abrirGrupos()` será
+una vista de lectura para el `Miembro`; las acciones administrativas seguirán
+dependiendo del perfil.
 
 ## Modelo de datos que habrá que cuidar
 
 ### Pertenencia a grupo
 
 El modelo de dominio indica que un usuario puede pertenecer a varios grupos de
-forma independiente. Por tanto, en diseño conviene representar la pertenencia
-como relación propia entre usuario y grupo, no como un dato plano del usuario.
+forma independiente. Por tanto, en diseño se representará la pertenencia como
+relación propia entre usuario y grupo, no como un dato plano del usuario.
 
 Recomendación de diseño:
 
 - `Usuario`
 - `Grupo`
-- `Pertenencia` o `MiembroGrupo`
+- `MiembroGrupo`
 - `RolEnGrupo`
 
-Esto permite que una misma persona sea administradora en un grupo y miembro en
-otro, sin contradecir el planteamiento del SdR.
+El rol operativo se asociará a `MiembroGrupo`, no a `Usuario`. Así una misma
+persona podrá administrar un grupo y ser miembro ordinario en otro sin heredar
+permisos indebidos.
 
 ### Roles
 
-Hay que cerrar el catálogo mínimo de roles antes de implementar permisos:
+El catálogo mínimo de roles por grupo será:
 
 - `Administrador`
 - `Miembro Administrador`
 - `Miembro`
 
-También debe existir la regla de integridad: un grupo no puede quedarse sin
-ningún perfil capaz de administrarlo.
+También existirá la regla de integridad: un grupo no puede quedarse sin ningún
+miembro con perfil capaz de administrarlo.
+- El primer incremento partirá de usuarios precargados. No se inventará un
+  registro de cuentas que SdR no define.
 
 ### Invitaciones
 
@@ -123,13 +126,12 @@ La invitación debe enlazar como mínimo:
 
 - grupo de destino,
 - usuario emisor,
-- usuario destinatario o identificador invitado,
+- email normalizado del destinatario,
 - estado,
-- fecha relevante.
+- fecha límite.
 
-La fecha de `invitarUsuario()` debe concretarse. Para que encaje con el modelo
-de estados, la interpretación más útil es tratarla como fecha límite o
-caducidad de la invitación.
+El email será el identificador común para login e invitaciones. La fecha
+solicitada por `invitarUsuario()` se tratará como límite de caducidad.
 
 ## Decisiones por módulo
 
@@ -137,11 +139,12 @@ caducidad de la invitación.
 
 - `crearGrupo()` exige nombre obligatorio. Faltan reglas de longitud, nombres
   duplicados y mensajes de validación.
-- `editarGrupo()` necesita definir qué campos son editables. Como mínimo debe
-  mantener coherencia con `crearGrupo()`: nombre y descripción.
-- `eliminarGrupo()` no debe borrar en cascada de forma silenciosa. Antes de
-  implementar hay que decidir si se bloquea cuando hay tareas, miembros o
-  invitaciones asociadas, o si se pide confirmación reforzada.
+- Al crear un grupo se registrará también la pertenencia del creador con rol
+  `Administrador`.
+- `editarGrupo()` permitirá modificar nombre y descripción.
+- `eliminarGrupo()` exigirá confirmación y se bloqueará mientras existan tareas
+  asociadas. Si no hay tareas, retirará las pertenencias y cancelará las
+  invitaciones pendientes del grupo.
 - Las listas (`abrirGrupos()`) deben soportar lista vacía, error de carga y
   filtro sin resultados.
 
@@ -153,9 +156,8 @@ caducidad de la invitación.
   del usuario.
 - No se debe permitir eliminar al último administrador o último gestor efectivo
   del grupo.
-- El destino tras eliminar miembro debe aclararse: lo funcional es volver a
-  `GRUPO_ABIERTO` o a una lista de miembros, no permanecer en un
-  `MIEMBRO_ABIERTO` que ya no existe.
+- Tras eliminar un miembro se volverá a `GRUPO_ABIERTO`, porque
+  `MIEMBRO_ABIERTO` ya no representa un elemento válido.
 
 ### Invitaciones
 
@@ -168,17 +170,20 @@ caducidad de la invitación.
 - `editarInvitacion()` debe tratarse como validación de invitación, no como
   edición libre. Solo `Pendiente` debería permitir aceptar o rechazar.
 - Aceptar una invitación debe crear o activar la pertenencia del usuario al
-  grupo. Rechazarla no debe modificar la composición del grupo.
+  grupo con rol inicial `Miembro`. Rechazarla no debe modificar la composición
+  del grupo.
 - El estado `Cancelada` aparece en el modelo como acción de administrador, pero
-  todavía no hay un caso de uso administrativo claro para cancelar
-  invitaciones. Habrá que cubrirlo más adelante o dejarlo fuera del alcance de
-  la primera implementación.
+  no tiene un caso de uso propio. Se conservará en el modelo sin exponer una
+  pantalla nueva en el primer incremento.
 
 ### Tareas
 
 - `abrirTareas()` debe separar consulta y gestión: el `Miembro` puede consultar
   y marcar tareas, mientras que la creación, edición y eliminación requieren
   perfil administrador.
+- El `Miembro` verá sus tareas asignadas y las abiertas a
+  `CUALQUIERA_DEL_GRUPO`; los perfiles gestores podrán consultar las tareas de
+  los grupos que administran.
 - La lista debe poder abrirse desde `SISTEMA_DISPONIBLE`, desde una tarea
   concreta y desde un grupo. Si llega desde `GRUPO_ABIERTO`, el filtro por grupo
   debería conservarse.
@@ -193,9 +198,14 @@ caducidad de la invitación.
 - Para crear una tarea se exigirán título, fecha, hora de inicio y hora de fin.
   La implementación validará que el inicio sea anterior al fin aunque el
   detalle y el prototipo de SdR todavía no reflejen todos esos campos.
+- `Creada` será el estado transitorio durante la captura de datos. Al guardar
+  una tarea con horario válido quedará `Programada`.
+- La localización será opcional y no condicionará el paso a `Programada`.
+- La transición `Programada -> En ejecución` se aplicará cuando se alcance la
+  hora de inicio. SdR no define un caso de uso manual para iniciar tareas.
 - Un solapamiento horario no bloqueará la creación ni cambiará el ciclo de vida
-  de la tarea. Se registrará como conflicto paralelo del usuario afectado y se
-  generará el aviso correspondiente.
+  de la tarea. Si ya hay destinatarios concretos, se registrará como conflicto
+  paralelo del usuario afectado y se generará el aviso correspondiente.
 - `editarTarea()` coordinará la edición de datos base y las operaciones
   relacionadas de asignación, horario, localización, recordatorios y
   relaciones entre tareas.
@@ -204,11 +214,10 @@ caducidad de la invitación.
   notificación y resolución independiente. La aclaración posterior del cliente
   prevalecerá sobre el bloqueo dibujado en el PUML de `editarTarea()`.
 - `relacionarTareas()` partirá y terminará en `TAREA_ABIERTO` como operación
-  asociada a la edición. La primera implementación registrará relaciones de
-  precedencia `predecesora` o `sucesora`.
-- Las relaciones de precedencia no se mezclarán automáticamente con la
-  jerarquía recursiva de subtareas. La implementación rechazará autorrelaciones,
-  duplicados y ciclos incoherentes.
+  asociada a la edición. Admitirá `subtarea de`, `predecesora` y `sucesora`.
+- La jerarquía recursiva de subtareas se almacenará separada de las relaciones
+  lógicas de precedencia. Ambas rechazarán autorrelaciones, duplicados y ciclos
+  incoherentes.
 - `eliminarTarea()` partirá de `TAREA_ABIERTO`: al confirmar volverá a
   `TAREAS_ABIERTO` y al cancelar mantendrá el detalle abierto.
 - La eliminación de una tarea padre borrará también sus subtareas descendientes
@@ -219,14 +228,18 @@ caducidad de la invitación.
   independiente del usuario, sin eliminarlos en cascada de forma automática.
 - El estado `Cancelada` y `eliminarTarea()` no serán equivalentes: cancelar
   conservará el registro de la tarea y eliminar lo retirará de forma
-  irreversible.
+  irreversible. Como SdR no define un caso de uso para cancelar tareas, el
+  estado se conservará en el modelo sin añadir una pantalla nueva al primer
+  incremento.
 - `marcarCompletada()` se ejecutará desde `TAREAS_ABIERTO` y mantendrá la lista
   abierta. Solo permitirá la transición de `En ejecución` a `Finalizada` y
   registrará la fecha de finalización.
-- Un `Miembro` solo podrá completar tareas asignadas. Los perfiles
-  administradores podrán hacerlo dentro de su ámbito de gestión.
+- Un `Miembro` podrá completar tareas asignadas o abiertas a
+  `CUALQUIERA_DEL_GRUPO`. Los perfiles administradores podrán hacerlo dentro de
+  su ámbito de gestión.
 - La finalización no se propagará en cascada a las subtareas. Una tarea padre
-  no podrá finalizar mientras tenga descendientes pendientes.
+  no podrá finalizar mientras tenga descendientes pendientes y requerirá
+  confirmación explícita aunque todas estén resueltas.
 - Al finalizar una tarea se desactivarán sus recordatorios vigentes. Los
   conflictos del usuario seguirán tratándose como información independiente.
 - `validarConflicto()` se implementará como servicio interno reutilizable. Se
@@ -241,6 +254,12 @@ caducidad de la invitación.
 - Los conflictos se registrarán sin duplicados para cada usuario y conjunto de
   tareas implicadas. Si la planificación cambia, deberán reevaluarse para
   resolver o descartar los que ya no correspondan.
+- La notificación de conflicto se generará al abrir o reabrir un conflicto, no
+  en cada reevaluación idéntica. No se confundirá con un `Recordatorio`
+  programado por el usuario.
+- La resolución se realizará mediante los flujos existentes de reprogramación
+  o reasignación. No se inventará una pantalla adicional en el primer
+  incremento.
 
 ### Planificación y configuración
 
@@ -251,11 +270,15 @@ caducidad de la invitación.
 - La vista permitirá consultar la planificación existente y solicitar
   `establecerHorario()`, `definirLocalizacion()`,
   `configurarRecordatorio()` o `asignarTareaAUsuario()`.
+- La planificación se abrirá como agenda global con filtro opcional por grupo.
+  Cada mutación usará el grupo de la tarea seleccionada.
 - Si todavía no hay datos planificados, la vista vacía debe seguir permitiendo
   iniciar las operaciones de configuración.
 - `establecerHorario()` partirá y terminará en `PLANIFICACION_ABIERTO`.
 - El horario de una tarea incluirá fecha, hora de inicio y hora de fin. El
   inicio deberá ser anterior al fin.
+- El primer incremento solo admitirá intervalos cerrados. Los horarios
+  flexibles y repetitivos quedan fuera de alcance.
 - Antes de guardar se comprobará la disponibilidad de los usuarios asignados.
   Un solapamiento válido registrará o actualizará el conflicto y generará una
   notificación, pero no bloqueará el horario.
@@ -264,12 +287,15 @@ caducidad de la invitación.
 - La localización se asociará a una tarea concreta y se validará antes de
   guardar. Si el usuario cancela o falla el guardado, se conservará el valor
   anterior.
-- La primera implementación tratará la localización como un dato propio de la
-  tarea. No dependerá de mapas, rutas, proximidad geográfica ni servicios
+- La primera implementación tratará la localización como texto opcional propio
+  de la tarea. No dependerá de mapas, rutas, proximidad geográfica ni servicios
   externos de geolocalización.
 - `configurarRecordatorio()` partirá y terminará en `PLANIFICACION_ABIERTO`.
 - El recordatorio se asociará a una tarea concreta e incluirá al menos tipo de
   aviso y antelación respecto a la tarea.
+- Una tarea podrá tener varios recordatorios con antelaciones distintas. En el
+  primer incremento el aviso será interno a la aplicación; los canales externos
+  quedan fuera de alcance.
 - `configurarRecordatorio()` no se acoplará a `definirLocalizacion()`. El flujo
   de localización incluido por error en su PUML de SdR se ignorará durante el
   desarrollo.
@@ -278,9 +304,16 @@ caducidad de la invitación.
   registros repetidos.
 - Si el usuario cancela o falla el guardado, se conservará la configuración
   anterior.
+- Los recordatorios vigentes pasarán a `Finalizado` cuando se envíen o cuando
+  la tarea asociada quede `Finalizada` o `Cancelada`.
 - `asignarTareaAUsuario()` partirá y terminará en `PLANIFICACION_ABIERTO`.
 - La asignación enlazará una tarea con usuarios existentes que pertenezcan al
   grupo responsable de esa tarea.
+- La asignación admitirá varios destinatarios concretos o el modo
+  `CUALQUIERA_DEL_GRUPO`, sin crear un usuario ficticio. Este último modo no
+  generará conflictos hasta que exista un destinatario concreto.
+- Si una tarea abierta a `CUALQUIERA_DEL_GRUPO` se completa, se registrará el
+  usuario que la realizó.
 - No se crearán asignaciones duplicadas. Si cambia la asignación de una tarea
   con horario, se reevaluarán los conflictos de los usuarios afectados sin
   bloquear una asignación válida.
@@ -305,42 +338,24 @@ caducidad de la invitación.
   un caso de uso específico.
 - Los cambios de rol o pertenencia deben revisarse contra reglas de integridad
   del grupo.
+- Las mutaciones que afecten a varias entidades deben ser atómicas: si falla
+  una parte, no deben quedar cambios parciales.
+- Las tareas `Finalizada` y `Cancelada` serán de solo lectura en el primer
+  incremento.
 
-## Puntos que conviene resolver antes de codificar
+## Pendientes no bloqueantes
 
-1. Identificador de usuario: decidir si el sistema usa email, nombre de usuario
-   o ambos para login e invitaciones.
-2. Fecha de invitación: confirmar que representa caducidad.
-3. Campos editables de grupo.
-4. Política de eliminación de grupos con datos asociados.
-5. Destino final de `eliminarMiembro()` tras confirmar.
-6. Catálogo exacto de roles y permisos.
-7. Tratamiento de cambios no guardados en `cerrarSesion()` y
-   `completarGestion()`.
-8. Corregir en SdR el conflicto de merge pendiente del PUML de `abrirTareas()`.
-9. Concretar si una tarea creada con horario obligatorio queda inicialmente en
-   estado `Creada` o `Programada`.
-10. Concretar qué modificaciones se permiten sobre tareas `Finalizada` o
-    `Cancelada`.
-11. Aclarar si `relacionarTareas()` también debe reestructurar subtareas y si
-    los vínculos de bloqueo o apoyo del modelo se exponen en el mismo flujo.
-12. Concretar si una tarea padre se finaliza automáticamente cuando todas sus
-    subtareas quedan resueltas o si requiere confirmación explícita.
-13. Completar en SdR el ciclo de vida de recordatorio para reflejar su
-    finalización cuando la tarea asociada ya está `Finalizada`.
-14. Concretar la política de repetición de notificaciones cuando un conflicto
-    ya registrado siga pendiente tras una nueva validación.
-15. Definir si `abrirPlanificacion()` muestra una agenda global del usuario o
-    una planificación filtrada por grupo.
-16. Concretar si `establecerHorario()` debe soportar horarios flexibles,
-    repeticiones o solo intervalos cerrados con fecha, inicio y fin.
-17. Definir el formato mínimo de `Localizacion`. La optimización por proximidad
-    geográfica, la integración con mapas y el cálculo de rutas quedan fuera del
-    alcance del proyecto.
-18. Corregir en SdR el PUML de `configurarRecordatorio()`, que actualmente
-    contiene el flujo de `definirLocalizacion()`, sin trasladar ese acoplamiento
-    al desarrollo, y concretar qué tipos de aviso admite la primera
-    implementación.
-19. Concretar cómo se representa una tarea compartida entre varios usuarios o
-    disponible para cualquiera del grupo. El prototipo de
-    `asignarTareaAUsuario()` solo muestra un destinatario.
+Estos puntos no impiden comenzar el diseño del primer incremento:
+
+1. Definir longitudes máximas y mensajes de validación para nombres y
+   descripciones.
+2. Precisar el tratamiento visual de cambios no guardados en `cerrarSesion()`
+   y `completarGestion()`.
+3. Corregir en SdR el conflicto de merge del PUML de `abrirTareas()`.
+4. Corregir en SdR el PUML de `configurarRecordatorio()`, que contiene por
+   error el flujo de `definirLocalizacion()`.
+5. Corregir en SdR los enlaces de `asignarTareaAUsuario()` que apuntan a una
+   carpeta incorrecta.
+6. Valorar en incrementos posteriores cancelación de tareas, reprogramación
+   guiada, cancelación administrativa de invitaciones, horarios flexibles,
+   repeticiones y canales externos de notificación.

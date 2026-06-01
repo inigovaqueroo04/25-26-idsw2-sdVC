@@ -74,6 +74,6 @@ SdR, nunca desde `sdvc`.
 
 ## Observaciones
 
-SdR no concreta si la planificación se abre como agenda global del usuario o
-filtrada por grupo. Conviene definirlo antes de implementar, especialmente para
-las asignaciones y los usuarios que pertenecen a varios grupos.
+SdR no concreta si la planificación se abre como agenda global o por grupo.
+Para diseño se adopta una agenda global con filtro opcional por grupo. Cada
+mutación se aplicará al grupo de la tarea seleccionada.

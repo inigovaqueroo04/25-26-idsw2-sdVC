@@ -15,14 +15,14 @@ Administrador` y `Miembro`.
 
 - El sistema esta en estado `SESION_CERRADA`.
 - El usuario quiere acceder al sistema.
-- El usuario dispone de usuario/email y contrasena.
+- El usuario dispone de email y contrasena.
 - El sistema puede presentar el formulario de inicio de sesion.
 
 ## Flujo principal
 
 1. El usuario solicita iniciar sesion.
 2. El sistema muestra el formulario de inicio de sesion.
-3. El usuario introduce usuario/email y contrasena.
+3. El usuario introduce email y contrasena.
 4. El usuario confirma el inicio.
 5. El sistema valida las credenciales.
 6. El sistema permite el acceso y pasa a `SISTEMA_DISPONIBLE`.
@@ -68,6 +68,6 @@ cancela o falla, el sistema continua en `SESION_CERRADA`.
 
 ## Observaciones
 
-El caso esta bien situado como puerta de entrada al sistema. Como mejora, SdR
-podria detallar si el identificador principal sera usuario, email o ambos, y
-que mensajes exactos se mostraran en los errores de autenticacion.
+El caso esta bien situado como puerta de entrada al sistema. Para mantener
+coherencia con las invitaciones, el primer diseño utilizará email normalizado y
+único como identificador. Queda por concretar el texto exacto de los errores.

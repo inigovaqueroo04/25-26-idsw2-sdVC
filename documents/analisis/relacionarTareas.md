@@ -3,8 +3,8 @@
 ## Objetivo
 
 Permitir que un perfil con permisos vincule una tarea abierta con otra tarea.
-El caso registra una relación lógica de precedencia para coordinar el orden en
-que deben realizarse ambas tareas.
+El caso puede registrar una relación lógica de precedencia o indicar que una
+tarea es subtarea de otra, manteniendo ambas estructuras diferenciadas.
 
 ## Actor principal
 
@@ -25,8 +25,8 @@ administrador.
 1. El usuario solicita relacionar la tarea abierta.
 2. El sistema presenta un buscador de tareas vinculables.
 3. El usuario busca otra tarea por identificador o título.
-4. El usuario selecciona la tarea y el tipo de relación: `predecesora` o
-   `sucesora`.
+4. El usuario selecciona la tarea y el tipo de relación: `subtarea de`,
+   `predecesora` o `sucesora`.
 5. El sistema valida que la relación sea admisible.
 6. El sistema registra la relación entre ambas tareas.
 7. El sistema vuelve a mostrar la tarea abierta en `TAREA_ABIERTO`.
@@ -49,9 +49,9 @@ administrador.
 
 ## Postcondiciones
 
-La relación de precedencia queda registrada y la tarea de origen continúa
-visible en `TAREA_ABIERTO`. La nueva vinculación queda disponible para
-consultar o continuar editando la tarea.
+La relación queda registrada y la tarea de origen continúa visible en
+`TAREA_ABIERTO`. Si se trata de una subtarea, se actualiza la jerarquía
+recursiva; si es precedencia, se registra como vínculo lógico independiente.
 
 ## Elementos relacionados en SdR
 
@@ -72,9 +72,8 @@ diagramas, el prototipo y la documentación del SdR.
 
 ## Observaciones
 
-SdR no mantiene todavía una única interpretación del caso: el README de
-contexto lo describe como creación de subtareas, pero el detalle solo permite
-elegir `predecesora` o `sucesora` y el modelo separa subtareas de
-`RelacionTareas`. Para la primera implementación se tratará como relación de
-precedencia. Antes de incorporar jerarquías, bloqueos o apoyos habrá que
-concretar si comparten este flujo o requieren operaciones diferenciadas.
+SdR no mantiene una única interpretación del caso: el README de contexto lo
+describe como creación de subtareas, pero el detalle solo permite elegir
+`predecesora` o `sucesora`. Para no perder la recursividad requerida, el diseño
+permitirá ambos tipos desde el mismo flujo, pero almacenará la jerarquía de
+subtareas separada de `RelacionTareas`.

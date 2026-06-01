@@ -49,7 +49,7 @@ también puede realizar la operación por herencia de permisos.
 
 El recordatorio queda registrado o actualizado y asociado a la tarea en estado
 `Creado`. Al alcanzarse su hora de envío se notifica y pasa a `Finalizado`;
-también finaliza si la tarea se cancela.
+también finaliza si la tarea se completa o cancela.
 
 ## Elementos relacionados en SdR
 

@@ -47,4 +47,7 @@ Si el caso termina correctamente, el miembro queda actualizado con el rol o perm
 No se ha usado el repositorio `sdvc` como referencia principal. No se ha localizado una implementacion directa en codigo, por lo que el analisis se ha inferido a partir de diagramas de actividad, diagramas de contexto, descripcion de roles y modelo de dominio del repositorio SdR.
 
 ## Observaciones
-SdR deja clara la edicion de rol o permisos, pero no concreta el catalogo exacto de roles ni reglas como impedir que un grupo se quede sin administrador. Esa validacion deberia definirse antes de implementar el caso de uso.
+Para el primer diseño se conservarán los roles `Administrador`, `Miembro
+Administrador` y `Miembro`, asociados a la pertenencia `MiembroGrupo`. Así un
+cambio dentro de un grupo no filtrará permisos a los demás. No se permitirá
+retirar el último miembro capaz de administrarlo.

@@ -46,4 +46,6 @@ Si el caso termina correctamente, el miembro deja de pertenecer al grupo y la ge
 No se ha usado el repositorio `sdvc` como referencia principal. No se ha localizado una implementacion directa en codigo, por lo que el analisis se ha inferido a partir de diagramas de actividad, diagramas de contexto, descripcion de roles y modelo de dominio del repositorio SdR.
 
 ## Observaciones
-El PUML modela la confirmacion y la cancelacion, pero queda ambigua la vista final tras confirmar: el comentario indica que al eliminar el miembro se deberia volver a la lista del grupo, mientras que la transicion dibujada termina en `MIEMBRO_ABIERTO`. Conviene aclararlo antes de implementar el flujo.
+El PUML deja ambigua la vista final tras confirmar. Para diseño prevalece el
+resultado funcional: tras retirar la pertenencia se volverá a
+`GRUPO_ABIERTO`, porque `MIEMBRO_ABIERTO` ya no representa un elemento válido.

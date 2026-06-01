@@ -3,8 +3,8 @@
 ## Objetivo
 
 Permitir que un usuario con permisos invite a otra persona a incorporarse a un
-grupo existente. El caso recoge el identificador del usuario invitado y una
-fecha asociada a la invitacion, y mantiene la gestion dentro del grupo abierto.
+grupo existente. El caso recoge el email del usuario invitado y la fecha límite
+de la invitacion, y mantiene la gestion dentro del grupo abierto.
 
 ## Actor principal
 
@@ -25,7 +25,7 @@ permiten la misma accion desde `GRUPO_ABIERTO` para ambos perfiles.
 
 1. El usuario solicita invitar a un usuario al grupo.
 2. El sistema presenta el formulario de invitacion.
-3. El usuario introduce el identificador del invitado y la fecha.
+3. El usuario introduce el email del invitado y la fecha límite.
 4. El usuario solicita enviar la invitacion.
 5. El sistema registra o envia la invitacion.
 6. El sistema vuelve a `GRUPO_ABIERTO`.
@@ -85,6 +85,6 @@ prototipos, diagramas de contexto y modelo de dominio.
 
 ## Observaciones
 
-SdR indica que se introduce un identificador y una fecha, pero no concreta si el
-identificador es email, nombre de usuario u otro dato. Tampoco define si la
-fecha representa caducidad, fecha de envio o fecha prevista de incorporacion.
+SdR no concreta la semántica del identificador y la fecha. Para diseño se adopta
+email normalizado y único como identificador y fecha límite como caducidad,
+porque encaja con el estado `Caducada` del modelo.

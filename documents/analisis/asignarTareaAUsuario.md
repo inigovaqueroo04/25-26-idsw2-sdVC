@@ -71,6 +71,7 @@ exclusivamente desde los artefactos de SdR indicados, nunca desde `sdvc`.
 
 ## Observaciones
 
-Antes de implementar conviene concretar cómo se representa una tarea asignada
-a varios usuarios o disponible para cualquiera del grupo. El prototipo solo
-muestra un destinatario, pero las minutas admiten esas variantes.
+El prototipo solo muestra un destinatario, pero las minutas admiten varios o
+cualquiera del grupo. Para diseño se usarán asignaciones múltiples y un modo
+`CUALQUIERA_DEL_GRUPO`, sin crear un usuario ficticio. Los conflictos solo se
+evaluarán para destinatarios concretos.

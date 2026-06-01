@@ -70,7 +70,6 @@ SdR, nunca desde `sdvc`.
 
 ## Observaciones
 
-SdR no concreta el formato de `Localizacion`: texto libre, dirección
-normalizada o coordenadas. La optimización por proximidad geográfica, la
-integración con mapas y el cálculo de rutas quedan expresamente fuera del
-alcance de este proyecto.
+Para el primer diseño, `Localizacion` será un texto opcional asociado a la
+tarea. La optimización por proximidad geográfica, la integración con mapas y el
+cálculo de rutas quedan expresamente fuera del alcance de este proyecto.

@@ -50,9 +50,10 @@ tarea creada para continuar configurándola.
 
 ## Postcondiciones
 
-La tarea queda registrada dentro del grupo y visible en `TAREA_ABIERTO`. Sus
-datos iniciales y su horario quedan disponibles para continuar con la
-configuración de asignaciones, localización, relaciones o recordatorios.
+La tarea queda registrada dentro del grupo, visible en `TAREA_ABIERTO` y en
+estado `Programada`, porque el horario válido es obligatorio al guardar. Sus
+datos quedan disponibles para continuar con la configuración de asignaciones,
+localización, relaciones o recordatorios.
 
 ## Elementos relacionados en SdR
 
@@ -78,5 +79,6 @@ en código; el análisis se obtiene de los diagramas y documentación del SdR.
 El detalle y el prototipo de `crearTarea()` no reflejan todavía la aclaración
 posterior sobre el horario obligatorio. Para la futura implementación se
 exigirán hora de inicio y hora de fin, se validará que inicio sea anterior a
-fin y el conflicto se tratará como aviso paralelo del usuario, nunca como
-bloqueo de la creación.
+fin y la tarea persistida quedará `Programada`. Los conflictos se comprobarán
+para los usuarios que ya estén asignados y se reevaluarán cuando cambien las
+asignaciones; nunca bloquearán la creación.

@@ -6,3 +6,4 @@ Este proyecto aplica las disciplinas de análisis, diseño e implementación de 
 
 - [Protocolo de sesiones con IA](./documents/protocolo-sesiones-ia.md)
 - [Análisis de casos de uso](./documents/analisis/README.md)
+- [Revisión de coherencia previa al diseño](./documents/revision-pre-diseno.md)
