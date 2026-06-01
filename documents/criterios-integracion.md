@@ -17,7 +17,8 @@ Los criterios salen de los casos ya analizados:
   `editarMiembro()`, `eliminarMiembro()`.
 - Gestión de invitaciones: `abrirInvitaciones()`, `editarInvitacion()`.
 - Gestión de tareas: `abrirTareas()`, `crearTarea()`, `editarTarea()`,
-  `relacionarTareas()`, `eliminarTarea()`, `marcarCompletada()`.
+  `relacionarTareas()`, `eliminarTarea()`, `marcarCompletada()`,
+  `validarConflicto()`.
 
 ## Reglas transversales
 
@@ -220,6 +221,18 @@ caducidad de la invitación.
   no podrá finalizar mientras tenga descendientes pendientes.
 - Al finalizar una tarea se desactivarán sus recordatorios vigentes. Los
   conflictos del usuario seguirán tratándose como información independiente.
+- `validarConflicto()` se implementará como servicio interno reutilizable. Se
+  ejecutará al crear una tarea y cuando cambien su horario o sus asignaciones.
+- La validación comparará las tareas de cada usuario aunque pertenezcan a
+  grupos distintos. Cualquier intersección temporal positiva generará o
+  actualizará un conflicto; dos intervalos contiguos no se considerarán
+  solapados.
+- Un horario inválido impedirá guardar. Un horario válido con solapamiento
+  registrará el conflicto y generará la notificación, pero no bloqueará los
+  cambios ni alterará el ciclo de vida de la tarea.
+- Los conflictos se registrarán sin duplicados para cada usuario y conjunto de
+  tareas implicadas. Si la planificación cambia, deberán reevaluarse para
+  resolver o descartar los que ya no correspondan.
 
 ### Sesión y salida de flujos
 
@@ -262,3 +275,5 @@ caducidad de la invitación.
     subtareas quedan resueltas o si requiere confirmación explícita.
 13. Completar en SdR el ciclo de vida de recordatorio para reflejar su
     finalización cuando la tarea asociada ya está `Finalizada`.
+14. Concretar la política de repetición de notificaciones cuando un conflicto
+    ya registrado siga pendiente tras una nueva validación.

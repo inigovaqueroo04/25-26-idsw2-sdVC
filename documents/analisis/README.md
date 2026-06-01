@@ -23,3 +23,4 @@ del repositorio de requisitado SdR.
 - [`relacionarTareas()`](./relacionarTareas.md)
 - [`eliminarTarea()`](./eliminarTarea.md)
 - [`marcarCompletada()`](./marcarCompletada.md)
+- [`validarConflicto()`](./validarConflicto.md)

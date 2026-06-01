@@ -233,3 +233,13 @@
 **Decision:** `marcarCompletada()` se implementará como una operación autorreflexiva sobre `TAREAS_ABIERTO`. Permitirá pasar una tarea asignada de `En ejecución` a `Finalizada`, registrará la fecha de finalización y desactivará sus recordatorios pendientes. No cerrará subtareas en cascada ni permitirá finalizar una tarea padre con descendientes pendientes. Los conflictos permanecerán independientes del ciclo de vida de la tarea. Queda pendiente decidir si una tarea padre se finaliza automáticamente al quedar resueltas todas sus subtareas o si requiere confirmación explícita.
 
 ---
+
+## [2026-06-01 18:58] Análisis de validarConflicto()
+
+**Prompt:** El usuario pidió analizar `validarConflicto()`, atendiendo a quién provoca la validación, qué datos necesita y qué ocurre ante horario inválido, solapamiento detectado o fallo de comprobación.
+
+**Resultado:** Se revisaron la inclusión de `validarConflicto()` dentro de `editarTarea()`, el diagrama de gestión de tareas, el modelo y ciclo de vida de conflicto horario y las aclaraciones de la segunda reunión. Se creó `documents/analisis/validarConflicto.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `validarConflicto()` se implementará como servicio interno reutilizable al crear una tarea o cambiar horario o asignaciones. Comparará las tareas de cada usuario aunque pertenezcan a grupos distintos y registrará o actualizará un conflicto ante cualquier intersección temporal positiva. Un horario inválido bloqueará el guardado; un solapamiento válido generará notificación, pero no impedirá guardar ni alterará el ciclo de vida de la tarea. Queda pendiente concretar la política de repetición de avisos para conflictos que sigan abiertos.
+
+---
