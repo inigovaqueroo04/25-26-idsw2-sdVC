@@ -19,6 +19,7 @@ Los criterios salen de los casos ya analizados:
 - Gestión de tareas: `abrirTareas()`, `crearTarea()`, `editarTarea()`,
   `relacionarTareas()`, `eliminarTarea()`, `marcarCompletada()`,
   `validarConflicto()`.
+- Planificación y configuración: `abrirPlanificacion()`.
 
 ## Reglas transversales
 
@@ -46,7 +47,7 @@ Los criterios salen de los casos ya analizados:
 - Los estados de contexto deben conservarse como contrato de navegación:
   `GRUPOS_ABIERTO`, `GRUPO_ABIERTO`, `MIEMBRO_ABIERTO`,
   `INVITACIONES_ABIERTO`, `INVITACION_ABIERTO`, `TAREAS_ABIERTO` y
-  `TAREA_ABIERTO`.
+  `TAREA_ABIERTO`, `PLANIFICACION_ABIERTO`.
 - Las cancelaciones deben volver al estado desde el que el usuario entró cuando
   SdR distingue ese origen. Esto ya aparece en `editarMiembro()` y
   `editarInvitacion()`.
@@ -75,6 +76,7 @@ esta matriz operativa:
 | Crear/editar/eliminar tareas | Miembro Administrador o Administrador |
 | Relacionar tareas | Miembro Administrador o Administrador |
 | Marcar tarea completada | Miembro asignado o perfil administrador |
+| Abrir planificación | Miembro Administrador o Administrador |
 
 Esta matriz no cambia la jerarquía del SdR: la concreta. Si se quiere que un
 `Miembro` consulte grupos, debería definirse como vista de lectura, no como la
@@ -234,6 +236,18 @@ caducidad de la invitación.
   tareas implicadas. Si la planificación cambia, deberán reevaluarse para
   resolver o descartar los que ya no correspondan.
 
+### Planificación y configuración
+
+- `abrirPlanificacion()` partirá de `SISTEMA_DISPONIBLE` y dejará abierto
+  `PLANIFICACION_ABIERTO`.
+- El módulo estará disponible para `Miembro Administrador` y `Administrador`,
+  no para el `Miembro` operacional.
+- La vista permitirá consultar la planificación existente y solicitar
+  `establecerHorario()`, `definirLocalizacion()`,
+  `configurarRecordatorio()` o `asignarTareaAUsuario()`.
+- Si todavía no hay datos planificados, la vista vacía debe seguir permitiendo
+  iniciar las operaciones de configuración.
+
 ### Sesión y salida de flujos
 
 - `cerrarSesion()` debería avisar si existen cambios no guardados en una vista
@@ -277,3 +291,5 @@ caducidad de la invitación.
     finalización cuando la tarea asociada ya está `Finalizada`.
 14. Concretar la política de repetición de notificaciones cuando un conflicto
     ya registrado siga pendiente tras una nueva validación.
+15. Definir si `abrirPlanificacion()` muestra una agenda global del usuario o
+    una planificación filtrada por grupo.

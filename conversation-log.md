@@ -243,3 +243,13 @@
 **Decision:** `validarConflicto()` se implementará como servicio interno reutilizable al crear una tarea o cambiar horario o asignaciones. Comparará las tareas de cada usuario aunque pertenezcan a grupos distintos y registrará o actualizará un conflicto ante cualquier intersección temporal positiva. Un horario inválido bloqueará el guardado; un solapamiento válido generará notificación, pero no impedirá guardar ni alterará el ciclo de vida de la tarea. Queda pendiente concretar la política de repetición de avisos para conflictos que sigan abiertos.
 
 ---
+
+## [2026-06-01 19:25] Análisis de abrirPlanificacion()
+
+**Prompt:** El usuario inició una sesión con `recopilacion` y pidió analizar `abrirPlanificacion()`, atendiendo a quién accede a la planificación, qué queda disponible al abrirla y qué ocurre ante falta de autenticación, error de carga, grupo no seleccionado o ausencia de datos planificados.
+
+**Resultado:** Se revisaron el detalle, PUML y prototipo de `abrirPlanificacion()`, el diagrama de planificación y detalles, los diagramas de contexto de Administrador y Miembro Administrador y el modelo de dominio. Se creó `documents/analisis/abrirPlanificacion.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `abrirPlanificacion()` se implementará como acceso desde `SISTEMA_DISPONIBLE` a `PLANIFICACION_ABIERTO` para `Miembro Administrador` y `Administrador`. La vista mantendrá disponibles las operaciones de horario, localización, recordatorios y asignación incluso cuando todavía no existan datos planificados. Queda pendiente concretar si la planificación es global para el usuario o filtrada por grupo.
+
+---
