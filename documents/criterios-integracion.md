@@ -20,7 +20,7 @@ Los criterios salen de los casos ya analizados:
   `relacionarTareas()`, `eliminarTarea()`, `marcarCompletada()`,
   `validarConflicto()`.
 - Planificación y configuración: `abrirPlanificacion()`,
-  `establecerHorario()`, `definirLocalizacion()`.
+  `establecerHorario()`, `definirLocalizacion()`, `configurarRecordatorio()`.
 
 ## Reglas transversales
 
@@ -80,6 +80,7 @@ esta matriz operativa:
 | Abrir planificación | Miembro Administrador o Administrador |
 | Establecer horario | Miembro Administrador o Administrador |
 | Definir localización | Miembro Administrador o Administrador |
+| Configurar recordatorio | Miembro Administrador o Administrador |
 
 Esta matriz no cambia la jerarquía del SdR: la concreta. Si se quiere que un
 `Miembro` consulte grupos, debería definirse como vista de lectura, no como la
@@ -261,6 +262,20 @@ caducidad de la invitación.
 - La localización se asociará a una tarea concreta y se validará antes de
   guardar. Si el usuario cancela o falla el guardado, se conservará el valor
   anterior.
+- La primera implementación tratará la localización como un dato propio de la
+  tarea. No dependerá de mapas, rutas, proximidad geográfica ni servicios
+  externos de geolocalización.
+- `configurarRecordatorio()` partirá y terminará en `PLANIFICACION_ABIERTO`.
+- El recordatorio se asociará a una tarea concreta e incluirá al menos tipo de
+  aviso y antelación respecto a la tarea.
+- `configurarRecordatorio()` no se acoplará a `definirLocalizacion()`. El flujo
+  de localización incluido por error en su PUML de SdR se ignorará durante el
+  desarrollo.
+- Antes de guardar se validará que la tarea exista, disponga de horario y que
+  la antelación sea válida. Los duplicados se evitarán o actualizarán sin crear
+  registros repetidos.
+- Si el usuario cancela o falla el guardado, se conservará la configuración
+  anterior.
 
 ### Sesión y salida de flujos
 
@@ -312,3 +327,7 @@ caducidad de la invitación.
 17. Definir el formato mínimo de `Localizacion`. La optimización por proximidad
     geográfica, la integración con mapas y el cálculo de rutas quedan fuera del
     alcance del proyecto.
+18. Corregir en SdR el PUML de `configurarRecordatorio()`, que actualmente
+    contiene el flujo de `definirLocalizacion()`, sin trasladar ese acoplamiento
+    al desarrollo, y concretar qué tipos de aviso admite la primera
+    implementación.

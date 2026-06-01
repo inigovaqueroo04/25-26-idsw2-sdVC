@@ -273,3 +273,13 @@
 **Decision:** `definirLocalizacion()` se implementará como operación autorreflexiva sobre `PLANIFICACION_ABIERTO` para perfiles administradores. La ubicación se asociará a una tarea concreta, se validará antes de guardar y conservará el valor anterior si se cancela o falla el registro. Queda pendiente definir el formato mínimo de `Localizacion`. La optimización por proximidad geográfica, la integración con mapas y el cálculo de rutas quedan fuera del alcance del proyecto.
 
 ---
+
+## [2026-06-01 19:46] Análisis de configurarRecordatorio()
+
+**Prompt:** El usuario inició una sesión con `recopilacion` y pidió analizar `configurarRecordatorio()`, atendiendo a quién configura el aviso y qué ocurre ante tarea inexistente, fecha u hora inválida, duplicidad, falta de permisos o fallo al guardar.
+
+**Resultado:** Se revisaron el prototipo de `configurarRecordatorio()`, el diagrama de planificación y detalles, los diagramas de contexto, el modelo y ciclo de vida de `Recordatorio` y las minutas sobre avisos personalizados. El PUML específico de SdR contiene por error el flujo de `definirLocalizacion()`. Se creó `documents/analisis/configurarRecordatorio.md`, se añadió al índice y se actualizaron los pendientes de diseño e implementación.
+
+**Decision:** `configurarRecordatorio()` se implementará como operación autorreflexiva sobre `PLANIFICACION_ABIERTO` para perfiles administradores. El recordatorio se asociará a una tarea concreta, incluirá como mínimo tipo de aviso y antelación, y quedará en estado `Creado` tras guardar. Se evitarán duplicados y se conservará la configuración anterior si se cancela o falla el registro. El flujo de localización incluido por error en el PUML de SdR se ignorará durante el desarrollo: los recordatorios no dependerán de localización, mapas, rutas ni proximidad geográfica. Queda pendiente corregir ese PUML y concretar los tipos de aviso admitidos.
+
+---

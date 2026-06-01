@@ -27,3 +27,4 @@ del repositorio de requisitado SdR.
 - [`abrirPlanificacion()`](./abrirPlanificacion.md)
 - [`establecerHorario()`](./establecerHorario.md)
 - [`definirLocalizacion()`](./definirLocalizacion.md)
+- [`configurarRecordatorio()`](./configurarRecordatorio.md)
