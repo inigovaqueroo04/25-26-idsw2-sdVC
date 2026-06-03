@@ -303,3 +303,13 @@
 **Decision:** El diseño puede comenzar sobre un primer incremento acotado: consulta de grupos propios para cualquier miembro, identidad global y rol operativo en `MiembroGrupo`, tareas guardadas como `Programada` con inicio automático por horario, subtareas separadas de relaciones de precedencia, asignaciones múltiples o `CUALQUIERA_DEL_GRUPO`, conflictos idempotentes no bloqueantes, planificación global filtrable, localización textual y recordatorios internos. Mapas, rutas, horarios flexibles, repeticiones, canales externos y pantallas nuevas no justificadas por casos de uso quedan fuera del primer diseño.
 
 ---
+
+## [2026-06-03] Organización visual del modelo del dominio
+
+**Prompt:** El usuario pidió que, en partes como el modelo del dominio, se incluyeran también las imágenes para poder verlo directamente y que los artefactos quedaran en carpetas más limpias, separando MDD, diagrama de objetos y diagramas de estados.
+
+**Resultado:** Se reorganizó `documents/RUP/00-casos-uso/00-modelo-del-dominio/` en `mdd/`, `diagrama-objetos/` y `diagrama-estados/`. Se añadieron los SVG correspondientes junto a sus PUML y se actualizaron los README para mostrar las vistas principales sin tener que abrir cada fuente manualmente.
+
+**Decision:** El modelo del dominio queda como punto de entrada visual y navegable para el trabajo posterior de diseño, manteniendo cada tipo de diagrama en su propia carpeta para evitar mezcla de artefactos.
+
+---
