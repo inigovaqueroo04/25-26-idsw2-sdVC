@@ -1,0 +1,19 @@
+﻿@startuml completarGestion-diseno-secuencia
+actor "Actor" as Actor
+participant "Interfaz" as UI
+participant "ServicioAplicacion" as Servicio
+participant "Repositorio" as Repositorio
+database "Persistencia" as BD
+
+title Diseno: completarGestion()
+
+Actor -> UI : solicita completarGestion()
+UI -> Servicio : ejecutarCasoUso()
+Servicio -> Repositorio : accederDominio()
+Repositorio -> BD : consulta/modificacion
+BD --> Repositorio : datos
+Repositorio --> Servicio : resultado
+Servicio --> UI : respuesta
+UI --> Actor : presenta resultado
+
+@enduml

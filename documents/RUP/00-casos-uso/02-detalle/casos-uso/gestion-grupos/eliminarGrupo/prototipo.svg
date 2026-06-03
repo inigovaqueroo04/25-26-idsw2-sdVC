@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="650" viewBox="0 0 1000 650">
+  <defs>
+    <style>
+      .hand { font-family: "Comic Sans MS", "Segoe UI", "Arial", sans-serif; fill:#111; }
+      .title { font-size: 52px; font-weight: 700; }
+      .section { font-size: 34px; font-weight: 700; }
+      .label { font-size: 26px; }
+      .outline { fill:none; stroke:#111; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+      .thin { stroke-width:2; }
+      .btn { fill:#fff; stroke:#111; stroke-width:3; rx:18; ry:18; }
+      .btnDanger { fill:#e35b5b; stroke:#111; stroke-width:3; rx:18; ry:18; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="650" fill="white"/>
+  <rect x="8" y="8" width="984" height="634" class="outline"/>
+
+  <text x="30" y="80" class="hand section">eliminarGrupo()</text>
+
+  <rect x="190.0" y="150" width="620" height="360" class="outline"/>
+  <line x1="190.0" y1="240" x2="810.0" y2="240" class="outline thin"/>
+
+  <text x="500.0" y="212" text-anchor="middle" class="hand title">Eliminar Grupo</text>
+  <text x="780.0" y="210" text-anchor="middle" class="hand section">×</text>
+
+  <text x="500.0" y="320" text-anchor="middle" class="hand label">
+    ¿Seguro que deseas eliminar este grupo?
+  </text>
+  <text x="500.0" y="360" text-anchor="middle" class="hand label">
+    Esta acción no se puede deshacer.
+  </text>
+
+  <rect x="215.0" y="415" width="230" height="70" class="btn"/>
+  <text x="330.0" y="461" text-anchor="middle" class="hand label">
+    Cancelar
+  </text>
+
+  <rect x="485.0" y="415" width="300" height="70" class="btnDanger"/>
+  <text x="635.0" y="461" text-anchor="middle" class="hand label" style="fill:#fff;">
+    Confirmar eliminación
+  </text>
+
+</svg>

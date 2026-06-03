@@ -1,0 +1,23 @@
+@startuml DiagramaEstadosTarea
+hide empty description
+
+state "Creada" as Creada
+state "Programada" as Programada
+state "En ejecución" as EnEjecucion
+state "Finalizada" as Finalizada
+state "Cancelada" as Cancelada
+
+[*] --> Creada
+
+Creada --> Programada : Asignar horario/localización
+
+Programada --> EnEjecucion : Iniciar tarea
+Programada --> Cancelada : Cancelar tarea (con o sin conflicto)
+
+EnEjecucion --> Finalizada : Completar tarea
+EnEjecucion --> Cancelada : Cancelar tarea
+
+Finalizada --> [*]
+Cancelada --> [*]
+
+@enduml

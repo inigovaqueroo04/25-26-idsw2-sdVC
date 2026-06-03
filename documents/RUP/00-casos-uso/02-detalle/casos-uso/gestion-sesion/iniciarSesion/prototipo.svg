@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="650" viewBox="0 0 1000 650">
+  <defs>
+    <style>
+      .hand { font-family: "Comic Sans MS", "Segoe UI", "Arial", sans-serif; fill: #111; }
+      .title { font-size: 56px; font-weight: 700; }
+      .section { font-size: 34px; font-weight: 700; }
+      .label { font-size: 30px; }
+      .outline { fill: none; stroke: #111; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .thin { stroke-width: 2; }
+      .input { fill:#fff; stroke:#111; stroke-width:3; rx:12; ry:12; }
+      .btn { fill: #fff; stroke: #111; stroke-width: 3; rx: 18; ry: 18; }
+      .btnPrimary { fill: #e35b5b; stroke: #111; stroke-width: 3; rx: 18; ry: 18; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="650" fill="white"/>
+  <rect x="8" y="8" width="984" height="634" class="outline" />
+
+  <text x="30" y="80" class="hand section">iniciarSesion()</text>
+
+  <!-- modal -->
+  <rect x="220.0" y="90" width="560" height="480" class="outline" />
+  <line x1="220.0" y1="185" x2="780.0" y2="185" class="outline thin"/>
+
+  <text x="500.0" y="152" text-anchor="middle" class="hand title">Iniciar Sesión</text>
+  <text x="750.0" y="150" text-anchor="middle" class="hand section">×</text>
+
+  <!-- user icon centered -->
+  <circle cx="500.0" cy="245" r="22" class="outline"/>
+  <line x1="452.0" y1="285" x2="548.0" y2="285" class="outline"/>
+
+  <!-- Usuario / Email -->
+  <text x="280.0" y="325" class="hand label">Usuario / Email</text>
+  <rect x="280.0" y="343" width="440" height="54" class="input"/>
+
+  <!-- Contraseña -->
+  <text x="280.0" y="433" class="hand label">Contraseña</text>
+  <rect x="280.0" y="451" width="440" height="54" class="input"/>
+
+  <!-- password dots -->
+  <circle cx="654.0" cy="479" r="6" class="outline"/>
+  <circle cx="676.0" cy="479" r="6" class="outline"/>
+  <circle cx="698.0" cy="479" r="6" class="outline"/>
+
+  <!-- buttons (centered row) -->
+  <rect x="285.0" y="546" width="190" height="70" class="btn"/>
+  <text x="380.0" y="592" text-anchor="middle" class="hand label">Cancelar</text>
+
+  <rect x="505.0" y="546" width="210" height="70" class="btnPrimary"/>
+  <text x="610.0" y="592" text-anchor="middle" class="hand label" style="fill:#fff;">Confirmar</text>
+
+</svg>

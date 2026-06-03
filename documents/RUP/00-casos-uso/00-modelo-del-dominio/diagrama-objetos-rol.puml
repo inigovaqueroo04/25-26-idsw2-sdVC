@@ -1,0 +1,28 @@
+@startuml
+
+package "Nivel 2" {
+   
+    ' Definición de los objetos (Instancias)
+   
+    object "u1 : Padre" as user1 {
+        ' Puedes añadir atributos aquí si quieres
+    }
+   
+    object "r1 : Rol" as rolAdmin {
+        nombre = "administrador"
+    }
+
+    object "u2 : Hijo" as user2 {
+    }
+
+    object "r2 : Rol" as rolMember {
+        nombre = "miembro"
+    }
+
+    ' Relaciones (basadas en la asociación "tiene")
+    user1 -> rolAdmin : tiene
+    user2 -> rolMember : tiene
+
+}
+
+@enduml

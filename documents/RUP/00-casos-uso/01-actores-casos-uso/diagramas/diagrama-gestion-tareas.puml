@@ -1,0 +1,42 @@
+@startuml DiagramaGestionTareas
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Administrador" as Admin
+actor "Miembro Administrador" as MiemAdmin
+actor "Miembro" as Miem
+
+Admin -right-|> MiemAdmin
+MiemAdmin -right-|> Miem
+
+package "Gestión de Tareas" {
+    usecase "abrirTareas()" as UC8
+    usecase "marcarCompletada()" as UC4
+    usecase "crearTarea()" as UC1
+    usecase "editarTarea()" as UC2
+    usecase "eliminarTarea()" as UC3
+    usecase "relacionarTareas()" as UC5
+    usecase "establecerHorario()" as UC6
+    usecase "definirLocalizacion()" as UC7
+    usecase "validarConflicto()" as UC9
+    usecase "configurarRecordatorio()" as UC10
+    usecase "asignarTareaAUsuario()" as UC11
+}
+
+Miem --> UC8
+Miem --> UC4
+
+MiemAdmin --> UC1
+MiemAdmin --> UC2
+MiemAdmin --> UC3
+MiemAdmin --> UC5
+
+UC2 <.. UC4 : <<extend>>
+UC2 <.. UC5 : <<extend>>
+UC2 <.. UC6 : <<extend>>
+UC2 <.. UC7 : <<extend>>
+UC2 ..> UC9 : <<include>>
+UC2 <.. UC10 : <<extend>>
+UC2 <.. UC11 : <<extend>>
+
+@enduml

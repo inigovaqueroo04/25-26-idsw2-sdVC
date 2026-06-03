@@ -1,0 +1,62 @@
+@startuml eliminarGrupo
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "GRUPOS_ABIERTO" as Inicio
+
+state "eliminarGrupo()" as EliminarGrupoContainer {
+    
+    state " " as EstadoConfirmacion
+    state " " as EstadoDecision
+    
+    [*] --> EstadoConfirmacion
+    note on link
+        **Administrador** solicita eliminar grupo
+    end note
+
+    EstadoConfirmacion --> EstadoDecision
+    note on link
+        **Sistema** presenta solicitud de confirmación
+        **Sistema** permite solicitar:
+        * confirmar eliminación
+        * cancelar eliminación
+    end note
+
+    EstadoDecision -[#green]down-> [*]
+    note on link
+        **Administrador** solicita confirmar eliminación
+    end note
+
+    EstadoDecision -[#red]down-> [*]
+    note on link
+        **Administrador** solicita cancelar eliminación
+    end note
+}
+
+state "GRUPOS_ABIERTO" as Fin
+
+Inicio --> EliminarGrupoContainer
+
+EliminarGrupoContainer -[#green]-> Fin : "               "
+
+EliminarGrupoContainer -[#red]-> Fin
+note on link
+    cancelar eliminación
+end note
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml diagrama-contexto-admin-seguimiento
+title Seguimiento RUP - Administrador
+
+legend
+  Blanco: pendiente
+  Rojo: detalle/prototipado
+  Amarillo: analisis
+  Verde: diseño
+  Azul: desarrollo
+  Negro: completado
+endlegend
+
+state "SISTEMA_DISPONIBLE" as SistemaDisponible
+state "GRUPOS_ABIERTO" as GruposAbierto
+state "TAREAS_ABIERTO" as TareasAbierto
+state "PLANIFICACION_ABIERTO" as PlanificacionAbierto
+
+SistemaDisponible --> GruposAbierto : abrirGrupos()
+SistemaDisponible --> TareasAbierto : abrirTareas()
+SistemaDisponible --> PlanificacionAbierto : abrirPlanificacion()
+
+@enduml

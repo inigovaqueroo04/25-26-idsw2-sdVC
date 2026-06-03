@@ -1,77 +1,20 @@
-@startuml abrirInvitaciones
-skinparam monochrome false
-skinparam shadow false
-top to bottom direction
+﻿@startuml abrirInvitaciones-analisis
+skinparam linetype polyline
 
-skinparam state {
-    BackgroundColor White
-    BorderColor Black
-    ArrowColor #009900
-    StartColor Black
-    EndColor Black
+rectangle #CDEBA5 ":Estado origen SdR" as EstadoOrigen
+rectangle #CDEBA5 ":Estado destino SdR" as EstadoDestino
+
+package "abrirInvitaciones()" {
+    rectangle #629EF9 AbrirInvitacionesView
+    rectangle #b5bd68 AbrirInvitacionesController
+    rectangle #F2AC4E RepositorioDominio
+    rectangle #F2AC4E EntidadDominio
 }
 
-
-skinparam note {
-    BackgroundColor #FFFFE0
-    BorderColor #B0B060
-    FontName Arial
-}
-
-state "SISTEMA_DISPONIBLE" as Inicio
-state "INVITACIONES_ABIERTO" as EntradaLista
-
-state "abrirInvitaciones()" as AbrirInvitacionesContainer {
-    top to bottom direction
-
-    state " " as PasoInicial
-    state " " as PasoLista
-
-    [*] --> PasoInicial
-    note on link
-        **Miembro** solicita abrir invitaciones
-    end note
-
-    PasoInicial --> PasoLista
-    note on link
-        **Sistema** presenta lista de invitaciones
-        • Identificador y estado de cada invitación
-        • Permite solicitar filtrar lista
-        • Permite solicitar editar invitación
-    end note
-
-    PasoLista -right-> PasoLista
-    note on link
-        **Miembro** solicita filtrar lista
-        **Sistema** presenta lista filtrada
-    end note
-    
-    PasoLista --> [*]
-    note on link
-        **Miembro** solicita una de las opciones
-    end note
-}
-
-state "INVITACION_ABIERTO" as FinDetalle
-state "INVITACIONES_ABIERTO" as FinLista
-state "SISTEMA_DISPONIBLE" as FinSistema
-
-Inicio --> AbrirInvitacionesContainer
-EntradaLista --> AbrirInvitacionesContainer
-
-AbrirInvitacionesContainer --> FinDetalle
-note on link
-  editarInvitacion()
-end note
-
-AbrirInvitacionesContainer --> FinLista
-note on link
-  abrirInvitaciones()
-end note
-
-AbrirInvitacionesContainer --> FinSistema
-note on link
-  completarGestion()
-end note
+EstadoOrigen --> AbrirInvitacionesView: abrirInvitaciones()
+AbrirInvitacionesView --> AbrirInvitacionesController: coordinarCasoUso()
+AbrirInvitacionesController --> RepositorioDominio: consultarOModificarDominio()
+RepositorioDominio -- EntidadDominio
+AbrirInvitacionesView --> EstadoDestino: presentaResultado()
 
 @enduml

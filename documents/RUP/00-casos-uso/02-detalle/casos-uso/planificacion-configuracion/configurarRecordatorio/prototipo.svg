@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="600" viewBox="0 0 900 600"
+     xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="900" height="600" fill="white"/>
+
+  <!-- Function label -->
+  <text x="30" y="40" font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="26" fill="black">configurarRecordatorio()</text>
+
+  <!-- Outer modal -->
+  <rect x="150" y="80" rx="18" ry="18" width="600" height="420"
+        fill="white" stroke="black" stroke-width="3"/>
+
+  <!-- Header -->
+  <rect x="150" y="80" rx="18" ry="18" width="600" height="70"
+        fill="white" stroke="black" stroke-width="3"/>
+  <line x1="150" y1="150" x2="750" y2="150"
+        stroke="black" stroke-width="3"/>
+
+  <text x="450" y="125" text-anchor="middle"
+        font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="36" fill="black">Configurar recordatorio</text>
+
+  <!-- Grid area -->
+  <!-- Row 1 -->
+  <text x="190" y="185"
+        font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="20">Tipo de recordatorio</text>
+  <rect x="190" y="195" rx="12" ry="12" width="520" height="45"
+        fill="white" stroke="black" stroke-width="2"/>
+  <text x="205" y="225"
+        font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="18" fill="#555">Ej: Notificación</text>
+
+  <!-- Row 2 -->
+  <text x="190" y="270"
+        font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="20">Tiempo del recordatorio</text>
+  <rect x="190" y="280" rx="12" ry="12" width="520" height="45"
+        fill="white" stroke="black" stroke-width="2"/>
+  <text x="205" y="310"
+        font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="18" fill="#555">Ej: 1h antes</text>
+
+  <!-- Row 3 (summary grid cell) -->
+  <text x="190" y="355"
+        font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="20">Resumen</text>
+  <rect x="190" y="365" rx="12" ry="12" width="520" height="55"
+        fill="white" stroke="black" stroke-width="2"/>
+  <text x="205" y="400"
+        font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="18" fill="#555">
+        Notificación 1h antes
+  </text>
+
+  <!-- Buttons row -->
+  <rect x="220" y="440" rx="16" ry="16" width="180" height="50"
+        fill="white" stroke="black" stroke-width="2"/>
+  <text x="310" y="472" text-anchor="middle"
+        font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="20">Cancelar</text>
+
+  <!-- Save button properly inside its grid -->
+  <rect x="460" y="440" rx="16" ry="16" width="230" height="50"
+        fill="#e85b57" stroke="black" stroke-width="2"/>
+  <text x="575" y="472" text-anchor="middle"
+        font-family="Comic Sans MS, Comic Sans, cursive"
+        font-size="20" fill="white">
+        Guardar recordatorio
+  </text>
+</svg>

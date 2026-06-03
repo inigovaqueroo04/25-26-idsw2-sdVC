@@ -1,0 +1,79 @@
+@startuml Diagrama de Objetos - Conflicto Horario
+top to bottom direction
+skinparam classAttributeIconSize 0
+
+' Nivel 1: Tareas
+package "Nivel 1 - Tareas" {
+  object tarea1 {
+    titulo = "Recoger a los niños"
+    tieneConflicto = "No"
+  }
+
+  object tarea2 {
+    titulo = "Llevar al abuelo al médico"
+    tieneConflicto = "Sí"
+  }
+}
+
+' Nivel 2: Usuario
+package "Nivel 2 - Usuario" {
+  object usuario1 {
+    nombre = "José Manuel Breñosa"
+  }
+}
+
+' Nivel 3: Grupo
+package "Nivel 3 - Grupo" {
+  object grupo1 {
+    nombre = "Familia"
+  }
+}
+
+' Nivel 4: Entidades externas
+package "Nivel 4 - Clases auxiliares" {
+
+  object conflictoHorario1 {
+    tipo = "Solapamiento entre tareas"
+  }
+
+  ' Varios recordatorios posibles
+  object recordatorioA {
+    medio = "Notificación móvil"
+  }
+
+  object recordatorioB {
+    medio = "Correo electrónico"
+  }
+
+  object localizacion1 {
+    lugar = "Colegio"
+  }
+
+  object horario1 {
+    rango = "14:30"
+  }
+}
+
+' Relaciones principales
+grupo1 *-- tarea1 : gestiona > 
+grupo1 *-- tarea2 : gestiona >
+
+usuario1 o-- tarea1 : participa en >
+usuario1 o-- tarea2 : participa en >
+usuario1 o-- grupo1 : pertenece a >
+
+' Relaciones externas para tarea sin conflicto
+tarea1 --> localizacion1 : se realiza en >
+tarea1 --> horario1 : se programa en >
+
+' Recordatorios asociados a la tarea sin conflicto (varios)
+tarea1 *-- recordatorioA : notifica sobre <
+tarea1 *-- recordatorioB : notifica sobre <  
+
+' Relaciones para la tarea con conflicto
+tarea2 <-- conflictoHorario1 : provoca un conflicto <
+tarea1 <-- conflictoHorario1 : provoca un conflicto <
+conflictoHorario1 --> usuario1 : notifica a >
+tarea2 --> usuario1 : se devuelve para reprogramar >
+
+@enduml

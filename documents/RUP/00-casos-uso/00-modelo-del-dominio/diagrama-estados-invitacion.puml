@@ -1,0 +1,24 @@
+@startuml DiagramaEstadosInvitacion
+hide empty description
+
+state "Creada" as Creada
+state "Pendiente" as Pendiente
+state "Aceptada" as Aceptada
+state "Rechazada" as Rechazada
+state "Caducada" as Caducada
+state "Cancelada" as Cancelada
+
+[*] --> Creada
+
+Creada --> Pendiente : Enviar invitación
+Pendiente --> Aceptada : Aceptar invitación
+Pendiente --> Rechazada : Rechazar invitación
+Pendiente --> Cancelada : Cancelar invitación (Admin)
+Pendiente --> Caducada : Expirar fecha límite
+
+Aceptada --> [*]
+Rechazada --> [*]
+Cancelada --> [*]
+Caducada --> [*]
+
+@enduml

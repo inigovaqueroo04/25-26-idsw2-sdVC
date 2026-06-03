@@ -1,0 +1,19 @@
+﻿@startuml eliminarMiembro-analisis-secuencia
+actor "Actor SdR" as Actor
+boundary "EliminarMiembroView" as Vista
+control "EliminarMiembroController" as Controlador
+entity "RepositorioDominio" as Repositorio
+entity "EntidadDominio" as Entidad
+
+title Analisis de colaboracion: eliminarMiembro()
+
+Actor -> Vista : 1: solicita eliminarMiembro()
+Vista -> Controlador : 2: coordinarCasoUso()
+Controlador -> Repositorio : 3: consultarOModificarDominio()
+Repositorio -> Entidad : 4: usa entidad de dominio
+Entidad --> Repositorio : 5: resultado
+Repositorio --> Controlador : 6: resultado
+Controlador --> Vista : 7: respuesta
+Vista --> Actor : 8: presenta resultado
+
+@enduml

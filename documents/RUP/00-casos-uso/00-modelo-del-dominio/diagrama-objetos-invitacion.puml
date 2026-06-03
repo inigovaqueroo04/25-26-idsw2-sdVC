@@ -1,0 +1,26 @@
+@startuml Diagrama de Objetos - Conflicto Horario
+top to bottom direction
+skinparam classAttributeIconSize 0
+
+' Nivel 2: Usuario
+package "Nivel 2 - Usuario" {
+  object usuario1 {
+    nombre = "José Manuel Breñosa"
+  }
+}
+' Nivel 3: Grupo
+package "Nivel 3 - Grupo" {
+    object grupo1 {
+        nombre = "Familia"
+    }
+    object  invitación1 {
+    estado = "Aceptada"
+    } 
+}
+
+' Relación principal
+usuario1 o-- grupo1 : pertenece a >
+
+' Relaciones invitación
+usuario1 --> invitación1 : envia >
+invitación1 -left-* grupo1 : para unirse a >

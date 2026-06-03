@@ -1,0 +1,71 @@
+@startuml editarInvitacion
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "INVITACIONES_ABIERTO" as EntradaLista
+state "INVITACION_ABIERTO" as EntradaDetalle
+
+state "editarInvitacion()" as MainBlock {
+    
+    state " " as EstadoVisualizacion
+    state " " as EstadoDecision
+    
+    [*] --> EstadoVisualizacion
+    note on link
+        **Miembro** solicita editar invitación
+    end note
+
+    EstadoVisualizacion --> EstadoDecision
+    note on link
+        **Sistema** visualiza datos de la invitación
+        **Sistema** permite solicitar:
+        * introducir cambios en el estado (Aceptar/Rechazar)
+        * guardar cambios
+        * cancelar edición
+    end note
+
+    EstadoDecision -[#green]down-> [*]
+    note on link
+        **Miembro** introduce los cambios y solicita guardar
+    end note
+
+    EstadoDecision -[#red]down-> [*]
+    note on link
+        **Miembro** solicita cancelar edición
+    end note
+}
+
+state "INVITACION_ABIERTO" as FinInvitacion
+state "INVITACIONES_ABIERTO" as FinLista
+
+EntradaLista --> MainBlock
+EntradaDetalle --> MainBlock
+
+MainBlock -[#green]-> FinInvitacion : "               "
+
+MainBlock -[#red]down-> FinInvitacion
+note on link
+    cancelar edición (desde detalle)
+end note
+
+MainBlock -[#red]down-> FinLista
+note on link
+    cancelar edición (desde lista)
+end note
+
+@enduml

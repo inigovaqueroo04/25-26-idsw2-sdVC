@@ -1,0 +1,127 @@
+@startuml
+' --- CONFIGURACIÓN VISUAL ---
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+' --- 1. ENTRADAS (ARRIBA) ---
+state TAREAS_ABIERTO
+state "TAREA_ABIERTO" as TareaInicio
+
+' --- 2. CONTENEDOR PRINCIPAL ---
+state "editarTarea()" as EditarTareaContainer {
+    
+    ' Estados internos
+    state " "        as PasoRecepcion
+    state "  "       as PasoVisualizacion
+    state "   "      as PasoMenuOpciones
+    state "    "     as PasoPreValidacion
+    state "     "    as PasoValidacion
+
+    ' Flujo interno normal
+    [*] --> PasoRecepcion
+    note on link: **Administrador** solicita editar tarea
+    
+    PasoRecepcion --> PasoVisualizacion
+    note on link
+        **Sistema** presenta datos actuales:
+        * Nombre y descripción
+        * Usuarios asignados
+        * Recordatorios
+        * Localización
+        * Horario
+        * Estado de la tarea
+        * Relaciones de tareas
+    end note
+    
+    PasoVisualizacion --> PasoMenuOpciones
+    note on link: **Administrador** selecciona acción
+    
+    ' --- LÓGICA DE VALIDACIÓN (Esperando flecha de entrada) ---
+    
+    PasoPreValidacion -[#green]down-> PasoValidacion
+    note on link
+        validarConflicto()
+    end note    
+    
+    PasoValidacion -[#red]up-> PasoVisualizacion
+    note on link 
+      **Sistema** detecta conflicto
+      Muestra campos afectados
+    end note
+    
+    PasoValidacion -[#green]-> [*]
+    note on link
+        **Sistema** confirma sin conflicto
+        Guarda cambios
+    end note
+    
+    EstadoMetodos -[#red]down-> [*]
+    note on link
+        **Administrador** solicita cancelar edición
+    end note
+}
+
+' --- 3. ESTADOS EXTERNOS (ABAJO) ---
+state "TAREA_ABIERTO" as TareaFin
+state "      " as EstadoMetodos
+
+' --- 4. CONEXIONES Y ANCLAJES ---
+
+' Entradas
+TAREAS_ABIERTO --> EditarTareaContainer
+TareaInicio --> EditarTareaContainer
+
+' Salida al Distribuidor (Menú -> Estado Externo)
+PasoMenuOpciones --> EstadoMetodos
+note on link
+    * Modificar nombre/descripción
+    * asignarTareaAUsuario()
+    * establecerHorario()
+    * definirLocalizacion()
+    * configurarRecordatorio()
+    * relacionarTareas()
+    * marcarCompletada()
+end note
+
+' --- 5. TRANSICIONES DESDE EL ESTADO INTERMEDIO ---
+
+
+
+' B. SOLICITA GUARDAR Y SALIR (Lo que pediste)
+EstadoMetodos -[#green]up-> PasoPreValidacion
+note on link
+    **Administrador** solicita guardar y salir
+end note
+
+' C. RETORNO DE MÉTODOS (Hacia arriba)
+EstadoMetodos -[#009900]up-> TareaInicio
+
+' --- 6. SALIDAS FINALES ---
+EditarTareaContainer -[#green]down-> TareaFin
+EditarTareaContainer -[#red]down-> TareaFin : cancelar edición
+
+
+' --- 7. ESTRUCTURA DE ANCLAJE (ANTIDESASTRE) ---
+
+' Alineación vertical estricta (Validación -> Fin)
+PasoValidacion -[hidden]down-> TareaFin
+
+' Separación lateral para que EstadoMetodos se quede a la derecha y abajo
+TareaFin -[hidden]right-> EstadoMetodos
+
+@enduml

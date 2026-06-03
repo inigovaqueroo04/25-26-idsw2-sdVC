@@ -1,0 +1,21 @@
+@startuml DiagramaGestionSesion
+left to right direction
+
+actor "Administrador" as Admin
+actor "Miembro Administrador" as MiemAdmin
+actor "Miembro" as Miem
+
+Admin -right-|> MiemAdmin
+MiemAdmin -right-|> Miem
+
+package "Gestión de Sesión y Navegación" {
+    usecase "iniciarSesion()" as UC_S1
+    usecase "cerrarSesion()" as UC_S2
+    usecase "completarGestion()" as UC_S3
+}
+
+Miem --> UC_S1
+Miem --> UC_S2
+Miem --> UC_S3
+
+@enduml

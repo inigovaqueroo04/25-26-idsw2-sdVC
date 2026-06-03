@@ -1,67 +1,20 @@
-@startuml definirLocalizacion
-skinparam monochrome false
-skinparam shadow false
-top to bottom direction
+﻿@startuml configurarRecordatorio-analisis
+skinparam linetype polyline
 
-skinparam state {
-    BackgroundColor White
-    BorderColor Black
-    ArrowColor #009900
-    StartColor Black
-    EndColor Black
+rectangle #CDEBA5 ":Estado origen SdR" as EstadoOrigen
+rectangle #CDEBA5 ":Estado destino SdR" as EstadoDestino
+
+package "configurarRecordatorio()" {
+    rectangle #629EF9 ConfigurarRecordatorioView
+    rectangle #b5bd68 ConfigurarRecordatorioController
+    rectangle #F2AC4E RepositorioDominio
+    rectangle #F2AC4E EntidadDominio
 }
 
-skinparam note {
-    BackgroundColor #FFFFE0
-    BorderColor #B0B060
-    FontName Arial
-}
-
-state "PLANIFICACION_ABIERTO" as Inicio
-
-state "definirLocalizacion()" as DefinirLocalizacionContainer {
-    top to bottom direction
-
-    state " " as PasoInicial
-    state " " as PasoDatos
-
-    [*] --> PasoInicial
-    note on link
-        **Usuario** solicita definir localización
-    end note
-
-    PasoInicial --> PasoDatos
-    note on link
-        **Sistema** presenta mapa y buscador
-        **Sistema** permite solicitar:
-        • introducir coordenadas o dirección
-        • guardar localización
-        • cancelar localización
-    end note
-
-    PasoDatos -[#green]-> [*]
-    note on link
-        **Usuario** introduce los datos y solicita guardar
-    end note
-
-    PasoDatos -[#red]-> [*]
-    note on link
-        **Usuario** solicita cancelar localización
-    end note
-}
-
-state "PLANIFICACION_ABIERTO" as SalidaPlanificacion
-
-Inicio --> DefinirLocalizacionContainer
-
-DefinirLocalizacionContainer -[#green]-> SalidaPlanificacion
-note on link
-    guardar localización
-end note
-
-DefinirLocalizacionContainer -[#red]-> SalidaPlanificacion
-note on link
-    cancelar localización
-end note
+EstadoOrigen --> ConfigurarRecordatorioView: configurarRecordatorio()
+ConfigurarRecordatorioView --> ConfigurarRecordatorioController: coordinarCasoUso()
+ConfigurarRecordatorioController --> RepositorioDominio: consultarOModificarDominio()
+RepositorioDominio -- EntidadDominio
+ConfigurarRecordatorioView --> EstadoDestino: presentaResultado()
 
 @enduml

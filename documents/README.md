@@ -1,11 +1,13 @@
 # Documentacion
 
 Esta carpeta contiene los artefactos de trabajo del proyecto. La documentacion
-RUP queda organizada por disciplina para mantener trazabilidad entre analisis,
-diseno e implementacion.
+RUP queda organizada por disciplina para mantener trazabilidad entre requisitos,
+analisis, diseño, desarrollo y pruebas.
 
 ## RUP
 
+- [RUP](./RUP/README.md)
+- [00-casos-uso](./RUP/00-casos-uso/README.md)
 - [01-analisis](./RUP/01-analisis/README.md)
 - [02-diseno](./RUP/02-diseño/README.md)
 

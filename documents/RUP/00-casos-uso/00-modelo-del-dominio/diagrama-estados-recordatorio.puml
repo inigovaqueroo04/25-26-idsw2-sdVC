@@ -1,0 +1,15 @@
+@startuml DiagramaEstadosRecordatorio
+hide empty description
+
+state "Creado" as Creado
+state "Finalizado" as Finalizado
+
+[*] --> Creado
+
+Creado --> Finalizado : Hora de envío alcanzada / \nNotificación enviada
+
+Creado --> Finalizado : Tarea Cancelada
+
+Finalizado --> [*]
+
+@enduml

@@ -1,0 +1,67 @@
+@startuml establecerHorario
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "PLANIFICACION_ABIERTO" as Inicio
+
+state "establecerHorario()" as EstablecerHorarioContainer {
+    top to bottom direction
+
+    state " " as PasoInicial
+    state " " as PasoDatos
+
+    [*] --> PasoInicial
+    note on link
+        **Usuario** solicita establecer horario
+    end note
+
+    PasoInicial --> PasoDatos
+    note on link
+        **Sistema** presenta calendario de disponibilidad
+        **Sistema** permite solicitar:
+        • introducir fecha y hora
+        • guardar horario
+        • cancelar horario
+    end note
+
+    PasoDatos -[#green]-> [*]
+    note on link
+        **Usuario** introduce los datos y solicita guardar
+    end note
+
+    PasoDatos -[#red]-> [*]
+    note on link
+        **Usuario** solicita cancelar horario
+    end note
+}
+
+state "PLANIFICACION_ABIERTO" as SalidaPlanificacion
+
+Inicio --> EstablecerHorarioContainer
+
+EstablecerHorarioContainer -[#green]-> SalidaPlanificacion
+note on link
+    guardar horario
+end note
+
+EstablecerHorarioContainer -[#red]-> SalidaPlanificacion
+note on link
+    cancelar horario
+end note
+
+@enduml

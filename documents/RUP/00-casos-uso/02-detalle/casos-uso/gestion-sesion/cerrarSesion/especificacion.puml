@@ -1,0 +1,63 @@
+@startuml cerrarSesion
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "SISTEMA_DISPONIBLE" as Inicio
+
+state "cerrarSesion()" as CerrarSesionContainer {
+    
+    state " " as EstadoVisualizacion
+    state " " as EstadoDecision
+    
+    [*] --> EstadoVisualizacion
+    note on link
+        **Usuario** solicita cerrar sesión
+    end note
+
+    EstadoVisualizacion --> EstadoDecision
+    note on link
+        **Sistema** presenta solicitud de confirmación
+        **Sistema** permite solicitar:
+        * confirmar cierre
+        * cancelar cierre
+    end note
+
+    EstadoDecision -[#green]down-> [*]
+    note on link
+        **Usuario** solicita confirmar cierre
+    end note
+
+    EstadoDecision -[#red]down-> [*]
+    note on link
+        **Usuario** solicita cancelar cierre
+    end note
+}
+
+state "SESION_CERRADA" as FinSesion
+state "SISTEMA_DISPONIBLE" as FinSistema
+
+Inicio --> CerrarSesionContainer
+
+CerrarSesionContainer -[#green]-> FinSesion : "               "
+
+CerrarSesionContainer -[#red]down-> FinSistema
+note on link
+    cancelar cierre
+end note
+
+@enduml

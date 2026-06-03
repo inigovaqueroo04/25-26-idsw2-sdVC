@@ -1,0 +1,35 @@
+@startuml definirLocalizacion
+
+hide empty description
+skinparam linetype polyline
+
+state in1 as "PLANIFICACION_ABIERTO"
+in1 -[#green]-> definirLocalizacion
+
+state definirLocalizacion as "definirLocalizacion()" {
+
+    state IngresandoLocalizacion as " "
+    state ValidandoLocalizacion as " "
+
+    [*] -[#green]-> IngresandoLocalizacion
+    note on link
+        <b>Usuario</b> introduce ubicación
+    end note
+
+    IngresandoLocalizacion -[#green]-> ValidandoLocalizacion
+    note on link
+        <b>Sistema</b> valida localización
+    end note
+
+    ValidandoLocalizacion -[#green]-> [*]
+    note on link
+        <b>Sistema</b> guarda localización
+    end note
+}
+
+definirLocalizacion -[#green]-> PLANIFICACION_ABIERTO
+note on link
+    Localización definida
+end note
+
+@enduml

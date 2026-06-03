@@ -1,63 +1,20 @@
-@startuml invitarUsuario
-skinparam monochrome false
-skinparam shadow false
-top to bottom direction
+﻿@startuml invitarUsuario-analisis
+skinparam linetype polyline
 
-skinparam state {
-    BackgroundColor White
-    BorderColor Black
-    ArrowColor #009900
-    StartColor Black
-    EndColor Black
+rectangle #CDEBA5 ":Estado origen SdR" as EstadoOrigen
+rectangle #CDEBA5 ":Estado destino SdR" as EstadoDestino
+
+package "invitarUsuario()" {
+    rectangle #629EF9 InvitarUsuarioView
+    rectangle #b5bd68 InvitarUsuarioController
+    rectangle #F2AC4E RepositorioDominio
+    rectangle #F2AC4E EntidadDominio
 }
 
-skinparam note {
-    BackgroundColor #FFFFE0
-    BorderColor #B0B060
-    FontName Arial
-}
-
-state "GRUPO_ABIERTO" as Inicio
-
-state "invitarUsuario()" as MainBlock {
-    
-    state " " as EstadoFormulario
-    state " " as EstadoDecision
-    
-    [*] --> EstadoFormulario
-    note on link
-        **Administrador** solicita invitar usuario
-    end note
-
-    EstadoFormulario --> EstadoDecision
-    note on link
-        **Sistema** presenta formulario de invitación
-        **Sistema** permite solicitar:
-        * introducir identificador y fecha
-        * enviar invitación
-        * cancelar invitación
-    end note
-
-    EstadoDecision -[#green]down-> [*]
-    note on link
-        **Administrador** introduce identificador y fecha y solicita enviar
-    end note
-
-    EstadoDecision -[#red]down-> [*]
-    note on link
-        **Administrador** solicita cancelar invitación
-    end note
-}
-
-state "GRUPO_ABIERTO" as Fin
-
-Inicio --> MainBlock
-
-MainBlock -[#green]-> Fin : "               "
-
-MainBlock -[#red]-> Fin
-note on link
-    cancelar invitación
-end note
+EstadoOrigen --> InvitarUsuarioView: invitarUsuario()
+InvitarUsuarioView --> InvitarUsuarioController: coordinarCasoUso()
+InvitarUsuarioController --> RepositorioDominio: consultarOModificarDominio()
+RepositorioDominio -- EntidadDominio
+InvitarUsuarioView --> EstadoDestino: presentaResultado()
 
 @enduml

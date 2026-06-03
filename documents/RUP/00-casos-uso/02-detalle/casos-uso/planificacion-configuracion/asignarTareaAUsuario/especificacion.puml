@@ -1,0 +1,67 @@
+@startuml asignarTareaAUsuario
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "PLANIFICACION_ABIERTO" as Inicio
+
+state "asignarTareaAUsuario()" as AsignarTareaContainer {
+    top to bottom direction
+
+    state " " as PasoInicial
+    state " " as PasoDatos
+
+    [*] --> PasoInicial
+    note on link
+        **Usuario** solicita asignar tarea a usuario
+    end note
+
+    PasoInicial --> PasoDatos
+    note on link
+        **Sistema** presenta formulario de asignación
+        **Sistema** permite solicitar:
+        • introducir usuario destinatario
+        • guardar asignación
+        • cancelar asignación
+    end note
+
+    PasoDatos -[#green]-> [*]
+    note on link
+        **Usuario** introduce usuario y solicita guardar
+    end note
+
+    PasoDatos -[#red]-> [*]
+    note on link
+        **Usuario** solicita cancelar asignación
+    end note
+}
+
+state "PLANIFICACION_ABIERTO" as SalidaPlanificacion
+
+Inicio --> AsignarTareaContainer
+
+AsignarTareaContainer -[#green]-> SalidaPlanificacion
+note on link
+    guardar asignación
+end note
+
+AsignarTareaContainer -[#red]-> SalidaPlanificacion
+note on link
+    cancelar asignación
+end note
+
+@enduml

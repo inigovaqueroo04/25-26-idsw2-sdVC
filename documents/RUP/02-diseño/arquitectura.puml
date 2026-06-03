@@ -1,0 +1,11 @@
+﻿@startuml arquitectura
+skinparam linetype polyline
+
+rectangle "Frontend / Interfaz" as Frontend
+rectangle "Backend / Servicios" as Backend
+database "Persistencia" as Persistencia
+
+Frontend --> Backend : solicitudes del sistema
+Backend --> Persistencia : consulta y modifica datos
+
+@enduml

@@ -1,0 +1,70 @@
+@startuml iniciarSesion
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "SESION_CERRADA" as Inicio
+
+state "iniciarSesion()" as IniciarSesionContainer {
+    
+    state " " as EstadoFormulario
+    state " " as EstadoDecision
+    
+    [*] --> EstadoFormulario
+    note on link
+        **Usuario** solicita iniciar sesión
+    end note
+
+    EstadoFormulario --> EstadoDecision
+    note on link
+        **Sistema** presenta formulario de inicio de sesión
+        **Sistema** permite solicitar:
+        * introducir credenciales (Usuario/email y contraseña)
+        * confirmar inicio
+        * cancelar inicio
+    end note
+
+    EstadoDecision -[#green]up-> EstadoFormulario
+    note on link
+        **Sistema** comunica error en credenciales
+        **Usuario** solicita introducir credenciales de nuevo
+    end note
+
+    EstadoDecision -[#green]down-> [*]
+    note on link
+        **Usuario** introduce credenciales y solicita confirmar inicio
+    end note
+
+    EstadoDecision -[#red]down-> [*]
+    note on link
+        **Usuario** solicita cancelar inicio
+    end note
+}
+
+state "SISTEMA_DISPONIBLE" as FinSistema
+state "SESION_CERRADA" as FinCerrada
+
+Inicio --> IniciarSesionContainer
+
+IniciarSesionContainer -[#green]-> FinSistema : "               "
+
+IniciarSesionContainer -[#red]down-> FinCerrada
+note on link
+    cancelar inicio
+end note
+
+@enduml

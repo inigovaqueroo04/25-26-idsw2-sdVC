@@ -1,0 +1,19 @@
+@startuml DiagramaEstadosConflictoHorario
+hide empty description
+
+state "Detectado/Abierto" as Detectado
+state "Pendiente de Resolución" as Pendiente
+state "Resuelto" as Resuelto
+state "Descartado" as Descartado
+
+[*] --> Detectado
+
+Detectado --> Pendiente : Notificación de usuario
+
+Pendiente --> Resuelto : Acción de resolución (reprogramar, delegar)
+Pendiente --> Descartado : Tarea afectada Cancelada/Ignorada
+
+Resuelto --> [*]
+Descartado --> [*]
+
+@endumpl

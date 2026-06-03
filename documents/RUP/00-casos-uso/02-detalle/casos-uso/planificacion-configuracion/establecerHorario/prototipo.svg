@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <style><![CDATA[
+      .comic { font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Arial"; }
+      .title { font-size: 56px; font-weight: 700; }
+      .h1 { font-size: 34px; font-weight: 700; }
+      .label { font-size: 26px; font-weight: 700; }
+      .text { font-size: 22px; }
+      .muted { fill: #6f6f6f; }
+      .stroke { stroke: #111; stroke-width: 4; }
+      .stroke2 { stroke: #111; stroke-width: 3; }
+    ]]></style>
+  </defs>
+
+  <!-- Fondo blanco total -->
+  <rect x="0" y="0" width="1200" height="800" fill="#ffffff"/>
+
+  <!-- Marco exterior -->
+  <rect x="20" y="20" width="1160" height="760" rx="14" ry="14" fill="#fff" class="stroke"/>
+
+  <!-- Etiqueta de operación -->
+  <text x="50" y="85" class="comic h1" fill="#111">establecerHorario()</text>
+
+  <!-- Modal centrado -->
+  <g transform="translate(210,140)">
+    <rect x="0" y="0" width="780" height="540" rx="18" ry="18" fill="#fff" class="stroke"/>
+
+    <!-- Header -->
+    <rect x="0" y="0" width="780" height="120" rx="18" ry="18" fill="#fff" class="stroke"/>
+    <line x1="0" y1="120" x2="780" y2="120" class="stroke2"/>
+
+    <text x="390" y="80" text-anchor="middle" class="comic title" fill="#111">Establecer Horario</text>
+    <text x="744" y="76" class="comic h1" fill="#111">×</text>
+
+    <!-- Contenido -->
+    <g transform="translate(55,165)">
+      <!-- Fecha -->
+      <text x="0" y="0" class="comic label" fill="#111">Fecha</text>
+      <rect x="0" y="20" width="670" height="70" rx="14" ry="14" fill="#fff" class="stroke2"/>
+      <text x="22" y="66" class="comic text muted">Ej: 24/12/2025</text>
+
+      <!-- Icono calendario -->
+      <g transform="translate(610,35)">
+        <rect x="0" y="0" width="44" height="40" rx="6" ry="6" fill="#fff" class="stroke2"/>
+        <line x1="0" y1="12" x2="44" y2="12" class="stroke2"/>
+        <line x1="12" y1="0" x2="12" y2="12" class="stroke2"/>
+        <line x1="32" y1="0" x2="32" y2="12" class="stroke2"/>
+      </g>
+
+      <!-- Hora -->
+      <text x="0" y="140" class="comic label" fill="#111">Hora</text>
+      <rect x="0" y="160" width="670" height="70" rx="14" ry="14" fill="#fff" class="stroke2"/>
+      <text x="22" y="206" class="comic text muted">Ej: 18:00 - 19:00</text>
+
+      <!-- Nota -->
+      <text x="0" y="280" class="comic text muted">El sistema validará la disponibilidad antes de guardar.</text>
+    </g>
+
+    <!-- Botonera inferior -->
+    <g transform="translate(55,435)">
+      <rect x="0" y="0" width="260" height="86" rx="22" ry="22" fill="#fff" class="stroke"/>
+      <text x="130" y="55" text-anchor="middle" class="comic h1" fill="#111">Cancelar</text>
+
+      <rect x="465" y="0" width="260" height="86" rx="22" ry="22" fill="#e65b5b" class="stroke"/>
+      <text x="595" y="55" text-anchor="middle" class="comic h1" fill="#fff">Guardar</text>
+    </g>
+  </g>
+</svg>

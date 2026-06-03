@@ -1,0 +1,82 @@
+@startuml
+' Configuración visual idéntica a la referencia
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+' Estado inicial externo (Estamos viendo el perfil del miembro)
+state "MIEMBRO_ABIERTO" as Inicio
+
+' Estado compuesto principal
+state "eliminarMiembro()" as EliminarMiembroContainer {
+    
+    ' Puntos de anclaje
+    state " " as PasoSolicitud
+    state " " as PasoConfirmacion
+    
+    ' 1. Inicio -> Solicitud
+    [*] --> PasoSolicitud
+    note on link
+        **Administrador** solicita eliminar miembro
+    end note
+
+    ' 2. Sistema presenta confirmación
+    PasoSolicitud --> PasoConfirmacion
+    note on link
+        **Sistema** presenta solicitud de confirmación
+        **Sistema** permite solicitar:
+        * confirmar eliminación
+        * cancelar eliminación
+    end note
+
+    ' 3. BIFURCACIÓN VISUAL (ESTRUCTURA DE DIAMANTE)
+    
+    ' Camino VERDE (Confirmar) - Izquierda
+    PasoConfirmacion -[#green]down-> [*]
+    note on link
+        **Administrador** solicita confirmar eliminación
+    end note
+
+    ' Camino ROJO (Cancelar) - Derecha
+    PasoConfirmacion -[#red]down-> [*]
+    note on link
+        **Administrador** solicita cancelar eliminación
+    end note
+}
+
+' --- ESTADOS FINALES EXTERNOS ---
+
+' Si se elimina, el miembro deja de existir -> Volvemos a la lista del GRUPO
+
+' Si se cancela, volvemos a ver al MIEMBRO
+state "MIEMBRO_ABIERTO" as FinCancelacion
+
+' --- TRANSICIONES DE SALIDA ---
+
+' Entrada
+Inicio --> EliminarMiembroContainer
+
+' Salida de ÉXITO (Verde) -> Se ejecutó la eliminación
+EliminarMiembroContainer -[#green]-> FinCancelacion : "              "
+
+' Salida de CANCELACIÓN (Rojo) -> No se hizo nada
+EliminarMiembroContainer -[#red]-> FinCancelacion
+note on link
+    cancelar eliminación
+end note
+
+@enduml

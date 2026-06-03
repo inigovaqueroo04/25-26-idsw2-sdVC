@@ -1,0 +1,23 @@
+﻿@startuml clases-diseno
+skinparam classAttributeIconSize 0
+
+package "Interfaz" {
+  class VistaCasoUso
+}
+
+package "Aplicacion" {
+  class ControladorCasoUso
+  class ServicioDominio
+}
+
+package "Dominio" {
+  class EntidadDominio
+  class RepositorioDominio
+}
+
+VistaCasoUso --> ControladorCasoUso
+ControladorCasoUso --> ServicioDominio
+ServicioDominio --> RepositorioDominio
+RepositorioDominio --> EntidadDominio
+
+@enduml

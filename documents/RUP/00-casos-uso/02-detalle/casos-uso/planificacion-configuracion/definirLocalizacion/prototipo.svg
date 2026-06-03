@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600">
+  <rect x="0" y="0" width="900" height="600" fill="white"/>
+
+  <text x="30" y="40" font-family="Comic Sans MS, Arial" font-size="22">
+    definirLocalizacion()
+  </text>
+
+  <rect x="40" y="60" width="820" height="500" rx="18"
+        fill="white" stroke="black" stroke-width="3"/>
+
+  <rect x="160" y="110" width="580" height="360" rx="16"
+        fill="white" stroke="black" stroke-width="3"/>
+
+  <rect x="160" y="110" width="580" height="70"
+        fill="white" stroke="black" stroke-width="3"/>
+  <text x="450" y="155"
+        font-family="Comic Sans MS, Arial"
+        font-size="34"
+        text-anchor="middle">
+    Definir localización
+  </text>
+  <text x="720" y="150"
+        font-family="Comic Sans MS, Arial"
+        font-size="22">×</text>
+
+  <text x="190" y="210"
+        font-family="Comic Sans MS, Arial"
+        font-size="20">
+    Localización
+  </text>
+
+  <rect x="190" y="225" width="520" height="55" rx="12"
+        fill="white" stroke="black" stroke-width="2"/>
+  <text x="210" y="260"
+        font-family="Comic Sans MS, Arial"
+        font-size="18"
+        fill="#666">
+    Ej: Casa / Supermercado
+  </text>
+
+  <rect x="190" y="300" width="520" height="50" rx="12"
+        fill="#ffffe0" stroke="black" stroke-width="2"/>
+  <text x="210" y="332"
+        font-family="Comic Sans MS, Arial"
+        font-size="17">
+    El sistema validará y guardará la localización
+  </text>
+
+  <rect x="230" y="380" width="160" height="50" rx="16"
+        fill="white" stroke="black" stroke-width="2"/>
+  <text x="310" y="413"
+        font-family="Comic Sans MS, Arial"
+        font-size="20"
+        text-anchor="middle">
+    Cancelar
+  </text>
+
+  <rect x="450" y="380" width="220" height="50" rx="16"
+        fill="#ef5a5a" stroke="black" stroke-width="2"/>
+  <text x="560" y="413"
+        font-family="Comic Sans MS, Arial"
+        font-size="20"
+        fill="white"
+        text-anchor="middle">
+    Guardar localización
+  </text>
+</svg>

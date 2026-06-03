@@ -1,70 +1,20 @@
-@startuml crearGrupo
-skinparam monochrome false
-skinparam shadow false
-top to bottom direction
+﻿@startuml crearGrupo-analisis
+skinparam linetype polyline
 
-skinparam state {
-    BackgroundColor White
-    BorderColor Black
-    ArrowColor #009900
-    StartColor Black
-    EndColor Black
+rectangle #CDEBA5 ":Estado origen SdR" as EstadoOrigen
+rectangle #CDEBA5 ":Estado destino SdR" as EstadoDestino
+
+package "crearGrupo()" {
+    rectangle #629EF9 CrearGrupoView
+    rectangle #b5bd68 CrearGrupoController
+    rectangle #F2AC4E RepositorioDominio
+    rectangle #F2AC4E EntidadDominio
 }
 
-
-skinparam note {
-    BackgroundColor #FFFFE0
-    BorderColor #B0B060
-    FontName Arial
-}
-
-state "GRUPOS_ABIERTO" as Inicio
-
-state "crearGrupo()" as CrearGrupoContainer {
-    
-    state " " as EstadoFormulario
-    state " " as EstadoDecision
-    
-    [*] --> EstadoFormulario
-    note on link
-        **Administrador** solicita crear grupo
-    end note
-
-    EstadoFormulario --> EstadoDecision
-    note on link
-        **Sistema** presenta solicitud de datos mínimos del grupo
-        **Sistema** permite solicitar:
-        * introducir nombre (obligatorio) y descripción
-        * crear grupo
-        * cancelar creación
-    end note
-
-    EstadoDecision -[#green]up-> EstadoFormulario
-    note on link
-        **Administrador** solicita modificar datos introducidos
-    end note
-
-    EstadoDecision -[#green]down-> [*]
-    note on link
-        **Administrador** introduce datos y solicita crear grupo
-    end note
-
-    EstadoDecision -[#red]down-> [*]
-    note on link
-        **Administrador** solicita cancelar creación
-    end note
-}
-
-state "GRUPO_ABIERTO" as FinExito
-state "GRUPOS_ABIERTO" as FinCancelacion
-
-Inicio --> CrearGrupoContainer
-
-CrearGrupoContainer -[#green]-> FinExito : "               "
-
-CrearGrupoContainer -[#red]down-> FinCancelacion
-note on link
-    cancelar creación
-end note
+EstadoOrigen --> CrearGrupoView: crearGrupo()
+CrearGrupoView --> CrearGrupoController: coordinarCasoUso()
+CrearGrupoController --> RepositorioDominio: consultarOModificarDominio()
+RepositorioDominio -- EntidadDominio
+CrearGrupoView --> EstadoDestino: presentaResultado()
 
 @enduml

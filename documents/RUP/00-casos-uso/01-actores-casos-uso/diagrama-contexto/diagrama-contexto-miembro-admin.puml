@@ -1,0 +1,58 @@
+@startuml DiagramaContextoMiembroAdmin
+left to right direction
+skinparam linetype polyline
+
+state "SESION_CERRADA" as NoAuth
+state "SISTEMA_DISPONIBLE" as Menu
+
+state "PLANIFICACION_ABIERTO" as Planificacion
+
+state "TAREAS_ABIERTO" as ListProgramas
+state "TAREA_ABIERTO" as EditPrograma
+
+state "GRUPOS_ABIERTO" as ListGrupos
+state "GRUPO_ABIERTO" as EditGrupo
+
+state "MIEMBRO_ABIERTO" as EditMiembro
+
+[*] --> NoAuth
+
+NoAuth --> Menu : iniciarSesion()
+
+Menu --> NoAuth : cerrarSesion()
+Menu --> ListProgramas: abrirTareas()
+Menu --> ListGrupos: abrirGrupos()
+Menu ---> Planificacion: abrirPlanificacion()
+
+Planificacion --> Planificacion: establecerHorario()
+Planificacion --> Planificacion: definirLocalizacion()
+Planificacion --> Planificacion: configurarRecordatorio()
+Planificacion --> Planificacion: asignarTareaAUsuario()
+
+ListProgramas --> EditPrograma: crearTarea()
+ListProgramas --> EditPrograma: editarTarea()
+ListProgramas --> ListProgramas: eliminarTarea()
+ListProgramas --> ListProgramas: marcarCompletada()
+ListProgramas --> EditGrupo: editarGrupo()
+
+EditPrograma --> EditPrograma: editarTarea()
+EditPrograma --> ListProgramas: abrirTareas()
+EditPrograma --> EditPrograma: relacionarTareas()
+
+ListGrupos --> EditGrupo: editarGrupo()
+ListGrupos --> ListGrupos: abrirGrupos()
+
+EditGrupo --> ListGrupos: abrirGrupos()
+EditGrupo --> EditGrupo: editarGrupo()
+EditGrupo --> EditGrupo: invitarUsuario()
+EditGrupo --> EditMiembro: editarMiembro()
+EditGrupo --> ListProgramas: abrirTareas(grupo)
+
+EditMiembro --> EditGrupo: editarGrupo()
+EditMiembro --> EditMiembro: editarMiembro()
+EditMiembro --> EditMiembro: eliminarMiembro()
+
+ListProgramas --> Menu: completarGestion()
+ListGrupos --> Menu: completarGestion()
+Planificacion --> Menu: completarGestion()
+@enduml
