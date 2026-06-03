@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: eliminarMiembro()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/eliminarMiembro/eliminarMiembro.svg)|
+|![Diagrama de Actividad: eliminarMiembro()](./especificacion.svg)|
 |-|
-|Código fuente: [eliminarMiembro.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/eliminarMiembro/eliminarMiembro.puml)|
+|Código fuente: [eliminarMiembro.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo eliminarMiembro](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

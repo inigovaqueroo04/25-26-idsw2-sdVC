@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: editarTarea()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/editarTarea/editarTarea.svg)|
+|![Diagrama de Actividad: editarTarea()](./especificacion.svg)|
 |-|
-|Código fuente: [editarTarea.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/editarTarea/editarTarea.puml)|
+|Código fuente: [editarTarea.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo editarTarea](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: relacionarTareas()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/relacionarTareas/relacionarTareas.svg)|
+|![Diagrama de Actividad: relacionarTareas()](./especificacion.svg)|
 |-|
-|Código fuente: [relacionarTareas.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/relacionarTareas/relacionarTareas.puml)|
+|Código fuente: [relacionarTareas.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo relacionarTareas](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

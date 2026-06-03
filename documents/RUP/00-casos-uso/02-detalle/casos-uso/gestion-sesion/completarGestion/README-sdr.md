@@ -4,8 +4,18 @@
 
 <div align="center">
 
-![Diagrama de Actividad: completarGestion()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeSesionYNavegacion/completarGestion/completarGestion.svg)
+![Diagrama de Actividad: completarGestion()](./especificacion.svg)
 
-[Código fuente: completarGestion.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeSesionYNavegacion/completarGestion/completarGestion.puml)
+[Código fuente: completarGestion.puml](./especificacion.puml)
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo completarGestion](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

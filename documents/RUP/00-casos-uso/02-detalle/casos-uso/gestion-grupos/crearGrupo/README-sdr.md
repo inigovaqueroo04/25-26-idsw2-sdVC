@@ -4,8 +4,18 @@
 ### Administrador
 <div align=center>
 
-|![Diagrama de Actividad: crearGrupo()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/crearGrupo/crearGrupo.svg)|
+|![Diagrama de Actividad: crearGrupo()](./especificacion.svg)|
 |-|
-|Código fuente: [crearGrupo.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/crearGrupo/crearGrupo.puml)|
+|Código fuente: [crearGrupo.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo crearGrupo](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

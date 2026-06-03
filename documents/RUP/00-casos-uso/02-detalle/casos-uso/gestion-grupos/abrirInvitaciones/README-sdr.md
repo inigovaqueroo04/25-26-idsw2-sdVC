@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: abrirInvitaciones()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/abrirInvitaciones/abrirInvitaciones.svg)|
+|![Diagrama de Actividad: abrirInvitaciones()](./especificacion.svg)|
 |-|
-|Código fuente: [abrirInvitaciones.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/abrirInvitaciones/abrirInvitaciones.puml)|
+|Código fuente: [abrirInvitaciones.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo abrirInvitaciones](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

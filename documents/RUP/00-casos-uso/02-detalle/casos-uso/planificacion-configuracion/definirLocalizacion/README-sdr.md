@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: definirLocalizacion()](/documents/actoresYCasosDeUso/detalladoYPrototipado/planificacionYConfiguracion/definirLocalizacion/definirLocalizacion.svg)|
+|![Diagrama de Actividad: definirLocalizacion()](./especificacion.svg)|
 |-|
-|Código fuente: [definirLocalizacion.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/planificacionYConfiguracion/definirLocalizacion/definirLocalizacion.puml)|
+|Código fuente: [definirLocalizacion.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo definirLocalizacion](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

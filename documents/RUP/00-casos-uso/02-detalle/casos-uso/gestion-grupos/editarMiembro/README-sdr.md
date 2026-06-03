@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: editarMiembro()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/editarMiembro/editarMiembro.svg)|
+|![Diagrama de Actividad: editarMiembro()](./especificacion.svg)|
 |-|
-|Código fuente: [editarMiembro.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/editarMiembro/editarMiembro.puml)|
+|Código fuente: [editarMiembro.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo editarMiembro](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

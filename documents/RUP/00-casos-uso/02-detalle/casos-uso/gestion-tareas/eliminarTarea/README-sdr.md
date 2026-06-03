@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: eliminarTarea()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/eliminarTarea/eliminarTarea.svg)|
+|![Diagrama de Actividad: eliminarTarea()](./especificacion.svg)|
 |-|
-|Código fuente: [eliminarTarea.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/eliminarTarea/eliminarTarea.puml)|
+|Código fuente: [eliminarTarea.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo eliminarTarea](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

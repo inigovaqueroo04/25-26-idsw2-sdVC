@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: marcarCompletada()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/marcarCompletada/marcarCompletada.svg)|
+|![Diagrama de Actividad: marcarCompletada()](./especificacion.svg)|
 |-|
-|Código fuente: [marcarCompletada.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/marcarCompletada/marcarCompletada.puml)|
+|Código fuente: [marcarCompletada.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo marcarCompletada](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

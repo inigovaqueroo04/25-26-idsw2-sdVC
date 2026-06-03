@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: asignarTareaAUsuario()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/asignarTareaAUsuario/asignarTareaAUsuario.svg)|
+|![Diagrama de Actividad: asignarTareaAUsuario()](./especificacion.svg)|
 |-|
-|Código fuente: [asignarTareaAUsuario.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/asignarTareaAUsuario/asignarTareaAUsuario.puml)|
+|Código fuente: [asignarTareaAUsuario.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo asignarTareaAUsuario](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

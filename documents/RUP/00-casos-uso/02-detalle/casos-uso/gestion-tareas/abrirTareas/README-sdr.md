@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: abrirTareas()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/abrirTareas/abrirTareas.svg)|
+|![Diagrama de Actividad: abrirTareas()](./especificacion.svg)|
 |-|
-|Código fuente: [abrirTareas.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeTareas/abrirTareas/abrirTareas.puml)|
+|Código fuente: [abrirTareas.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo abrirTareas](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

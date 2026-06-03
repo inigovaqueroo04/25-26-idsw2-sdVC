@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: invitarUsuario()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/invitarUsuario/invitarUsuario.svg)|
+|![Diagrama de Actividad: invitarUsuario()](./especificacion.svg)|
 |-|
-|Código fuente: [invitarUsuario.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/invitarUsuario/invitarUsuario.puml)|
+|Código fuente: [invitarUsuario.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo invitarUsuario](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

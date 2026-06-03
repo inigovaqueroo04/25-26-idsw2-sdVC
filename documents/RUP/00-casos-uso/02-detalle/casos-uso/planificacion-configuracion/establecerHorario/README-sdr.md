@@ -4,8 +4,18 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: establecerHorario()](/documents/actoresYCasosDeUso/detalladoYPrototipado/planificacionYConfiguracion/establecerHorario/establecerHorario.svg)|
+|![Diagrama de Actividad: establecerHorario()](./especificacion.svg)|
 |-|
-|Código fuente: [establecerHorario.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/planificacionYConfiguracion/establecerHorario/establecerHorario.puml)|
+|Código fuente: [establecerHorario.puml](./especificacion.puml)|
+
+</div>
+
+## Prototipado
+
+<div align="center">
+
+![Prototipo establecerHorario](./prototipo.svg)
+
+[prototipo.svg](./prototipo.svg)
 
 </div>

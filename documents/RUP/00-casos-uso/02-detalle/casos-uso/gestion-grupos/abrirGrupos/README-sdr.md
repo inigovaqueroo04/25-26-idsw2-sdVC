@@ -5,9 +5,9 @@
 
 <div align=center>
 
-|![Diagrama de Actividad: abrirGrupos()](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/abrirGrupos/abrirGrupos.svg)|
+|![Diagrama de Actividad: abrirGrupos()](./especificacion.svg)|
 |-|
-|Código fuente: [abrirGruposAdmin.puml](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/abrirGrupos/abrirGruposAdmin.puml)|
+|Código fuente: [abrirGruposAdmin.puml](./especificacion.puml)|
 
 </div>
  
@@ -15,8 +15,8 @@
 
 <div align=center>
 
-|![Prototipado abrirGrupos](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/abrirGrupos/abrirGruposPrototipado.svg)|
+|![Prototipado abrirGrupos](./prototipo.svg)|
 |-|
-|[abrirGruposPrototipado.svg](/documents/actoresYCasosDeUso/detalladoYPrototipado/gestionDeGruposYUsuarios/abrirGrupos/abrirGruposPrototipado.svg)|
+|[abrirGruposPrototipado.svg](./prototipo.svg)|
 
 </div>
