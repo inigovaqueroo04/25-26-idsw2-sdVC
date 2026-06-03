@@ -1,0 +1,69 @@
+@startuml relacionarTareas
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "TAREA_ABIERTO" as Inicio
+
+state "relacionarTareas()" as RelacionarTareasContainer {
+    
+    state " " as EstadoFormulario
+    state " " as EstadoDecision
+    
+    [*] --> EstadoFormulario
+    note on link
+        **Administrador** solicita introducir relación
+    end note
+
+    EstadoFormulario --> EstadoDecision
+    note on link
+        **Sistema** presenta buscador de tareas vinculables
+        **Sistema** permite solicitar:
+        * introducir identificador o título de la tarea a vincular
+        * seleccionar tipo de relación (predecesora/sucesora)
+        * establecer relación
+        * cancelar vinculación
+    end note
+
+    EstadoDecision -[#green]up-> EstadoFormulario
+    note on link
+        **Administrador** solicita cambiar la tarea seleccionada
+    end note
+
+    EstadoDecision -[#green]down-> [*]
+    note on link
+        **Administrador** selecciona tarea y solicita establecer relación
+    end note
+
+    EstadoDecision -[#red]down-> [*]
+    note on link
+        **Administrador** solicita cancelar vinculación
+    end note
+}
+
+state "TAREA_ABIERTO" as FinTarea
+
+Inicio --> RelacionarTareasContainer
+
+RelacionarTareasContainer -[#green]-> FinTarea : "               "
+
+RelacionarTareasContainer -[#red]down-> FinTarea
+note on link
+    cancelar vinculación
+end note
+
+@enduml

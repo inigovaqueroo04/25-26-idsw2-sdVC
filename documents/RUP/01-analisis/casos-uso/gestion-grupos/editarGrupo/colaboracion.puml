@@ -1,0 +1,75 @@
+@startuml editarGrupo
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "GRUPOS_ABIERTO" as InicioLista
+state "GRUPO_ABIERTO" as InicioDetalle
+state "TAREAS_ABIERTO" as InicioTareas
+state "MIEMBRO_ABIERTO" as InicioMiembros
+
+state "editarGrupo()" as EditarGrupoContainer {
+    
+    state " " as EstadoPreVisualizacion
+    state " " as EstadoDecision
+    
+    [*] --> EstadoPreVisualizacion
+    note on link
+        **Administrador** solicita editar grupo
+    end note
+
+    EstadoPreVisualizacion --> EstadoDecision
+    note on link
+        **Sistema** visualiza datos actuales del grupo
+        **Sistema** permite solicitar:
+        * modificar campos
+        * guardar grupo
+        * cancelar edición
+    end note
+
+    EstadoDecision -[#green]up-> EstadoPreVisualizacion
+    note on link
+        **Administrador** solicita modificar campos
+    end note
+
+    EstadoDecision -[#green]down-> [*]
+    note on link
+        **Administrador** solicita guardar y salir
+    end note
+
+    EstadoDecision -[#red]down-> [*]
+    note on link
+        **Administrador** solicita cancelar edición
+    end note
+}
+
+state "GRUPO_ABIERTO" as GrupoAbiertoFinal
+
+InicioLista --> EditarGrupoContainer
+InicioDetalle --> EditarGrupoContainer
+InicioTareas --> EditarGrupoContainer
+InicioMiembros --> EditarGrupoContainer
+
+EditarGrupoContainer -[#green]-> GrupoAbiertoFinal : "               "
+
+EditarGrupoContainer -[#red]-> GrupoAbiertoFinal
+note on link
+    cancelar edición
+end note
+
+
+@enduml

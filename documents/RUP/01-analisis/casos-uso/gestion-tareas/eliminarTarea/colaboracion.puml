@@ -1,0 +1,63 @@
+@startuml eliminarTarea
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "TAREA_ABIERTO" as Inicio
+
+state "eliminarTarea()" as EliminarTareaContainer {
+    
+    state " " as EstadoConfirmacion
+    state " " as EstadoDecision
+    
+    [*] --> EstadoConfirmacion
+    note on link
+        **Administrador** solicita eliminar tarea
+    end note
+
+    EstadoConfirmacion --> EstadoDecision
+    note on link
+        **Sistema** presenta solicitud de confirmación
+        **Sistema** permite solicitar:
+        * confirmar eliminación
+        * cancelar eliminación
+    end note
+
+    EstadoDecision -[#green]down-> [*]
+    note on link
+        **Administrador** solicita confirmar eliminación
+    end note
+
+    EstadoDecision -[#red]down-> [*]
+    note on link
+        **Administrador** solicita cancelar eliminación
+    end note
+}
+
+state "TAREAS_ABIERTO" as FinLista
+state "TAREA_ABIERTO" as FinDetalle
+
+Inicio --> EliminarTareaContainer
+
+EliminarTareaContainer -[#green]-> FinLista : "               "
+
+EliminarTareaContainer -[#red]down-> FinDetalle
+note on link
+    cancelar eliminación
+end note
+
+@enduml

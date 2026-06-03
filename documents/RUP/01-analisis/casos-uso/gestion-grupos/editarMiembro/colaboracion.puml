@@ -1,0 +1,71 @@
+@startuml editarMiembro
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "GRUPO_ABIERTO" as EntradaGrupo
+state "MIEMBRO_ABIERTO" as EntradaMiembro
+
+state "editarMiembro()" as MainBlock {
+    
+    state " " as EstadoVisualizacion
+    state " " as EstadoDecision
+    
+    [*] --> EstadoVisualizacion
+    note on link
+        **Administrador** solicita editar miembro
+    end note
+
+    EstadoVisualizacion --> EstadoDecision
+    note on link
+        **Sistema** visualiza datos actuales del miembro
+        **Sistema** permite solicitar:
+        * introducir cambios en el rol o permisos
+        * guardar cambios
+        * cancelar edición
+    end note
+
+    EstadoDecision -[#green]down-> [*]
+    note on link
+        **Administrador** introduce los cambios y solicita guardar
+    end note
+
+    EstadoDecision -[#red]down-> [*]
+    note on link
+        **Administrador** solicita cancelar edición
+    end note
+}
+
+state "MIEMBRO_ABIERTO" as FinMiembro
+state "GRUPO_ABIERTO" as FinGrupo
+
+EntradaGrupo --> MainBlock
+EntradaMiembro --> MainBlock
+
+MainBlock -[#green]-> FinMiembro : "               "
+
+MainBlock -[#red]down-> FinMiembro
+note on link
+    cancelar edición (desde miembro)
+end note
+
+MainBlock -[#red]down-> FinGrupo
+note on link
+    cancelar edición (desde grupo)
+end note
+
+@enduml

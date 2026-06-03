@@ -1,0 +1,104 @@
+@startuml abrirTareas
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "SISTEMA_DISPONIBLE" as Inicio
+state "TAREAS_ABIERTO" as EntradaLista
+state "GRUPO_ABIERTO" as GrupoAbierto
+
+state "abrirTareas()" as AbrirTareasContainer {
+    top to bottom direction
+
+    state " " as PasoInicial
+    state " " as PasoLista
+
+    [*] --> PasoInicial
+    note on link
+        **Administrador** solicita abrir tareas
+    end note
+
+    PasoInicial --> PasoLista
+    note on link
+        **Sistema** presenta lista de tareas
+        • ID, título y estado de cada tarea
+        • Permite solicitar filtrar lista
+        • Permite solicitar crear tarea nueva
+        • Permite solicitar editar tarea
+        • Permite solicitar eliminar tarea
+        • Permite solicitar marcar como completada
+    end note
+
+    PasoLista -right-> PasoLista
+    note on link
+        **Administrador** solicita filtrar lista
+        **Sistema** presenta lista filtrada
+    end note
+    
+    PasoLista --> [*]
+    note on link
+        **Administrador** solicita una de las opciones
+    end note
+}
+
+state "TAREA_ABIERTO" as FinDetalle
+state "TAREAS_ABIERTO" as SalidaLista
+state "SISTEMA_DISPONIBLE" as SalidaSistema
+
+<<<<<<<<< Temporary merge branch 1
+Inicio --> AbrirTareasContainer
+EntradaLista --> AbrirTareasContainer
+GrupoAbierto --> AbrirTareasContainer
+
+AbrirTareasContainer --> FinDetalle
+=========
+
+GRUPO_ABIERTO --> abrirTareas
+SISTEMA_DISPONIBLE--> abrirTareas
+TAREA_ABIERTO --> abrirTareas
+abrirTareas --> TAREAS_ABIERTO
+>>>>>>>>> Temporary merge branch 2
+note on link
+  crearTarea()
+end note
+
+AbrirTareasContainer --> FinDetalle
+note on link
+  editarTarea()
+end note
+
+AbrirTareasContainer --> SalidaLista
+note on link
+  eliminarTarea()
+end note
+
+AbrirTareasContainer --> SalidaLista
+note on link
+  marcarCompletada()
+end note
+
+AbrirTareasContainer --> SalidaLista
+note on link
+  abrirTareas()
+end note
+
+AbrirTareasContainer --> SalidaSistema
+note on link
+  completarGestion()
+end note
+
+@enduml

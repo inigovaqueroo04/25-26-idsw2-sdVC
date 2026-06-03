@@ -1,0 +1,69 @@
+@startuml crearTarea
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "TAREAS_ABIERTO" as Inicio
+
+state "crearTarea()" as CrearTareaContainer {
+    
+    state " " as EstadoFormulario
+    state " " as EstadoDecision
+    
+    [*] --> EstadoFormulario
+    note on link
+        **Administrador** solicita introducir tarea
+    end note
+
+    EstadoFormulario --> EstadoDecision
+    note on link
+        **Sistema** presenta formulario de datos de la tarea
+        **Sistema** permite solicitar:
+        * introducir título, descripción y fecha
+        * crear tarea
+        * cancelar creación
+    end note
+
+    EstadoDecision -[#green]up-> EstadoFormulario
+    note on link
+        **Administrador** solicita modificar datos introducidos
+    end note
+
+    EstadoDecision -[#green]down-> [*]
+    note on link
+        **Administrador** introduce datos y solicita crear tarea
+    end note
+
+    EstadoDecision -[#red]down-> [*]
+    note on link
+        **Administrador** solicita cancelar creación
+    end note
+}
+
+state "TAREA_ABIERTO" as FinExito
+state "TAREAS_ABIERTO" as FinCancelacion
+
+Inicio --> CrearTareaContainer
+
+CrearTareaContainer -[#green]-> FinExito : "               "
+
+CrearTareaContainer -[#red]down-> FinCancelacion
+note on link
+    cancelar creación
+end note
+
+@enduml

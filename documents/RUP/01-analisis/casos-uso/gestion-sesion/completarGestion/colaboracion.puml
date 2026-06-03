@@ -1,0 +1,37 @@
+@startuml completarGestion
+top to bottom direction
+skinparam classAttributeIconSize 0
+skinparam ArrowColor Green
+
+state "SISTEMA_DISPONIBLE" as SISTEMA_DISPONIBLE
+state "TAREAS_ABIERTO" as TAREAS_ABIERTO
+state "GRUPOS_ABIERTO" as GRUPOS_ABIERTO
+state "PLANIFICACION_ABIERTO" as PLANIFICACION_ABIERTO
+
+state "completarGestion()" as UC {
+
+  [*] --> N1
+
+  state " " as N1 
+  state " " as N2
+
+  N1 --> N2
+  note on link
+  Usuario solicita completar gestion
+  end note
+
+  N2 --> [*]
+  note on link
+  Sistema presenta pantalla principal
+  end note
+}
+
+TAREAS_ABIERTO --> UC : completarGestion()
+GRUPOS_ABIERTO --> UC : completarGestion()
+PLANIFICACION_ABIERTO --> UC : completarGestion()
+
+UC --> SISTEMA_DISPONIBLE : completarGestion()
+
+@enduml
+
+

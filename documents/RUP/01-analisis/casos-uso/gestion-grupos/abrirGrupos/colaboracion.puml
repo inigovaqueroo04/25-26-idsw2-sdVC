@@ -1,0 +1,98 @@
+@startuml
+' Configuración visual idéntica al ejemplo
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+' Estado inicial externo
+state SISTEMA_DISPONIBLE
+
+' Estado compuesto
+state "abrirGrupos()" as AbrirGruposContainer {
+    top to bottom direction
+
+    ' Estados de anclaje internos (sin nombre visible)
+    state " " as PasoInicial
+    state " " as PasoLista
+
+    ' 1. Inicio -> Solicitud
+    [*] --> PasoInicial
+    note on link
+        **Administrador** solicita abrir grupos
+    end note
+
+    ' 2. Solicitud -> Presentación de lista
+    PasoInicial --> PasoLista
+    note on link
+        **Sistema** presenta lista de grupos
+        • ID y nombre de cada grupo
+        • Permite solicitar filtrar lista
+        • Permite solicitar crear grupo nuevo
+        • Permite solicitar editar grupo
+        • Permite solicitar eliminar grupo
+    end note
+
+    ' 3. Bucle de Filtrado (Self-transition)
+    PasoLista -right-> PasoLista
+    note on link
+        **Administrador** solicita filtrar lista
+        **Sistema** presenta lista filtrada
+    end note
+    
+    ' 4. Selección de opción -> Fin interno
+    PasoLista --> [*]
+    note on link
+        **Administrador** solicita una de las opciones
+    end note
+}
+
+' Estados finales externos
+state GRUPO_ABIERTO
+state GRUPOS_ABIERTO
+
+' Transición de entrada
+SISTEMA_DISPONIBLE --> AbrirGruposContainer
+
+' Transiciones de salida (Acciones)
+' Se usan notas en los links para simular el estilo del ejemplo
+
+AbrirGruposContainer --> GRUPO_ABIERTO
+note on link
+  crearGrupo()
+end note
+
+AbrirGruposContainer --> GRUPO_ABIERTO
+note on link
+  editarGrupo()
+end note
+
+AbrirGruposContainer --> GRUPOS_ABIERTO
+note on link
+  eliminarGrupo()
+end note
+
+AbrirGruposContainer --> GRUPOS_ABIERTO
+note on link
+  abrirGrupos()
+end note
+
+AbrirGruposContainer --> SISTEMA_DISPONIBLE
+note on link
+  completarGestion()
+end note
+
+@enduml

@@ -1,10 +1,16 @@
-# Documentos
+# Documentacion
 
-Carpeta para documentos, en la medida de lo posible en formato Markdown.
+Esta carpeta contiene los artefactos de trabajo del proyecto. La documentacion
+RUP queda organizada por disciplina para mantener trazabilidad entre analisis,
+diseno e implementacion.
 
-## Contenido
+## RUP
 
+- [01-analisis](./RUP/01-analisis/README.md)
+- [02-diseno](./RUP/02-diseño/README.md)
+
+## Documentos de soporte
+
+- [Criterios de integracion](./criterios-integracion.md)
 - [Protocolo de sesiones con IA](./protocolo-sesiones-ia.md)
-- [Análisis de casos de uso](./analisis/README.md)
-- [Criterios de integración para diseño e implementación](./criterios-integracion.md)
-- [Revisión de coherencia previa al diseño](./revision-pre-diseno.md)
+- [Revision de coherencia previa al diseno](./revision-pre-diseno.md)

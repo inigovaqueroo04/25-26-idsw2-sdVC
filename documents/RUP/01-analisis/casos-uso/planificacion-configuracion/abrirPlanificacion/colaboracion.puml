@@ -1,0 +1,77 @@
+@startuml abrirPlanificacion
+skinparam monochrome false
+skinparam shadow false
+top to bottom direction
+
+skinparam state {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #009900
+    StartColor Black
+    EndColor Black
+}
+
+skinparam note {
+    BackgroundColor #FFFFE0
+    BorderColor #B0B060
+    FontName Arial
+}
+
+state "SISTEMA_DISPONIBLE" as Inicio
+
+state "abrirPlanificacion()" as AbrirPlanificacionContainer {
+    top to bottom direction
+
+    state " " as PasoInicial
+    state " " as PasoVisualizacion
+
+    [*] --> PasoInicial
+    note on link
+        **Usuario** solicita abrir planificación
+    end note
+
+    PasoInicial --> PasoVisualizacion
+    note on link
+        **Sistema** permite solicitar establecer horario
+        **Sistema** permite solicitar definir localización
+        **Sistema** permite solicitar configurar recordatorio
+        **Sistema** permite solicitar asignar tarea a usuario
+    end note
+
+    PasoVisualizacion --> [*]
+    note on link
+        **Usuario** solicita una de las opciones
+    end note
+}
+
+state "PLANIFICACION_ABIERTO" as SalidaPlanificacion
+state "SISTEMA_DISPONIBLE" as SalidaSistema
+
+Inicio --> AbrirPlanificacionContainer
+
+AbrirPlanificacionContainer --> SalidaPlanificacion
+note on link
+  establecerHorario()
+end note
+
+AbrirPlanificacionContainer --> SalidaPlanificacion
+note on link
+  definirLocalizacion()
+end note
+
+AbrirPlanificacionContainer --> SalidaPlanificacion
+note on link
+  configurarRecordatorio()
+end note
+
+AbrirPlanificacionContainer --> SalidaPlanificacion
+note on link
+  asignarTareaAUsuario()
+end note
+
+AbrirPlanificacionContainer --> SalidaSistema
+note on link
+  completarGestion()
+end note
+
+@enduml
