@@ -81,7 +81,9 @@ La invitación pasa a estado final y, si se acepta, se crea la pertenencia al gr
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de editarInvitacion()](./secuencia.svg)
+
+```plantuml
 @startuml editarInvitacion-diseno-secuencia
 title Diseño conceptual: editarInvitacion()
 
@@ -116,8 +118,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

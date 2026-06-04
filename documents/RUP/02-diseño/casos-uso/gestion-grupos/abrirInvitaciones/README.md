@@ -79,7 +79,9 @@ El usuario visualiza sus invitaciones y puede seleccionar una para gestionarla.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de abrirInvitaciones()](./secuencia.svg)
+
+```plantuml
 @startuml abrirInvitaciones-diseno-secuencia
 title Diseño conceptual: abrirInvitaciones()
 
@@ -114,8 +116,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

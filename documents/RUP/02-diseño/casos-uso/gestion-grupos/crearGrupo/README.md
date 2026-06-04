@@ -80,7 +80,9 @@ Se crea el grupo y el usuario queda vinculado como miembro con permisos de admin
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de crearGrupo()](./secuencia.svg)
+
+```plantuml
 @startuml crearGrupo-diseno-secuencia
 title Diseño conceptual: crearGrupo()
 
@@ -115,8 +117,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

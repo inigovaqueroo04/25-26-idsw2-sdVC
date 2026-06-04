@@ -81,7 +81,9 @@ La tarea conserva una localización descriptiva para consulta y planificación.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de definirLocalizacion()](./secuencia.svg)
+
+```plantuml
 @startuml definirLocalizacion-diseno-secuencia
 title Diseño conceptual: definirLocalizacion()
 
@@ -116,8 +118,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

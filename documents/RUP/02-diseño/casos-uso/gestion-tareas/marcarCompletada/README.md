@@ -81,7 +81,9 @@ La tarea queda marcada como completada y conserva trazabilidad del cierre.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de marcarCompletada()](./secuencia.svg)
+
+```plantuml
 @startuml marcarCompletada-diseno-secuencia
 title Diseño conceptual: marcarCompletada()
 
@@ -116,8 +118,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

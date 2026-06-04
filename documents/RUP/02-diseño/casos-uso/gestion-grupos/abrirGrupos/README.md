@@ -80,7 +80,9 @@ La lista de grupos queda disponible y filtrada según pertenencia y rol.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de abrirGrupos()](./secuencia.svg)
+
+```plantuml
 @startuml abrirGrupos-diseno-secuencia
 title Diseño conceptual: abrirGrupos()
 
@@ -115,8 +117,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

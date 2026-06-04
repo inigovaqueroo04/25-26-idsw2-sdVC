@@ -82,7 +82,9 @@ La tarea actualiza sus datos y se reevaluan efectos sobre planificación y confl
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de editarTarea()](./secuencia.svg)
+
+```plantuml
 @startuml editarTarea-diseno-secuencia
 title Diseño conceptual: editarTarea()
 
@@ -117,8 +119,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

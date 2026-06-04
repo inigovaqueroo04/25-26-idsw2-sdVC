@@ -78,7 +78,9 @@ La sesión queda cerrada y no se conserva acceso operativo al sistema.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de cerrarSesion()](./secuencia.svg)
+
+```plantuml
 @startuml cerrarSesion-diseno-secuencia
 title Diseño conceptual: cerrarSesion()
 
@@ -113,8 +115,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

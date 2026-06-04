@@ -80,7 +80,9 @@ El grupo deja de estar disponible y el usuario vuelve a la lista de grupos.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de eliminarGrupo()](./secuencia.svg)
+
+```plantuml
 @startuml eliminarGrupo-diseno-secuencia
 title Diseño conceptual: eliminarGrupo()
 
@@ -115,8 +117,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

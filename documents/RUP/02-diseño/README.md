@@ -11,12 +11,26 @@ Fase de diseño de BreñoTask tras cerrar el análisis de casos de uso. Esta fas
 
 ## Artefactos generales
 
-- [arquitectura.puml](./arquitectura.puml): capas conceptuales y dependencias permitidas.
-- [clases-diseno.puml](./clases-diseno.puml): modelo de dominio de diseño.
+- [arquitectura.puml](./arquitectura.puml) / [arquitectura.svg](./arquitectura.svg): capas conceptuales y dependencias permitidas.
+- [clases-diseno.puml](./clases-diseno.puml) / [clases-diseno.svg](./clases-diseno.svg): modelo de dominio de diseño.
 - [configuracion-proyecto.md](./configuracion-proyecto.md): organización conceptual de diseño y reglas de responsabilidad.
 - [decisiones-diseno.md](./decisiones-diseno.md): decisiones globales por módulo.
 - [trazabilidad-analisis-diseno.md](./trazabilidad-analisis-diseno.md): relación entre análisis y diseño.
 - [casos-uso](./casos-uso/README.md): diseño detallado de los 24 casos de uso.
+
+## Vista rápida
+
+### Arquitectura conceptual
+
+![Arquitectura conceptual](./arquitectura.svg)
+
+Código fuente: [arquitectura.puml](./arquitectura.puml)
+
+### Modelo de clases de diseño
+
+![Modelo de clases de diseño](./clases-diseno.svg)
+
+Código fuente: [clases-diseno.puml](./clases-diseno.puml)
 
 ## Relación con análisis
 

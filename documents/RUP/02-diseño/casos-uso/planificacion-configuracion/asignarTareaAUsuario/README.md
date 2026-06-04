@@ -82,7 +82,9 @@ La tarea queda asignada y se reevaluan conflictos de los usuarios afectados.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de asignarTareaAUsuario()](./secuencia.svg)
+
+```plantuml
 @startuml asignarTareaAUsuario-diseno-secuencia
 title Diseño conceptual: asignarTareaAUsuario()
 
@@ -117,8 +119,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

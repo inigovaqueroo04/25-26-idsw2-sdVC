@@ -80,7 +80,9 @@ El usuario queda identificado y el sistema pasa a un estado disponible para oper
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de iniciarSesion()](./secuencia.svg)
+
+```plantuml
 @startuml iniciarSesion-diseno-secuencia
 title Diseño conceptual: iniciarSesion()
 
@@ -115,8 +117,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

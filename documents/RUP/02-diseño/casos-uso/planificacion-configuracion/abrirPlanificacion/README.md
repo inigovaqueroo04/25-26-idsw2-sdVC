@@ -80,7 +80,9 @@ La planificación queda visible con tareas organizadas por fecha, grupo u horari
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de abrirPlanificacion()](./secuencia.svg)
+
+```plantuml
 @startuml abrirPlanificacion-diseno-secuencia
 title Diseño conceptual: abrirPlanificacion()
 
@@ -115,8 +117,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

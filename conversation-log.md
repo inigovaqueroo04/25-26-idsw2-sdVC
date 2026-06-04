@@ -335,3 +335,13 @@
 **Decision:** El diseño se mantiene como documentación conceptual lista para revisión y commit. Al haberse generado en bloque, queda registrado que antes de subirlo se hizo una pasada completa para comprobar consistencia, enlaces y trazabilidad. Como relleno útil para la siguiente fase, se deja marcado que el primer trabajo posterior debería ser elegir el primer caso de uso a implementar y transformar su diseño conceptual en componentes reales.
 
 ---
+
+## [2026-06-04 22:30] Imágenes renderizadas para los PUML de diseño
+
+**Prompt:** El usuario planteó que cada PUML de la fase de diseño debería ir acompañado de su imagen para poder revisarlo directamente desde la documentación.
+
+**Resultado:** Se generaron SVG para `arquitectura.puml`, `clases-diseno.puml` y los 24 `secuencia.puml` de los casos de uso. También se actualizaron los README de diseño para mostrar las imágenes junto al código PlantUML y se corrigieron los bloques de código para que se rendericen correctamente en Markdown.
+
+**Decision:** A partir de este punto, cada diagrama de diseño mantiene dos artefactos: el `.puml` como fuente editable y el `.svg` como vista rápida. Esto hace que la carpeta `documents/RUP/02-diseño/` sea más fácil de revisar sin abrir herramientas externas.
+
+---

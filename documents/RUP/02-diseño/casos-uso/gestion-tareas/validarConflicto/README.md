@@ -80,7 +80,9 @@ Los conflictos quedan registrados o actualizados sin bloquear por defecto la ope
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de validarConflicto()](./secuencia.svg)
+
+```plantuml
 @startuml validarConflicto-diseno-secuencia
 title Diseño conceptual: validarConflicto()
 
@@ -115,8 +117,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

@@ -78,7 +78,9 @@ El usuario vuelve a un estado estable sin alterar datos no confirmados.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de completarGestion()](./secuencia.svg)
+
+```plantuml
 @startuml completarGestion-diseno-secuencia
 title Diseño conceptual: completarGestion()
 
@@ -113,8 +115,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

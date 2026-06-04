@@ -82,7 +82,9 @@ La tarea queda asociada a uno o varios recordatorios internos.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de configurarRecordatorio()](./secuencia.svg)
+
+```plantuml
 @startuml configurarRecordatorio-diseno-secuencia
 title Diseño conceptual: configurarRecordatorio()
 
@@ -117,8 +119,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

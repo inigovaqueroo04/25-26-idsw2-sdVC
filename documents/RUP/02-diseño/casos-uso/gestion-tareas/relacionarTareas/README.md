@@ -82,7 +82,9 @@ Queda registrada la relación de jerarquía o precedencia entre tareas.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de relacionarTareas()](./secuencia.svg)
+
+```plantuml
 @startuml relacionarTareas-diseno-secuencia
 title Diseño conceptual: relacionarTareas()
 
@@ -117,8 +119,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

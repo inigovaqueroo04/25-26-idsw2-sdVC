@@ -81,7 +81,9 @@ El miembro queda desvinculado y las asignaciones afectadas quedan pendientes de 
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de eliminarMiembro()](./secuencia.svg)
+
+```plantuml
 @startuml eliminarMiembro-diseno-secuencia
 title Diseño conceptual: eliminarMiembro()
 
@@ -116,8 +118,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

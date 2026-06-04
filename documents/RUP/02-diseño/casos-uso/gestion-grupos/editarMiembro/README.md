@@ -80,7 +80,9 @@ El miembro conserva su identidad y actualiza su rol o datos operativos dentro de
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de editarMiembro()](./secuencia.svg)
+
+```plantuml
 @startuml editarMiembro-diseno-secuencia
 title Diseño conceptual: editarMiembro()
 
@@ -115,8 +117,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

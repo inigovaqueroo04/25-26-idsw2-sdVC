@@ -81,7 +81,9 @@ La tarea deja de estar disponible y se limpian relaciones auxiliares afectadas.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de eliminarTarea()](./secuencia.svg)
+
+```plantuml
 @startuml eliminarTarea-diseno-secuencia
 title Diseño conceptual: eliminarTarea()
 
@@ -116,8 +118,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

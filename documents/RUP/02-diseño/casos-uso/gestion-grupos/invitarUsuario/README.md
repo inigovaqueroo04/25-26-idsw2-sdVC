@@ -82,7 +82,9 @@ Queda registrada una invitación pendiente asociada al grupo.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de invitarUsuario()](./secuencia.svg)
+
+```plantuml
 @startuml invitarUsuario-diseno-secuencia
 title Diseño conceptual: invitarUsuario()
 
@@ -117,8 +119,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

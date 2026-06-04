@@ -25,18 +25,21 @@ Este documento define cómo se organiza el diseño antes de pasar a implementaci
 
 ## Estructura documental usada
 
-`	ext
+```text
 documents/RUP/02-diseño/
   README.md
   arquitectura.puml
+  arquitectura.svg
   clases-diseno.puml
+  clases-diseno.svg
   configuracion-proyecto.md
   decisiones-diseno.md
   trazabilidad-analisis-diseno.md
   casos-uso/
     <modulo>/<caso>/README.md
     <modulo>/<caso>/secuencia.puml
-`
+    <modulo>/<caso>/secuencia.svg
+```
 
 ## Reglas de diseño
 

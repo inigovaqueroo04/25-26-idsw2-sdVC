@@ -4,6 +4,7 @@ Cada carpeta contiene el diseño conceptual de un caso de uso:
 
 - README.md: responsabilidades, decisiones, validaciones, estados y trazabilidad.
 - secuencia.puml: flujo conceptual de diseño en PlantUML.
+- secuencia.svg: imagen renderizada del flujo para lectura directa.
 
 ## Gestión de sesión y navegación
 

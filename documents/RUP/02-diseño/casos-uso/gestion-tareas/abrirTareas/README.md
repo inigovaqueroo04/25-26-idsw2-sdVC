@@ -80,7 +80,9 @@ El usuario dispone de una lista de tareas consultable y preparada para acciones 
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de abrirTareas()](./secuencia.svg)
+
+```plantuml
 @startuml abrirTareas-diseno-secuencia
 title Diseño conceptual: abrirTareas()
 
@@ -115,8 +117,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

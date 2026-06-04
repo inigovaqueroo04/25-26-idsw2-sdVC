@@ -80,7 +80,9 @@ El grupo conserva identidad y actualiza únicamente los datos confirmados.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de editarGrupo()](./secuencia.svg)
+
+```plantuml
 @startuml editarGrupo-diseno-secuencia
 title Diseño conceptual: editarGrupo()
 
@@ -115,8 +117,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

@@ -82,7 +82,9 @@ La tarea queda con horario actualizado y preparada para reevaluar conflictos.
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de establecerHorario()](./secuencia.svg)
+
+```plantuml
 @startuml establecerHorario-diseno-secuencia
 title Diseño conceptual: establecerHorario()
 
@@ -117,8 +119,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)

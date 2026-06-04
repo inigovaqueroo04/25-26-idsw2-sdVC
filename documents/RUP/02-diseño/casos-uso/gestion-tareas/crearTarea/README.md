@@ -82,7 +82,9 @@ La tarea queda creada y disponible para seguimiento, asignación y planificació
 
 ## PlantUML del flujo de diseño
 
-`plantuml
+![Secuencia de diseño de crearTarea()](./secuencia.svg)
+
+```plantuml
 @startuml crearTarea-diseno-secuencia
 title Diseño conceptual: crearTarea()
 
@@ -117,8 +119,9 @@ else error funcional
 end
 
 @enduml
-`
+```
 
 ## Artefactos
 
 - [secuencia.puml](./secuencia.puml)
+- [secuencia.svg](./secuencia.svg)
