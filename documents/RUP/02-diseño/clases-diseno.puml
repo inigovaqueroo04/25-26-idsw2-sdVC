@@ -1,23 +1,98 @@
-﻿@startuml clases-diseno
+@startuml clases-diseno
 skinparam classAttributeIconSize 0
 
-package "Interfaz" {
-  class VistaCasoUso
+title Modelo de dominio de diseño - BreñoTask
+
+package "Identidad y grupos" {
+  class Usuario {
+    +id: Identificador
+    +email: Texto
+    +nombre: Texto
+    +estadoSesion: EstadoSesion
+  }
+
+  class Grupo {
+    +id: Identificador
+    +nombre: Texto
+    +descripcion: Texto
+  }
+
+  class Miembro {
+    +id: Identificador
+    +rol: RolGrupo
+    +fechaAlta: Fecha
+  }
+
+  class Invitacion {
+    +id: Identificador
+    +emailDestino: Texto
+    +estado: EstadoInvitacion
+    +fechaLimite: Fecha
+  }
 }
 
-package "Aplicacion" {
-  class ControladorCasoUso
-  class ServicioDominio
+package "Tareas y planificación" {
+  class Tarea {
+    +id: Identificador
+    +titulo: Texto
+    +descripcion: Texto
+    +estado: EstadoTarea
+  }
+
+  class Horario {
+    +fecha: Fecha
+    +horaInicio: Hora
+    +horaFin: Hora
+  }
+
+  class Localizacion {
+    +descripcion: Texto
+  }
+
+  class Recordatorio {
+    +id: Identificador
+    +antelacion: Duracion
+    +estado: EstadoRecordatorio
+  }
+
+  class ConflictoHorario {
+    +id: Identificador
+    +estado: EstadoConflicto
+    +motivo: Texto
+  }
+
+  class RelacionTareas {
+    +id: Identificador
+    +tipo: TipoRelacionTarea
+  }
 }
 
-package "Dominio" {
-  class EntidadDominio
-  class RepositorioDominio
-}
+Usuario "1" -- "0..*" Miembro : participa como
+Grupo "1" -- "0..*" Miembro : contiene
+Grupo "1" -- "0..*" Invitacion : emite
+Grupo "1" -- "0..*" Tarea : agrupa
+Invitacion "0..1" --> Usuario : destinatario si existe
+Miembro "0..*" -- "0..*" Tarea : asignaciones
+Tarea "1" *-- "0..1" Horario
+Tarea "1" *-- "0..1" Localizacion
+Tarea "1" *-- "0..*" Recordatorio
+Tarea "0..*" -- "0..*" ConflictoHorario : participa en
+RelacionTareas "1" --> "1" Tarea : origen
+RelacionTareas "1" --> "1" Tarea : destino
 
-VistaCasoUso --> ControladorCasoUso
-ControladorCasoUso --> ServicioDominio
-ServicioDominio --> RepositorioDominio
-RepositorioDominio --> EntidadDominio
+note bottom of Tarea
+Reglas: una tarea guardada debe conservar grupo,
+título y estado. Si tiene horario, inicio < fin.
+end note
+
+note bottom of Miembro
+El rol operativo pertenece a la relación
+Usuario-Grupo, no al usuario global.
+end note
+
+note bottom of ConflictoHorario
+Los conflictos son avisos derivados de horarios
+y asignaciones; no bloquean por defecto.
+end note
 
 @enduml

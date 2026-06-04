@@ -304,12 +304,34 @@
 
 ---
 
-## [2026-06-03] Organización visual del modelo del dominio
+## [2026-06-03 19:00] Organización visual del modelo del dominio
 
 **Prompt:** El usuario pidió que, en partes como el modelo del dominio, se incluyeran también las imágenes para poder verlo directamente y que los artefactos quedaran en carpetas más limpias, separando MDD, diagrama de objetos y diagramas de estados.
 
 **Resultado:** Se reorganizó `documents/RUP/00-casos-uso/00-modelo-del-dominio/` en `mdd/`, `diagrama-objetos/` y `diagrama-estados/`. Se añadieron los SVG correspondientes junto a sus PUML y se actualizaron los README para mostrar las vistas principales sin tener que abrir cada fuente manualmente.
 
 **Decision:** El modelo del dominio queda como punto de entrada visual y navegable para el trabajo posterior de diseño, manteniendo cada tipo de diagrama en su propia carpeta para evitar mezcla de artefactos.
+
+---
+
+## [2026-06-04 22:08] Inicio de diseño conceptual RUP
+
+**Prompt:** El usuario indicó que, tras cerrar el análisis, la fase actual debe centrarse en completar la carpeta de diseño siguiendo la plantilla RUP existente, sin implementar código ni fijar todavía tecnologías concretas de frontend, backend o base de datos.
+
+**Resultado:** Se completó `documents/RUP/02-diseño/` con arquitectura conceptual, modelo de dominio de diseño, configuración conceptual, decisiones globales, trazabilidad análisis-diseño y artefactos de diseño para los 24 casos de uso. No se modificó `src`.
+
+**Decision:** El diseño queda expresado en términos conceptuales: interfaz, coordinador de caso de uso, servicios de aplicación, servicios de dominio, repositorio conceptual, persistencia conceptual y estado de aplicación/sesión. La selección tecnológica se aplaza a la fase de implementación.
+
+---
+
+## [2026-06-04 22:21] Revisión integral del diseño generado en bloque
+
+**Prompt:** El usuario pidió revisar con calma toda la fase de diseño antes de preparar el commit, ya que los artefactos se habían completado de golpe en lugar de avanzar caso por caso. También pidió dejar constancia en el log de esta revisión adicional.
+
+**Resultado:** Se revisó la estructura completa de `documents/RUP/02-diseño/`, la cobertura de los 24 casos de uso, los README de cada caso, los `secuencia.puml`, el índice de casos, la trazabilidad análisis-diseño, los enlaces internos y la ausencia de cambios en `src`. La revisión confirmó que el diseño mantiene una plantilla homogénea y que todos los casos quedan enlazados con análisis y PlantUML.
+
+**Criterios revisados:** Cobertura por módulo, coherencia de nombres, separación entre análisis, diseño e implementación, uso de participantes conceptuales, enlaces internos, ausencia de tecnologías concretas y mantenimiento del enfoque RUP.
+
+**Decision:** El diseño se mantiene como documentación conceptual lista para revisión y commit. Al haberse generado en bloque, queda registrado que antes de subirlo se hizo una pasada completa para comprobar consistencia, enlaces y trazabilidad. Como relleno útil para la siguiente fase, se deja marcado que el primer trabajo posterior debería ser elegir el primer caso de uso a implementar y transformar su diseño conceptual en componentes reales.
 
 ---

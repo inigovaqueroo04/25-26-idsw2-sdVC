@@ -1,11 +1,40 @@
-﻿@startuml arquitectura
+@startuml arquitectura
 skinparam linetype polyline
 
-rectangle "Frontend / Interfaz" as Frontend
-rectangle "Backend / Servicios" as Backend
-database "Persistencia" as Persistencia
+title Arquitectura conceptual de diseño - BreñoTask
 
-Frontend --> Backend : solicitudes del sistema
-Backend --> Persistencia : consulta y modifica datos
+rectangle "Interfaz" as Interfaz
+rectangle "Coordinación de casos de uso" as Coordinacion
+rectangle "Servicios de aplicación" as Aplicacion
+rectangle "Servicios de dominio" as Dominio
+rectangle "Estado de aplicación / sesión" as Estado
+database "Persistencia conceptual" as Persistencia
+
+Interfaz --> Coordinacion : solicita casos de uso
+Coordinacion --> Aplicacion : orquesta operación
+Aplicacion --> Dominio : aplica reglas del modelo
+Aplicacion --> Estado : consulta/actualiza estado
+Dominio --> Persistencia : consulta entidades
+Aplicacion --> Persistencia : registra cambios validados
+
+note right of Interfaz
+Recoge datos y presenta resultados.
+No decide reglas de negocio.
+end note
+
+note right of Coordinacion
+Ordena el flujo de cada caso de uso.
+No persiste directamente.
+end note
+
+note right of Dominio
+Valida invariantes, permisos y relaciones.
+No conoce tecnología de interfaz.
+end note
+
+note bottom of Persistencia
+Persistencia conceptual: la tecnología concreta
+se definirá al pasar a implementación.
+end note
 
 @enduml

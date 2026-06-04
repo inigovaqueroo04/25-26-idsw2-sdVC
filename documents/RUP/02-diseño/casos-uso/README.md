@@ -1,42 +1,42 @@
 # Diseño de casos de uso
 
-Cada carpeta contiene una plantilla de diseño por caso de uso:
+Cada carpeta contiene el diseño conceptual de un caso de uso:
 
-- `README.md`: decisiones de diseño del caso.
-- `secuencia.puml`: secuencia tecnica pendiente de completar.
+- README.md: responsabilidades, decisiones, validaciones, estados y trazabilidad.
+- secuencia.puml: flujo conceptual de diseño en PlantUML.
 
-## Gestion de grupos
+## Gestión de sesión y navegación
 
-- [abrirGrupos](./gestion-grupos/abrirGrupos/README.md)
-- [abrirInvitaciones](./gestion-grupos/abrirInvitaciones/README.md)
-- [crearGrupo](./gestion-grupos/crearGrupo/README.md)
-- [editarGrupo](./gestion-grupos/editarGrupo/README.md)
-- [editarInvitacion](./gestion-grupos/editarInvitacion/README.md)
-- [editarMiembro](./gestion-grupos/editarMiembro/README.md)
-- [eliminarGrupo](./gestion-grupos/eliminarGrupo/README.md)
-- [eliminarMiembro](./gestion-grupos/eliminarMiembro/README.md)
-- [invitarUsuario](./gestion-grupos/invitarUsuario/README.md)
+- [iniciarSesion()](./gestion-sesion/iniciarSesion/README.md)
+- [cerrarSesion()](./gestion-sesion/cerrarSesion/README.md)
+- [completarGestion()](./gestion-sesion/completarGestion/README.md)
 
-## Gestion de sesion
+## Gestión de grupos y usuarios
 
-- [cerrarSesion](./gestion-sesion/cerrarSesion/README.md)
-- [completarGestion](./gestion-sesion/completarGestion/README.md)
-- [iniciarSesion](./gestion-sesion/iniciarSesion/README.md)
+- [abrirGrupos()](./gestion-grupos/abrirGrupos/README.md)
+- [crearGrupo()](./gestion-grupos/crearGrupo/README.md)
+- [editarGrupo()](./gestion-grupos/editarGrupo/README.md)
+- [eliminarGrupo()](./gestion-grupos/eliminarGrupo/README.md)
+- [invitarUsuario()](./gestion-grupos/invitarUsuario/README.md)
+- [editarMiembro()](./gestion-grupos/editarMiembro/README.md)
+- [eliminarMiembro()](./gestion-grupos/eliminarMiembro/README.md)
+- [abrirInvitaciones()](./gestion-grupos/abrirInvitaciones/README.md)
+- [editarInvitacion()](./gestion-grupos/editarInvitacion/README.md)
 
-## Gestion de tareas
+## Gestión de tareas
 
-- [abrirTareas](./gestion-tareas/abrirTareas/README.md)
-- [crearTarea](./gestion-tareas/crearTarea/README.md)
-- [editarTarea](./gestion-tareas/editarTarea/README.md)
-- [eliminarTarea](./gestion-tareas/eliminarTarea/README.md)
-- [marcarCompletada](./gestion-tareas/marcarCompletada/README.md)
-- [relacionarTareas](./gestion-tareas/relacionarTareas/README.md)
-- [validarConflicto](./gestion-tareas/validarConflicto/README.md)
+- [abrirTareas()](./gestion-tareas/abrirTareas/README.md)
+- [crearTarea()](./gestion-tareas/crearTarea/README.md)
+- [editarTarea()](./gestion-tareas/editarTarea/README.md)
+- [relacionarTareas()](./gestion-tareas/relacionarTareas/README.md)
+- [eliminarTarea()](./gestion-tareas/eliminarTarea/README.md)
+- [marcarCompletada()](./gestion-tareas/marcarCompletada/README.md)
+- [validarConflicto()](./gestion-tareas/validarConflicto/README.md)
 
-## Planificacion y configuracion
+## Planificación y configuración
 
-- [abrirPlanificacion](./planificacion-configuracion/abrirPlanificacion/README.md)
-- [asignarTareaAUsuario](./planificacion-configuracion/asignarTareaAUsuario/README.md)
-- [configurarRecordatorio](./planificacion-configuracion/configurarRecordatorio/README.md)
-- [definirLocalizacion](./planificacion-configuracion/definirLocalizacion/README.md)
-- [establecerHorario](./planificacion-configuracion/establecerHorario/README.md)
+- [abrirPlanificacion()](./planificacion-configuracion/abrirPlanificacion/README.md)
+- [establecerHorario()](./planificacion-configuracion/establecerHorario/README.md)
+- [definirLocalizacion()](./planificacion-configuracion/definirLocalizacion/README.md)
+- [configurarRecordatorio()](./planificacion-configuracion/configurarRecordatorio/README.md)
+- [asignarTareaAUsuario()](./planificacion-configuracion/asignarTareaAUsuario/README.md)

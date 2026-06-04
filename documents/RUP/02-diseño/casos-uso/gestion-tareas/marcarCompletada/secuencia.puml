@@ -1,19 +1,34 @@
-﻿@startuml marcarCompletada-diseno-secuencia
-actor "Actor" as Actor
-participant "Interfaz" as UI
-participant "ServicioAplicacion" as Servicio
-participant "Repositorio" as Repositorio
-database "Persistencia" as BD
+@startuml marcarCompletada-diseno-secuencia
+title Diseño conceptual: marcarCompletada()
 
-title Diseno: marcarCompletada()
+actor "Usuario" as Usuario
+participant "Interfaz" as Interfaz
+participant "CoordinadorMarcarCompletada" as Coordinador
+participant "ServicioAplicacion" as ServicioAplicacion
+participant "ServicioDominio" as ServicioDominio
+database "RepositorioConceptual" as Repositorio
+participant "EstadoAplicacion" as EstadoAplicacion
 
-Actor -> UI : solicita marcarCompletada()
-UI -> Servicio : ejecutarCasoUso()
-Servicio -> Repositorio : accederDominio()
-Repositorio -> BD : consulta/modificacion
-BD --> Repositorio : datos
-Repositorio --> Servicio : resultado
-Servicio --> UI : respuesta
-UI --> Actor : presenta resultado
+Usuario -> Interfaz : solicita marcarCompletada()
+Interfaz -> Coordinador : enviar datos de entrada
+Coordinador -> ServicioAplicacion : ejecutar marcarCompletada()
+ServicioAplicacion -> ServicioDominio : validar reglas del caso
+ServicioDominio -> Repositorio : consultar Tarea, Usuario, MiembroGrupo
+Repositorio --> ServicioDominio : datos conceptuales
+
+alt validaciones correctas
+  ServicioDominio --> ServicioAplicacion : resultado de dominio
+  ServicioAplicacion -> Repositorio : registrar cambios conceptuales
+  ServicioAplicacion -> EstadoAplicacion : actualizar estados afectados
+  EstadoAplicacion --> ServicioAplicacion : estado actualizado
+  ServicioAplicacion --> Coordinador : resultado correcto
+  Coordinador --> Interfaz : preparar respuesta
+  Interfaz --> Usuario : mostrar resultado esperado
+else error funcional
+  ServicioDominio --> ServicioAplicacion : error de validacion
+  ServicioAplicacion --> Coordinador : resultado rechazado
+  Coordinador --> Interfaz : preparar mensaje de error
+  Interfaz --> Usuario : mostrar error sin cambios no validos
+end
 
 @enduml
