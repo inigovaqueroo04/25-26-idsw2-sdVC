@@ -385,13 +385,3 @@
 **Decision:** A partir de este punto, salvo que el usuario pida expresamente un commit solo local, `commit` significa commit y push a remoto. Los mensajes deben contar bien el cambio y usar prefijo convencional.
 
 ---
-
-## [2026-06-08 16:39] Idioma de los commits
-
-**Prompt:** El usuario añadió que los commits deben estar en español.
-
-**Resultado:** Se actualizo `documents/protocolo-sesiones-ia.md` para indicar que los mensajes de commit deben escribirse en español, manteniendo solo el prefijo convencional en ingles por compatibilidad con Conventional Commits.
-
-**Decision:** En adelante los commits usaran formato como `docs: documentar politica de commits`, `feat: implementar gestion de grupos` o `fix: corregir cierre de sesion`.
-
----
