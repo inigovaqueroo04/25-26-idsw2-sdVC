@@ -39,10 +39,15 @@ Cuando el usuario pida `commit`, la IA debe entenderlo como cierre completo de
 versionado:
 
 1. Revisar `git status` y separar cambios propios de cambios ajenos.
-2. Preparar un commit con mensaje descriptivo y prefijo convencional.
+2. Preparar un commit con mensaje descriptivo, en español y con prefijo
+   convencional.
 3. Subir el commit a GitHub con `git push` para que quede visible en remoto.
 4. Informar del hash final y confirmar que `main` queda sincronizada con
    `origin/main`.
+
+Los mensajes de commit deben escribirse en español. El prefijo convencional se
+mantiene en ingles por compatibilidad con Conventional Commits, pero el resumen
+despues de los dos puntos debe estar en español.
 
 Prefijos esperados:
 
