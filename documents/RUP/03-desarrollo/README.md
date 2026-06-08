@@ -12,6 +12,7 @@ ya se han transformado en codigo ejecutable.
 | Incremento | Estado | Codigo | Notas |
 | --- | --- | --- | --- |
 | Gestion de sesion y navegacion | Implementado | [`app/`](../../../app/README.md) | Primer vertical con React, FastAPI y SQLite |
+| Gestion de grupos y usuarios | En progreso | [`app/`](../../../app/README.md) | Implementado `abrirGrupos()` como consulta de grupos propios |
 
 Casos cubiertos en codigo:
 
@@ -19,6 +20,15 @@ Casos cubiertos en codigo:
 - `cerrarSesion()`: cierre confirmado desde el frontend y limpieza de sesion.
 - `completarGestion()`: reflejado como estabilizacion del panel principal tras
   iniciar sesion.
+- `abrirGrupos()`: listado de grupos asociados al usuario autenticado.
+
+Pendiente del modulo de grupos:
+
+- `crearGrupo()`
+- `editarGrupo()`
+- `eliminarGrupo()`
+- `invitarUsuario()`
+- gestion de miembros e invitaciones.
 
 ## Criterio de seguimiento
 

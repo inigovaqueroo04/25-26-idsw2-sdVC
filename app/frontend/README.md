@@ -1,6 +1,6 @@
 # Frontend BreñoTask
 
-Aplicacion React + Vite para la primera iteracion del modulo de gestion de sesion y navegacion.
+Aplicacion React + Vite para las primeras iteraciones verticales de BreñoTask.
 
 ## Instalacion y ejecucion
 
@@ -21,6 +21,8 @@ npm run dev
 
 - Mostrar login si no hay sesion.
 - Iniciar sesion con el usuario de prueba.
-- Mostrar dashboard basico en `SISTEMA_DISPONIBLE`.
+- Mostrar dashboard basico con estado de sesion activo.
 - Mostrar el panel principal con estado de sesion activo.
+- Mostrar la seccion `Mis grupos` con los grupos del usuario autenticado.
+- Filtrar grupos por nombre desde el frontend.
 - Cerrar sesion y volver a `SESION_CERRADA`.

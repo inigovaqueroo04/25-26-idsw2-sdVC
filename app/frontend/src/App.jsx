@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { getCurrentUser, login, logout } from "./api/auth";
+import { getGroups } from "./api/groups";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -8,6 +9,7 @@ const SESSION_TOKEN_KEY = "brenotask_session_token";
 const ESTADO_LABELS = {
   SESION_CERRADA: "Sesión cerrada",
   SISTEMA_DISPONIBLE: "Sesión activa",
+  GRUPOS_ABIERTO: "Grupos disponibles",
 };
 
 
@@ -82,11 +84,19 @@ function Dashboard({
   confirmingLogout,
   estado,
   gestionMensaje,
+  grupos,
+  gruposError,
+  gruposLoading,
   onCancelLogout,
   onConfirmLogout,
   onRequestLogout,
   usuario,
 }) {
+  const [filtroGrupos, setFiltroGrupos] = useState("");
+  const gruposFiltrados = grupos.filter((grupo) =>
+    grupo.nombre.toLowerCase().includes(filtroGrupos.trim().toLowerCase()),
+  );
+
   return (
     <section className="workspace" aria-labelledby="dashboard-title">
       <header className="dashboard-header">
@@ -139,6 +149,48 @@ function Dashboard({
           <p>{gestionMensaje}</p>
         </div>
       </div>
+
+      <section className="groups-section" aria-labelledby="groups-title">
+        <div className="section-header">
+          <div>
+            <p className="eyebrow">Gestión de grupos</p>
+            <h2 id="groups-title">Mis grupos</h2>
+          </div>
+          <label className="filter-field">
+            Buscar grupo
+            <input
+              onChange={(event) => setFiltroGrupos(event.target.value)}
+              placeholder="Filtrar por nombre"
+              type="search"
+              value={filtroGrupos}
+            />
+          </label>
+        </div>
+
+        {gruposLoading ? <p className="subtle">Cargando grupos...</p> : null}
+        {gruposError ? <p className="error" role="alert">{gruposError}</p> : null}
+
+        {!gruposLoading && !gruposError && gruposFiltrados.length === 0 ? (
+          <p className="empty-state">No hay grupos que mostrar.</p>
+        ) : null}
+
+        {!gruposLoading && !gruposError && gruposFiltrados.length > 0 ? (
+          <div className="groups-grid">
+            {gruposFiltrados.map((grupo) => (
+              <article className="group-card" key={grupo.id}>
+                <div>
+                  <h3>{grupo.nombre}</h3>
+                  <p>{grupo.descripcion ?? "Sin descripción."}</p>
+                </div>
+                <div className="group-meta">
+                  <span>{grupo.rol}</span>
+                  <span>{grupo.numero_miembros} miembro{grupo.numero_miembros === 1 ? "" : "s"}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : null}
+      </section>
     </section>
   );
 }
@@ -149,8 +201,28 @@ export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem(SESSION_TOKEN_KEY));
   const [estado, setEstado] = useState(token ? "SISTEMA_DISPONIBLE" : "SESION_CERRADA");
   const [gestionMensaje, setGestionMensaje] = useState("Todo listo. Has iniciado sesión correctamente.");
+  const [grupos, setGrupos] = useState([]);
+  const [gruposError, setGruposError] = useState("");
+  const [gruposLoading, setGruposLoading] = useState(false);
   const [confirmingLogout, setConfirmingLogout] = useState(false);
   const [loading, setLoading] = useState(Boolean(token));
+
+  async function cargarGrupos(sessionToken) {
+    setGruposLoading(true);
+    setGruposError("");
+
+    try {
+      const result = await getGroups(sessionToken);
+      setGrupos(result.grupos);
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+    } catch (groupsError) {
+      setGrupos([]);
+      setGruposError(groupsError.message);
+    } finally {
+      setGruposLoading(false);
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -167,13 +239,14 @@ export default function App() {
           return;
         }
         setUsuario(currentUser);
-        setEstado("SISTEMA_DISPONIBLE");
+        await cargarGrupos(token);
       } catch {
         localStorage.removeItem(SESSION_TOKEN_KEY);
         if (active) {
           setToken(null);
           setUsuario(null);
           setEstado("SESION_CERRADA");
+          setGrupos([]);
         }
       } finally {
         if (active) {
@@ -195,9 +268,9 @@ export default function App() {
     localStorage.setItem(SESSION_TOKEN_KEY, result.token);
     setToken(result.token);
     setUsuario(result.usuario);
-    setEstado(result.estado);
     setGestionMensaje("Todo listo. Has iniciado sesión correctamente.");
     setConfirmingLogout(false);
+    await cargarGrupos(result.token);
     setLoading(false);
   }
 
@@ -218,6 +291,8 @@ export default function App() {
       setUsuario(null);
       setEstado("SESION_CERRADA");
       setGestionMensaje("Todo listo. Has iniciado sesión correctamente.");
+      setGrupos([]);
+      setGruposError("");
       setConfirmingLogout(false);
     }
   }
@@ -229,6 +304,9 @@ export default function App() {
           confirmingLogout={confirmingLogout}
           estado={estado}
           gestionMensaje={gestionMensaje}
+          grupos={grupos}
+          gruposError={gruposError}
+          gruposLoading={gruposLoading}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
           onRequestLogout={requestLogout}

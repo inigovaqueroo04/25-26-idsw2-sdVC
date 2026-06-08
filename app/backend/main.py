@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from database import init_db
 from routes.auth import router as auth_router
+from routes.groups import router as groups_router
 
 
 @asynccontextmanager
@@ -15,7 +16,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="BreñoTask API",
-    description="Primera iteracion: gestion de sesion y navegacion.",
+    description="Iteraciones iniciales: sesion, navegacion y grupos propios.",
     version="0.1.0",
     lifespan=lifespan,
 )
@@ -32,9 +33,9 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
+app.include_router(groups_router, prefix="/api/groups", tags=["groups"])
 
 
 @app.get("/api/health")
 def health_check():
-    return {"estado": "ok", "modulo": "gestion-sesion-navegacion"}
-
+    return {"estado": "ok", "modulos": ["gestion-sesion-navegacion", "gestion-grupos-usuarios"]}

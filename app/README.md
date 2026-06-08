@@ -1,6 +1,6 @@
-# BreñoTask - Primera iteracion tecnica
+# BreñoTask - Iteraciones tecnicas
 
-Esta carpeta contiene la primera version funcional vertical de BreñoTask para el modulo de gestion de sesion y navegacion.
+Esta carpeta contiene las primeras versiones funcionales verticales de BreñoTask.
 
 ## Estructura
 
@@ -11,15 +11,19 @@ app/
   frontend/  Aplicacion React + Vite
 ```
 
-## Modulo implementado
+## Modulos implementados
 
-Esta iteracion cubre:
+### Gestion de sesion y navegacion
 
 - `iniciarSesion()`: valida email y contrasena contra SQLite y abre una sesion simple.
 - `cerrarSesion()`: invalida la sesion activa y vuelve a `SESION_CERRADA`.
 - `completarGestion()`: estabiliza la navegacion y vuelve a `SISTEMA_DISPONIBLE`.
 
-No se han implementado todavia grupos, tareas, planificacion ni recordatorios.
+### Gestion de grupos y usuarios
+
+- `abrirGrupos()`: consulta los grupos asociados al usuario autenticado y los muestra en el dashboard.
+
+No se han implementado todavia crear, editar o eliminar grupos, invitaciones, tareas, planificacion ni recordatorios.
 
 ## Inicializar la base de datos
 
@@ -64,12 +68,17 @@ El frontend queda disponible normalmente en `http://localhost:5173`.
 
 La contrasena se guarda como hash SHA-256 en la semilla SQL para evitar almacenarla en texto plano.
 
+El usuario de prueba pertenece a:
+
+- `Casa Breñosa` como `Administrador`.
+- `Proyecto Universidad` como `Miembro Administrador`.
+
 ## Pendiente para siguientes iteraciones
 
-- Gestion de grupos y miembros.
+- Crear, editar y eliminar grupos.
+- Invitaciones y gestion de miembros.
 - Gestion de tareas.
 - Planificacion y configuracion.
 - Recordatorios.
 - Seguridad de sesion mas robusta y persistente.
 - Pruebas automatizadas de backend y frontend.
-

@@ -7,3 +7,12 @@ VALUES (
     'Administrador'
 );
 
+INSERT OR IGNORE INTO grupos (id, nombre, descripcion, creado_por)
+VALUES
+    (1, 'Casa Breñosa', 'Grupo familiar de prueba para organizar tareas del hogar.', 1),
+    (2, 'Proyecto Universidad', 'Grupo de ejemplo para coordinar entregas compartidas.', 1);
+
+INSERT OR IGNORE INTO miembros_grupo (id, usuario_id, grupo_id, rol)
+VALUES
+    (1, 1, 1, 'Administrador'),
+    (2, 1, 2, 'Miembro Administrador');

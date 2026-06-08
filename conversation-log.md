@@ -385,3 +385,13 @@
 **Decision:** A partir de este punto, salvo que el usuario pida expresamente un commit solo local, `commit` significa commit y push a remoto. Los mensajes deben contar bien el cambio y usar prefijo convencional.
 
 ---
+
+## [2026-06-08 16:51] Implementacion de abrirGrupos()
+
+**Prompt:** El usuario pidio continuar el desarrollo tras cerrar gestion de sesion, siguiendo con el modulo recomendado de Gestion de grupos y usuarios.
+
+**Resultado:** Se revisaron los artefactos de analisis y diseño de `abrirGrupos()`. Se ampliaron `schema.sql` y `seed.sql` con `grupos` y `miembros_grupo`, se añadieron modelo, schema, servicio y ruta backend para `GET /api/groups`, y el frontend carga y muestra la seccion `Mis grupos` para el usuario autenticado con filtro por nombre. Se actualizaron los README de `app/`, backend, frontend, `03-desarrollo` y el dashboard de `99-seguimiento`.
+
+**Decision:** Esta iteracion implementa solo la consulta autorizada de grupos propios. No se implementan todavia crear, editar, eliminar grupos, invitaciones ni gestion de miembros; quedan como siguientes incrementos del modulo.
+
+---

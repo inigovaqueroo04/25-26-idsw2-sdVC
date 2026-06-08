@@ -1,6 +1,6 @@
 # Backend BreñoTask
 
-API REST basica para la primera iteracion del modulo de gestion de sesion y navegacion.
+API REST basica para las primeras iteraciones de BreñoTask.
 
 ## Requisitos
 
@@ -23,11 +23,18 @@ uvicorn main:app --reload --port 8000
 - `POST /api/auth/login`
 - `POST /api/auth/logout`
 - `GET /api/auth/me`
+- `GET /api/groups`
 
-Los endpoints `logout` y `me` usan la cabecera `X-Session-Token` recibida en el login.
+Los endpoints `logout`, `me` y `groups` usan la cabecera `X-Session-Token` recibida en el login.
 
 ## Usuario de prueba
 
 - Email: `demo@brenotask.local`
 - Contrasena: `breno123`
 
+## Datos de grupos
+
+La semilla crea dos grupos para el usuario demo:
+
+- `Casa Breñosa`
+- `Proyecto Universidad`
