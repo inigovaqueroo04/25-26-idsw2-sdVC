@@ -345,3 +345,13 @@
 **Decision:** A partir de este punto, cada diagrama de diseño mantiene dos artefactos: el `.puml` como fuente editable y el `.svg` como vista rápida. Esto hace que la carpeta `documents/RUP/02-diseño/` sea más fácil de revisar sin abrir herramientas externas.
 
 ---
+
+## [2026-06-08 16:07] Primera implementacion vertical de sesion y navegacion
+
+**Prompt:** El usuario pidio iniciar la fase de implementacion de BrenoTask con una primera version tecnica funcional, siguiendo RUP iterativo e incremental, limitada al modulo de Gestion de sesion y navegacion. Se indico usar React en frontend, Python/FastAPI en backend, SQLite/SQL como base de datos y no implementar todavia grupos, tareas, planificacion ni recordatorios.
+
+**Resultado:** Se reviso la estructura del repositorio y la documentacion de analisis y diseno de `iniciarSesion()`, `cerrarSesion()` y `completarGestion()`. Como no existia una aplicacion preparada, se creo `app/` con `frontend/`, `backend/` y `database/`. Se anadieron `schema.sql`, `seed.sql`, una API FastAPI con endpoints `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me` y `GET /api/health`, una app React + Vite con login, dashboard, estado autenticado, confirmacion de cierre y accion de completar gestion, ademas de README en `app/`, `app/backend/` y `app/frontend/`.
+
+**Decision:** La sesion se implemento de forma simple para esta primera entrega: usuarios en SQLite, contrasena de prueba guardada como hash SHA-256, token de sesion en memoria del backend y almacenamiento local del token en frontend. `iniciarSesion()` pasa a `SISTEMA_DISPONIBLE`, `cerrarSesion()` vuelve a `SESION_CERRADA` y `completarGestion()` estabiliza la navegacion en el dashboard sin abrir modulos secundarios. Se verifico la base de datos, la compilacion del backend, `npm run build`, errores de login y el flujo completo en navegador. Queda pendiente abordar en la siguiente iteracion la gestion de grupos y miembros.
+
+---
