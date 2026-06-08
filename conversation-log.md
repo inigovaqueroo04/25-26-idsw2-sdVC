@@ -355,3 +355,23 @@
 **Decision:** La sesion se implemento de forma simple para esta primera entrega: usuarios en SQLite, contrasena de prueba guardada como hash SHA-256, token de sesion en memoria del backend y almacenamiento local del token en frontend. `iniciarSesion()` pasa a `SISTEMA_DISPONIBLE`, `cerrarSesion()` vuelve a `SESION_CERRADA` y `completarGestion()` estabiliza la navegacion en el dashboard sin abrir modulos secundarios. Se verifico la base de datos, la compilacion del backend, `npm run build`, errores de login y el flujo completo en navegador. Queda pendiente abordar en la siguiente iteracion la gestion de grupos y miembros.
 
 ---
+
+## [2026-06-08 16:25] Criterio permanente de dashboards y SVG
+
+**Prompt:** El usuario pidio mantener los dashboards y el seguimiento añadiendo el SVG de los PUML en cada cosa que se haga, para que el avance quede claro visualmente.
+
+**Resultado:** Se actualizo `documents/RUP/99-seguimiento/README.md` como dashboard real de avance por modulo, se enlazo el SVG visible del diagrama de seguimiento y se registro una regla explicita: cada `.puml` nuevo o modificado debe tener su `.svg` equivalente en la misma carpeta y mostrado desde el README correspondiente. Tambien se actualizo `documents/RUP/03-desarrollo/README.md` para reflejar el primer vertical implementado y el README principal para enlazar al dashboard visual.
+
+**Decision:** A partir de este punto, todo nuevo incremento debe actualizar simultaneamente codigo, seguimiento RUP, log de conversacion y artefactos visuales cuando haya diagramas. Los PUML quedan como fuente editable y los SVG como vista de revision rapida.
+
+---
+
+## [2026-06-08 16:28] Cierre de seguimiento visual
+
+**Prompt:** El usuario pidio cierre y commit tras fijar el criterio de mantener dashboards, seguimiento y SVG de cada PUML.
+
+**Resultado:** Se verifico el estado del repositorio, se confirmo que el dashboard de seguimiento ya contiene el avance por modulo, que `03-desarrollo` refleja el primer vertical implementado y que el diagrama `documents/RUP/99-seguimiento/diagrama-contexto-admin.puml` tiene su SVG equivalente enlazado desde el README. El archivo `diagrama-contexto-admin.puml` suelto en la raiz queda fuera del cierre por no pertenecer a este cambio.
+
+**Decision:** El cierre se limita a documentacion de seguimiento y trazabilidad visual. El siguiente incremento debera mantener esta misma regla antes de cerrar sesion: actualizar dashboard, log y SVG cuando se toque PUML.
+
+---
