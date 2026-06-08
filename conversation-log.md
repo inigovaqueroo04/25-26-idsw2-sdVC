@@ -375,3 +375,13 @@
 **Decision:** El cierre se limita a documentacion de seguimiento y trazabilidad visual. El siguiente incremento debera mantener esta misma regla antes de cerrar sesion: actualizar dashboard, log y SVG cuando se toque PUML.
 
 ---
+
+## [2026-06-08 16:36] Politica de commits y push
+
+**Prompt:** El usuario aclaro que no quiere repetir durante el proyecto que los commits deben subirse correctamente a GitHub y documentarse con su distintivo correspondiente, como `add`, `feat` o similares.
+
+**Resultado:** Se actualizo `documents/protocolo-sesiones-ia.md` para fijar que una peticion de `commit` implica revisar estado, crear un commit con prefijo convencional y hacer `git push` a GitHub. Tambien se documentaron los prefijos esperados: `feat:`, `add:`, `fix:`, `docs:`, `refactor:`, `test:` y `chore:`.
+
+**Decision:** A partir de este punto, salvo que el usuario pida expresamente un commit solo local, `commit` significa commit y push a remoto. Los mensajes deben contar bien el cambio y usar prefijo convencional.
+
+---

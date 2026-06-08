@@ -33,6 +33,30 @@ Cuando el usuario escriba `cierre`, la IA debe:
 4. Revisar `git status`.
 5. Proponer o realizar el commit si el usuario lo confirma o si ya lo había pedido.
 
+## Politica de commits y publicacion
+
+Cuando el usuario pida `commit`, la IA debe entenderlo como cierre completo de
+versionado:
+
+1. Revisar `git status` y separar cambios propios de cambios ajenos.
+2. Preparar un commit con mensaje descriptivo y prefijo convencional.
+3. Subir el commit a GitHub con `git push` para que quede visible en remoto.
+4. Informar del hash final y confirmar que `main` queda sincronizada con
+   `origin/main`.
+
+Prefijos esperados:
+
+- `feat:` para funcionalidad nueva.
+- `add:` para añadir artefactos, documentos o recursos nuevos sin cambiar una
+  funcionalidad existente.
+- `fix:` para correcciones.
+- `docs:` para documentacion, seguimiento, dashboards o log.
+- `refactor:` para reorganizacion interna sin cambio funcional.
+- `test:` para pruebas.
+- `chore:` para mantenimiento tecnico.
+
+Si el usuario quiere solo un commit local, debe indicarlo de forma explicita.
+
 ## Criterios que hay que respetar
 
 - El sistema entregado debe coincidir con `QUE_HACE.md`.
