@@ -395,3 +395,17 @@
 **Decision:** Esta iteracion implementa solo la consulta autorizada de grupos propios. No se implementan todavia crear, editar, eliminar grupos, invitaciones ni gestion de miembros; quedan como siguientes incrementos del modulo.
 
 ---
+
+## [2026-06-09 17:23] Implementacion de crearGrupo()
+
+**Prompt:** El usuario pidio avanzar en la fase de implementacion RUP con el siguiente incremento conveniente del modulo de Gestion de grupos y usuarios, manteniendo el mismo criterio iterativo, incremental y trazable usado en los verticales anteriores.
+
+**Resultado:** Se eligio `crearGrupo()` como siguiente paso natural tras `abrirGrupos()`. Se implemento `POST /api/groups` en FastAPI, con validacion de sesion, rol `Administrador`, nombre obligatorio y duplicidad relevante por usuario. La creacion registra el grupo y crea automaticamente la membresia inicial del usuario creador como `Administrador`. En React se anadio el formulario de creacion en `Mis grupos`, la llamada `createGroup`, el estado `GRUPO_ABIERTO` y la actualizacion de la lista sin recargar la app.
+
+**Ajustes tecnicos:** Durante la verificacion se detecto que las conexiones SQLite no se cerraban al salir del contexto, por lo que `database.py` paso a exponer `get_connection()` como context manager con cierre explicito. Tambien se corrigio la fusion de cabeceras en los helpers `auth.js` y `groups.js` para no perder `Content-Type` al enviar cabeceras adicionales.
+
+**Verificacion:** Se ejecuto compileall del backend, smoke de backend con SQLite temporal para crear, listar, duplicar y validar nombre vacio, `POST /api/groups` sin sesion con respuesta `401`, `npm run build` del frontend, creacion desde UI en navegador integrado y revision visual en desktop y viewport movil. No se crearon ni modificaron PUML en esta iteracion, por lo que no hubo SVG nuevo que regenerar.
+
+**Decision:** El modulo de grupos queda en progreso con `abrirGrupos()` y `crearGrupo()` implementados. No se implementan aun editar/eliminar grupos, invitaciones ni gestion de miembros. El siguiente incremento recomendable es `editarGrupo()` o `eliminarGrupo()` si se quiere cerrar el CRUD basico, o `invitarUsuario()` si se prefiere avanzar hacia colaboracion real.
+
+---

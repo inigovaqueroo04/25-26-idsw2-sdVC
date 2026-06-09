@@ -1,6 +1,11 @@
 from pydantic import BaseModel
 
 
+class GroupCreateRequest(BaseModel):
+    nombre: str
+    descripcion: str | None = None
+
+
 class GroupResponse(BaseModel):
     id: int
     nombre: str
@@ -14,3 +19,8 @@ class GroupListResponse(BaseModel):
     grupos: list[GroupResponse]
     mensaje: str
 
+
+class GroupCreateResponse(BaseModel):
+    estado: str
+    grupo: GroupResponse
+    mensaje: str

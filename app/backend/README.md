@@ -24,8 +24,12 @@ uvicorn main:app --reload --port 8000
 - `POST /api/auth/logout`
 - `GET /api/auth/me`
 - `GET /api/groups`
+- `POST /api/groups`
 
 Los endpoints `logout`, `me` y `groups` usan la cabecera `X-Session-Token` recibida en el login.
+
+`POST /api/groups` valida nombre obligatorio, evita duplicados para el usuario
+autenticado y crea la membresia inicial con rol `Administrador`.
 
 ## Usuario de prueba
 

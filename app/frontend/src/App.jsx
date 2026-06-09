@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { getCurrentUser, login, logout } from "./api/auth";
-import { getGroups } from "./api/groups";
+import { createGroup, getGroups } from "./api/groups";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -10,6 +10,7 @@ const ESTADO_LABELS = {
   SESION_CERRADA: "Sesión cerrada",
   SISTEMA_DISPONIBLE: "Sesión activa",
   GRUPOS_ABIERTO: "Grupos disponibles",
+  GRUPO_ABIERTO: "Grupo abierto",
 };
 
 
@@ -87,15 +88,44 @@ function Dashboard({
   grupos,
   gruposError,
   gruposLoading,
+  grupoCreando,
   onCancelLogout,
   onConfirmLogout,
+  onCreateGroup,
   onRequestLogout,
   usuario,
 }) {
   const [filtroGrupos, setFiltroGrupos] = useState("");
+  const [grupoNombre, setGrupoNombre] = useState("");
+  const [grupoDescripcion, setGrupoDescripcion] = useState("");
+  const [crearGrupoError, setCrearGrupoError] = useState("");
+  const [crearGrupoMensaje, setCrearGrupoMensaje] = useState("");
   const gruposFiltrados = grupos.filter((grupo) =>
     grupo.nombre.toLowerCase().includes(filtroGrupos.trim().toLowerCase()),
   );
+
+  async function handleCreateGroup(event) {
+    event.preventDefault();
+    setCrearGrupoError("");
+    setCrearGrupoMensaje("");
+
+    if (!grupoNombre.trim()) {
+      setCrearGrupoError("El nombre del grupo es obligatorio.");
+      return;
+    }
+
+    try {
+      const result = await onCreateGroup({
+        nombre: grupoNombre,
+        descripcion: grupoDescripcion,
+      });
+      setGrupoNombre("");
+      setGrupoDescripcion("");
+      setCrearGrupoMensaje(result.mensaje);
+    } catch (createError) {
+      setCrearGrupoError(createError.message);
+    }
+  }
 
   return (
     <section className="workspace" aria-labelledby="dashboard-title">
@@ -167,6 +197,39 @@ function Dashboard({
           </label>
         </div>
 
+        <form className="create-group-form" onSubmit={handleCreateGroup}>
+          <div className="create-group-fields">
+            <label>
+              Nombre
+              <input
+                maxLength={80}
+                onChange={(event) => setGrupoNombre(event.target.value)}
+                type="text"
+                value={grupoNombre}
+              />
+            </label>
+
+            <label>
+              Descripción
+              <input
+                maxLength={160}
+                onChange={(event) => setGrupoDescripcion(event.target.value)}
+                type="text"
+                value={grupoDescripcion}
+              />
+            </label>
+          </div>
+
+          <div className="create-group-actions">
+            <button className="primary-button" disabled={grupoCreando} type="submit">
+              {grupoCreando ? "Creando..." : "Crear grupo"}
+            </button>
+          </div>
+
+          {crearGrupoError ? <p className="error" role="alert">{crearGrupoError}</p> : null}
+          {crearGrupoMensaje ? <p className="success" role="status">{crearGrupoMensaje}</p> : null}
+        </form>
+
         {gruposLoading ? <p className="subtle">Cargando grupos...</p> : null}
         {gruposError ? <p className="error" role="alert">{gruposError}</p> : null}
 
@@ -184,7 +247,9 @@ function Dashboard({
                 </div>
                 <div className="group-meta">
                   <span>{grupo.rol}</span>
-                  <span>{grupo.numero_miembros} miembro{grupo.numero_miembros === 1 ? "" : "s"}</span>
+                  <span>
+                    {grupo.numero_miembros} miembro{grupo.numero_miembros === 1 ? "" : "s"}
+                  </span>
                 </div>
               </article>
             ))}
@@ -204,6 +269,7 @@ export default function App() {
   const [grupos, setGrupos] = useState([]);
   const [gruposError, setGruposError] = useState("");
   const [gruposLoading, setGruposLoading] = useState(false);
+  const [grupoCreando, setGrupoCreando] = useState(false);
   const [confirmingLogout, setConfirmingLogout] = useState(false);
   const [loading, setLoading] = useState(Boolean(token));
 
@@ -274,6 +340,24 @@ export default function App() {
     setLoading(false);
   }
 
+  async function handleCreateGroup(groupInput) {
+    setGrupoCreando(true);
+
+    try {
+      const result = await createGroup(token, groupInput);
+      setGrupos((currentGroups) =>
+        [...currentGroups, result.grupo].sort((firstGroup, secondGroup) =>
+          firstGroup.nombre.localeCompare(secondGroup.nombre, "es", { sensitivity: "base" }),
+        ),
+      );
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+      return result;
+    } finally {
+      setGrupoCreando(false);
+    }
+  }
+
   function requestLogout() {
     setConfirmingLogout(true);
   }
@@ -293,6 +377,7 @@ export default function App() {
       setGestionMensaje("Todo listo. Has iniciado sesión correctamente.");
       setGrupos([]);
       setGruposError("");
+      setGrupoCreando(false);
       setConfirmingLogout(false);
     }
   }
@@ -307,8 +392,10 @@ export default function App() {
           grupos={grupos}
           gruposError={gruposError}
           gruposLoading={gruposLoading}
+          grupoCreando={grupoCreando}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
+          onCreateGroup={handleCreateGroup}
           onRequestLogout={requestLogout}
           usuario={usuario}
         />

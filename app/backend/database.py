@@ -1,3 +1,5 @@
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 import sqlite3
 
@@ -9,10 +11,15 @@ SCHEMA_PATH = DATABASE_DIR / "schema.sql"
 SEED_PATH = DATABASE_DIR / "seed.sql"
 
 
-def get_connection() -> sqlite3.Connection:
+@contextmanager
+def get_connection() -> Iterator[sqlite3.Connection]:
     connection = sqlite3.connect(DATABASE_PATH)
     connection.row_factory = sqlite3.Row
-    return connection
+    try:
+        yield connection
+        connection.commit()
+    finally:
+        connection.close()
 
 
 def init_db() -> None:
@@ -21,4 +28,3 @@ def init_db() -> None:
     with get_connection() as connection:
         connection.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
         connection.executescript(SEED_PATH.read_text(encoding="utf-8"))
-

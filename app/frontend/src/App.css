@@ -168,6 +168,14 @@ input:focus {
   padding: 10px 12px;
 }
 
+.success {
+  background: #ecfdf5;
+  border-left: 4px solid #059669;
+  color: #065f46;
+  margin: 0;
+  padding: 10px 12px;
+}
+
 .workspace {
   display: grid;
   gap: 28px;
@@ -279,6 +287,31 @@ input:focus {
   width: 100%;
 }
 
+.create-group-form {
+  background: #ffffff;
+  border: 1px solid #d7dee8;
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.create-group-fields {
+  align-items: end;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(180px, 0.85fr) minmax(220px, 1.15fr);
+}
+
+.create-group-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.create-group-actions .primary-button {
+  min-width: 160px;
+}
+
 .groups-grid {
   display: grid;
   gap: 14px;
@@ -347,6 +380,19 @@ input:focus {
 
   .confirmation-actions {
     flex-direction: column;
+  }
+
+  .create-group-actions {
+    justify-content: stretch;
+  }
+
+  .create-group-actions .primary-button,
+  .create-group-fields {
+    width: 100%;
+  }
+
+  .create-group-fields {
+    grid-template-columns: 1fr;
   }
 
   .status-grid {

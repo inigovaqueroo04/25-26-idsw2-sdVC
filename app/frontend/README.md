@@ -25,4 +25,5 @@ npm run dev
 - Mostrar el panel principal con estado de sesion activo.
 - Mostrar la seccion `Mis grupos` con los grupos del usuario autenticado.
 - Filtrar grupos por nombre desde el frontend.
+- Crear un grupo nuevo desde el dashboard.
 - Cerrar sesion y volver a `SESION_CERRADA`.
