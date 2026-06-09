@@ -6,6 +6,11 @@ class GroupCreateRequest(BaseModel):
     descripcion: str | None = None
 
 
+class GroupUpdateRequest(BaseModel):
+    nombre: str
+    descripcion: str | None = None
+
+
 class GroupResponse(BaseModel):
     id: int
     nombre: str
@@ -21,6 +26,12 @@ class GroupListResponse(BaseModel):
 
 
 class GroupCreateResponse(BaseModel):
+    estado: str
+    grupo: GroupResponse
+    mensaje: str
+
+
+class GroupUpdateResponse(BaseModel):
     estado: str
     grupo: GroupResponse
     mensaje: str

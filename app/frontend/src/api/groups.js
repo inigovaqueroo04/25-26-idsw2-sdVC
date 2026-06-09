@@ -40,3 +40,14 @@ export function createGroup(token, group) {
     method: "POST",
   });
 }
+
+
+export function updateGroup(token, groupId, group) {
+  return request(`/groups/${groupId}`, {
+    body: JSON.stringify(group),
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "PUT",
+  });
+}

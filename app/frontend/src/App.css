@@ -339,6 +339,13 @@ input:focus {
   margin-bottom: 0;
 }
 
+.group-card-header {
+  align-items: start;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+}
+
 .group-meta {
   display: flex;
   flex-wrap: wrap;
@@ -353,6 +360,18 @@ input:focus {
   font-size: 0.84rem;
   font-weight: 800;
   padding: 6px 10px;
+}
+
+.edit-group-form {
+  display: grid;
+  gap: 14px;
+}
+
+.group-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .empty-state {
@@ -371,6 +390,7 @@ input:focus {
   }
 
   .dashboard-header,
+  .group-card-header,
   .logout-confirmation,
   .section-header,
   .navigation-band {
@@ -379,6 +399,10 @@ input:focus {
   }
 
   .confirmation-actions {
+    flex-direction: column;
+  }
+
+  .group-actions {
     flex-direction: column;
   }
 

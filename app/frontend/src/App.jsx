@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { getCurrentUser, login, logout } from "./api/auth";
-import { createGroup, getGroups } from "./api/groups";
+import { createGroup, getGroups, updateGroup } from "./api/groups";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -12,6 +12,8 @@ const ESTADO_LABELS = {
   GRUPOS_ABIERTO: "Grupos disponibles",
   GRUPO_ABIERTO: "Grupo abierto",
 };
+
+const ROLES_GESTION_GRUPO = new Set(["Administrador", "Miembro Administrador"]);
 
 
 function formatEstado(estado) {
@@ -89,10 +91,12 @@ function Dashboard({
   gruposError,
   gruposLoading,
   grupoCreando,
+  grupoActualizandoId,
   onCancelLogout,
   onConfirmLogout,
   onCreateGroup,
   onRequestLogout,
+  onUpdateGroup,
   usuario,
 }) {
   const [filtroGrupos, setFiltroGrupos] = useState("");
@@ -100,6 +104,11 @@ function Dashboard({
   const [grupoDescripcion, setGrupoDescripcion] = useState("");
   const [crearGrupoError, setCrearGrupoError] = useState("");
   const [crearGrupoMensaje, setCrearGrupoMensaje] = useState("");
+  const [grupoEditandoId, setGrupoEditandoId] = useState(null);
+  const [grupoEditadoNombre, setGrupoEditadoNombre] = useState("");
+  const [grupoEditadoDescripcion, setGrupoEditadoDescripcion] = useState("");
+  const [editarGrupoError, setEditarGrupoError] = useState("");
+  const [editarGrupoMensaje, setEditarGrupoMensaje] = useState("");
   const gruposFiltrados = grupos.filter((grupo) =>
     grupo.nombre.toLowerCase().includes(filtroGrupos.trim().toLowerCase()),
   );
@@ -108,6 +117,7 @@ function Dashboard({
     event.preventDefault();
     setCrearGrupoError("");
     setCrearGrupoMensaje("");
+    setEditarGrupoMensaje("");
 
     if (!grupoNombre.trim()) {
       setCrearGrupoError("El nombre del grupo es obligatorio.");
@@ -124,6 +134,46 @@ function Dashboard({
       setCrearGrupoMensaje(result.mensaje);
     } catch (createError) {
       setCrearGrupoError(createError.message);
+    }
+  }
+
+  function startEditGroup(grupo) {
+    setGrupoEditandoId(grupo.id);
+    setGrupoEditadoNombre(grupo.nombre);
+    setGrupoEditadoDescripcion(grupo.descripcion ?? "");
+    setEditarGrupoError("");
+    setEditarGrupoMensaje("");
+    setCrearGrupoMensaje("");
+  }
+
+  function cancelEditGroup() {
+    setGrupoEditandoId(null);
+    setGrupoEditadoNombre("");
+    setGrupoEditadoDescripcion("");
+    setEditarGrupoError("");
+  }
+
+  async function handleUpdateGroup(event, grupoId) {
+    event.preventDefault();
+    setEditarGrupoError("");
+    setEditarGrupoMensaje("");
+
+    if (!grupoEditadoNombre.trim()) {
+      setEditarGrupoError("El nombre del grupo es obligatorio.");
+      return;
+    }
+
+    try {
+      const result = await onUpdateGroup(grupoId, {
+        nombre: grupoEditadoNombre,
+        descripcion: grupoEditadoDescripcion,
+      });
+      setGrupoEditandoId(null);
+      setGrupoEditadoNombre("");
+      setGrupoEditadoDescripcion("");
+      setEditarGrupoMensaje(result.mensaje);
+    } catch (updateError) {
+      setEditarGrupoError(updateError.message);
     }
   }
 
@@ -230,6 +280,8 @@ function Dashboard({
           {crearGrupoMensaje ? <p className="success" role="status">{crearGrupoMensaje}</p> : null}
         </form>
 
+        {editarGrupoMensaje ? <p className="success" role="status">{editarGrupoMensaje}</p> : null}
+
         {gruposLoading ? <p className="subtle">Cargando grupos...</p> : null}
         {gruposError ? <p className="error" role="alert">{gruposError}</p> : null}
 
@@ -241,16 +293,69 @@ function Dashboard({
           <div className="groups-grid">
             {gruposFiltrados.map((grupo) => (
               <article className="group-card" key={grupo.id}>
-                <div>
-                  <h3>{grupo.nombre}</h3>
-                  <p>{grupo.descripcion ?? "Sin descripción."}</p>
-                </div>
-                <div className="group-meta">
-                  <span>{grupo.rol}</span>
-                  <span>
-                    {grupo.numero_miembros} miembro{grupo.numero_miembros === 1 ? "" : "s"}
-                  </span>
-                </div>
+                {grupoEditandoId === grupo.id ? (
+                  <form className="edit-group-form" onSubmit={(event) => handleUpdateGroup(event, grupo.id)}>
+                    <label>
+                      Nombre
+                      <input
+                        maxLength={80}
+                        onChange={(event) => setGrupoEditadoNombre(event.target.value)}
+                        type="text"
+                        value={grupoEditadoNombre}
+                      />
+                    </label>
+
+                    <label>
+                      Descripción
+                      <input
+                        maxLength={160}
+                        onChange={(event) => setGrupoEditadoDescripcion(event.target.value)}
+                        type="text"
+                        value={grupoEditadoDescripcion}
+                      />
+                    </label>
+
+                    {editarGrupoError ? <p className="error" role="alert">{editarGrupoError}</p> : null}
+
+                    <div className="group-actions">
+                      <button className="secondary-button compact" type="button" onClick={cancelEditGroup}>
+                        Cancelar
+                      </button>
+                      <button
+                        className="primary-button compact"
+                        disabled={grupoActualizandoId === grupo.id}
+                        type="submit"
+                      >
+                        {grupoActualizandoId === grupo.id ? "Guardando..." : "Guardar"}
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <div className="group-card-header">
+                      <div>
+                        <h3>{grupo.nombre}</h3>
+                        <p>{grupo.descripcion ?? "Sin descripción."}</p>
+                      </div>
+                      {ROLES_GESTION_GRUPO.has(grupo.rol) ? (
+                        <button
+                          className="secondary-button compact"
+                          type="button"
+                          onClick={() => startEditGroup(grupo)}
+                        >
+                          Editar
+                        </button>
+                      ) : null}
+                    </div>
+
+                    <div className="group-meta">
+                      <span>{grupo.rol}</span>
+                      <span>
+                        {grupo.numero_miembros} miembro{grupo.numero_miembros === 1 ? "" : "s"}
+                      </span>
+                    </div>
+                  </>
+                )}
               </article>
             ))}
           </div>
@@ -270,6 +375,7 @@ export default function App() {
   const [gruposError, setGruposError] = useState("");
   const [gruposLoading, setGruposLoading] = useState(false);
   const [grupoCreando, setGrupoCreando] = useState(false);
+  const [grupoActualizandoId, setGrupoActualizandoId] = useState(null);
   const [confirmingLogout, setConfirmingLogout] = useState(false);
   const [loading, setLoading] = useState(Boolean(token));
 
@@ -358,6 +464,26 @@ export default function App() {
     }
   }
 
+  async function handleUpdateGroup(groupId, groupInput) {
+    setGrupoActualizandoId(groupId);
+
+    try {
+      const result = await updateGroup(token, groupId, groupInput);
+      setGrupos((currentGroups) =>
+        currentGroups
+          .map((grupo) => (grupo.id === result.grupo.id ? result.grupo : grupo))
+          .sort((firstGroup, secondGroup) =>
+            firstGroup.nombre.localeCompare(secondGroup.nombre, "es", { sensitivity: "base" }),
+          ),
+      );
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+      return result;
+    } finally {
+      setGrupoActualizandoId(null);
+    }
+  }
+
   function requestLogout() {
     setConfirmingLogout(true);
   }
@@ -378,6 +504,7 @@ export default function App() {
       setGrupos([]);
       setGruposError("");
       setGrupoCreando(false);
+      setGrupoActualizandoId(null);
       setConfirmingLogout(false);
     }
   }
@@ -393,10 +520,12 @@ export default function App() {
           gruposError={gruposError}
           gruposLoading={gruposLoading}
           grupoCreando={grupoCreando}
+          grupoActualizandoId={grupoActualizandoId}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
           onCreateGroup={handleCreateGroup}
           onRequestLogout={requestLogout}
+          onUpdateGroup={handleUpdateGroup}
           usuario={usuario}
         />
       ) : (

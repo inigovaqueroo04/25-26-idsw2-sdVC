@@ -5,9 +5,11 @@ from schemas.groups import (
     GroupCreateResponse,
     GroupListResponse,
     GroupResponse,
+    GroupUpdateRequest,
+    GroupUpdateResponse,
 )
 from services.auth_service import AuthError, obtener_usuario
-from services.group_service import GroupError, crear_grupo, listar_grupos_usuario
+from services.group_service import GroupError, crear_grupo, editar_grupo, listar_grupos_usuario
 
 
 router = APIRouter()
@@ -59,4 +61,25 @@ def create_group(
         estado="GRUPO_ABIERTO",
         grupo=GroupResponse(**grupo.to_response()),
         mensaje="Grupo creado correctamente.",
+    )
+
+
+@router.put("/{group_id}", response_model=GroupUpdateResponse)
+def update_group(
+    group_id: int,
+    payload: GroupUpdateRequest,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        grupo = editar_grupo(usuario, group_id, payload.nombre, payload.descripcion)
+    except AuthError as error:
+        raise_auth_error(error)
+    except GroupError as error:
+        raise_group_error(error)
+
+    return GroupUpdateResponse(
+        estado="GRUPO_ABIERTO",
+        grupo=GroupResponse(**grupo.to_response()),
+        mensaje="Grupo actualizado correctamente.",
     )

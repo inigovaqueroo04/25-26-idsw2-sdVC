@@ -26,4 +26,5 @@ npm run dev
 - Mostrar la seccion `Mis grupos` con los grupos del usuario autenticado.
 - Filtrar grupos por nombre desde el frontend.
 - Crear un grupo nuevo desde el dashboard.
+- Editar nombre y descripcion de un grupo propio desde su tarjeta.
 - Cerrar sesion y volver a `SESION_CERRADA`.
