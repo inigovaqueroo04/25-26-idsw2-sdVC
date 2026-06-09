@@ -12,7 +12,7 @@ ya se han transformado en codigo ejecutable.
 | Incremento | Estado | Codigo | Notas |
 | --- | --- | --- | --- |
 | Gestion de sesion y navegacion | Implementado | [`app/`](../../../app/README.md) | Primer vertical con React, FastAPI y SQLite |
-| Gestion de grupos y usuarios | En progreso | [`app/`](../../../app/README.md) | Implementados `abrirGrupos()`, `crearGrupo()` y `editarGrupo()` |
+| Gestion de grupos y usuarios | En progreso | [`app/`](../../../app/README.md) | CRUD basico de grupos implementado |
 
 Casos cubiertos en codigo:
 
@@ -25,10 +25,11 @@ Casos cubiertos en codigo:
   administrador.
 - `editarGrupo()`: modificacion de nombre y descripcion de un grupo propio con
   permisos de gestion.
+- `eliminarGrupo()`: eliminacion confirmada de un grupo propio con rol de
+  administrador.
 
 Pendiente del modulo de grupos:
 
-- `eliminarGrupo()`
 - `invitarUsuario()`
 - gestion de miembros e invitaciones.
 

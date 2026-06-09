@@ -26,6 +26,7 @@ uvicorn main:app --reload --port 8000
 - `GET /api/groups`
 - `POST /api/groups`
 - `PUT /api/groups/{group_id}`
+- `DELETE /api/groups/{group_id}`
 
 Los endpoints `logout`, `me` y `groups` usan la cabecera `X-Session-Token` recibida en el login.
 
@@ -35,6 +36,9 @@ autenticado y crea la membresia inicial con rol `Administrador`.
 `PUT /api/groups/{group_id}` valida que el usuario sea `Administrador` o
 `Miembro Administrador` del grupo, mantiene la identidad del grupo y actualiza
 solo nombre y descripcion.
+
+`DELETE /api/groups/{group_id}` exige rol `Administrador` dentro del grupo,
+borra las membresias directas y retira el grupo de la lista.
 
 ## Usuario de prueba
 

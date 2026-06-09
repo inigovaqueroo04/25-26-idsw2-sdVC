@@ -1,9 +1,32 @@
-﻿# eliminarGrupo > Pruebas
+# eliminarGrupo > Pruebas
 
-Plantilla de pruebas del caso de uso $name().
+## Escenarios previstos
 
-## Pendiente
+| Escenario | Entrada | Resultado esperado | Estado |
+| --- | --- | --- | --- |
+| Eliminar grupo valido | Grupo propio con rol `Administrador` | `200`, estado `GRUPOS_ABIERTO`, grupo retirado del listado | Verificado |
+| Usuario sin permisos | Grupo propio con rol `Miembro Administrador` | Error `403` y grupo conservado | Verificado |
+| Grupo no disponible | Grupo inexistente o no asociado al usuario | Error `404` | Verificado |
+| Sesion no activa | Sin `X-Session-Token` valido | Error `401` | Verificado |
+| Cancelacion en UI | Confirmacion cancelada | No se llama al backend y el grupo se conserva | Verificado |
 
-- Definir escenarios de prueba del flujo principal.
-- Definir escenarios alternativos y de error.
-- Registrar pruebas automatizadas cuando existan.
+## Pruebas ejecutadas
+
+- `app/backend/.venv/Scripts/python.exe -m compileall database.py init_db.py main.py models routes schemas services`: correcto.
+- Smoke de backend con SQLite temporal: grupo borrable creado, eliminacion
+  correcta, listado actualizado, intento sin permisos, grupo inexistente y
+  sesion ausente: correcto.
+- `npm run build` en `app/frontend`: correcto.
+- Revision en navegador integrado: grupo temporal creado por API, confirmacion
+  de eliminacion desde UI, listado actualizado, mensaje correcto, cancelacion
+  sin borrado y ausencia de boton eliminar para `Miembro Administrador`.
+- Revision visual responsive: botones y tarjetas sin solapamientos en desktop
+  y viewport movil.
+
+## Riesgos pendientes
+
+- No hay pruebas automatizadas todavia.
+- La comprobacion de tareas asociadas queda pendiente hasta que exista la
+  gestion tecnica de tareas.
+- Las invitaciones pendientes se limpiaran cuando exista persistencia tecnica
+  para invitaciones.

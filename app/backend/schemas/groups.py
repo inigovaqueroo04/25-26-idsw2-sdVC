@@ -35,3 +35,9 @@ class GroupUpdateResponse(BaseModel):
     estado: str
     grupo: GroupResponse
     mensaje: str
+
+
+class GroupDeleteResponse(BaseModel):
+    estado: str
+    grupo_id: int
+    mensaje: str

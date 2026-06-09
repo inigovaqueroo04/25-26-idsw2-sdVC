@@ -12,6 +12,7 @@ class GroupError(Exception):
 
 
 ROLES_GESTION_GRUPO = {"Administrador", "Miembro Administrador"}
+ROL_ELIMINAR_GRUPO = "Administrador"
 
 
 def listar_grupos_usuario(usuario: Usuario) -> list[GrupoResumen]:
@@ -188,3 +189,30 @@ def editar_grupo(
         grupo = obtener_resumen_grupo_usuario(connection, grupo_id, usuario.id)
 
     return grupo
+
+
+def eliminar_grupo(usuario: Usuario, grupo_id: int) -> None:
+    with get_connection() as connection:
+        grupo_actual = obtener_resumen_grupo_usuario(connection, grupo_id, usuario.id)
+
+        if grupo_actual.rol != ROL_ELIMINAR_GRUPO:
+            raise GroupError(
+                code="usuario_sin_permisos",
+                message="Solo un administrador del grupo puede eliminarlo.",
+                status_code=403,
+            )
+
+        connection.execute(
+            """
+            DELETE FROM miembros_grupo
+            WHERE grupo_id = ?
+            """,
+            (grupo_id,),
+        )
+        connection.execute(
+            """
+            DELETE FROM grupos
+            WHERE id = ?
+            """,
+            (grupo_id,),
+        )

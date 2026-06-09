@@ -24,8 +24,9 @@ app/
 - `abrirGrupos()`: consulta los grupos asociados al usuario autenticado y los muestra en el dashboard.
 - `crearGrupo()`: crea un grupo nuevo y vincula al usuario creador como `Administrador`.
 - `editarGrupo()`: modifica nombre y descripcion de un grupo propio con permisos de gestion.
+- `eliminarGrupo()`: elimina un grupo propio con rol `Administrador` tras confirmacion.
 
-No se han implementado todavia eliminar grupos, invitaciones, tareas, planificacion ni recordatorios.
+No se han implementado todavia invitaciones, tareas, planificacion ni recordatorios.
 
 ## Inicializar la base de datos
 

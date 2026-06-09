@@ -3,13 +3,14 @@ from fastapi import APIRouter, Header, HTTPException
 from schemas.groups import (
     GroupCreateRequest,
     GroupCreateResponse,
+    GroupDeleteResponse,
     GroupListResponse,
     GroupResponse,
     GroupUpdateRequest,
     GroupUpdateResponse,
 )
 from services.auth_service import AuthError, obtener_usuario
-from services.group_service import GroupError, crear_grupo, editar_grupo, listar_grupos_usuario
+from services.group_service import GroupError, crear_grupo, editar_grupo, eliminar_grupo, listar_grupos_usuario
 
 
 router = APIRouter()
@@ -82,4 +83,24 @@ def update_group(
         estado="GRUPO_ABIERTO",
         grupo=GroupResponse(**grupo.to_response()),
         mensaje="Grupo actualizado correctamente.",
+    )
+
+
+@router.delete("/{group_id}", response_model=GroupDeleteResponse)
+def delete_group(
+    group_id: int,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        eliminar_grupo(usuario, group_id)
+    except AuthError as error:
+        raise_auth_error(error)
+    except GroupError as error:
+        raise_group_error(error)
+
+    return GroupDeleteResponse(
+        estado="GRUPOS_ABIERTO",
+        grupo_id=group_id,
+        mensaje="Grupo eliminado correctamente.",
     )

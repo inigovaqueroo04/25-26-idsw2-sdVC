@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { getCurrentUser, login, logout } from "./api/auth";
-import { createGroup, getGroups, updateGroup } from "./api/groups";
+import { createGroup, deleteGroup, getGroups, updateGroup } from "./api/groups";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -14,6 +14,7 @@ const ESTADO_LABELS = {
 };
 
 const ROLES_GESTION_GRUPO = new Set(["Administrador", "Miembro Administrador"]);
+const ROLES_ELIMINAR_GRUPO = new Set(["Administrador"]);
 
 
 function formatEstado(estado) {
@@ -92,9 +93,11 @@ function Dashboard({
   gruposLoading,
   grupoCreando,
   grupoActualizandoId,
+  grupoEliminandoId,
   onCancelLogout,
   onConfirmLogout,
   onCreateGroup,
+  onDeleteGroup,
   onRequestLogout,
   onUpdateGroup,
   usuario,
@@ -109,6 +112,9 @@ function Dashboard({
   const [grupoEditadoDescripcion, setGrupoEditadoDescripcion] = useState("");
   const [editarGrupoError, setEditarGrupoError] = useState("");
   const [editarGrupoMensaje, setEditarGrupoMensaje] = useState("");
+  const [grupoConfirmandoEliminarId, setGrupoConfirmandoEliminarId] = useState(null);
+  const [eliminarGrupoError, setEliminarGrupoError] = useState("");
+  const [eliminarGrupoMensaje, setEliminarGrupoMensaje] = useState("");
   const gruposFiltrados = grupos.filter((grupo) =>
     grupo.nombre.toLowerCase().includes(filtroGrupos.trim().toLowerCase()),
   );
@@ -118,6 +124,7 @@ function Dashboard({
     setCrearGrupoError("");
     setCrearGrupoMensaje("");
     setEditarGrupoMensaje("");
+    setEliminarGrupoMensaje("");
 
     if (!grupoNombre.trim()) {
       setCrearGrupoError("El nombre del grupo es obligatorio.");
@@ -144,6 +151,8 @@ function Dashboard({
     setEditarGrupoError("");
     setEditarGrupoMensaje("");
     setCrearGrupoMensaje("");
+    setEliminarGrupoMensaje("");
+    setGrupoConfirmandoEliminarId(null);
   }
 
   function cancelEditGroup() {
@@ -174,6 +183,32 @@ function Dashboard({
       setEditarGrupoMensaje(result.mensaje);
     } catch (updateError) {
       setEditarGrupoError(updateError.message);
+    }
+  }
+
+  function requestDeleteGroup(grupoId) {
+    setGrupoConfirmandoEliminarId(grupoId);
+    setEliminarGrupoError("");
+    setEliminarGrupoMensaje("");
+    setEditarGrupoMensaje("");
+    setCrearGrupoMensaje("");
+  }
+
+  function cancelDeleteGroup() {
+    setGrupoConfirmandoEliminarId(null);
+    setEliminarGrupoError("");
+  }
+
+  async function confirmDeleteGroup(grupoId) {
+    setEliminarGrupoError("");
+    setEliminarGrupoMensaje("");
+
+    try {
+      const result = await onDeleteGroup(grupoId);
+      setGrupoConfirmandoEliminarId(null);
+      setEliminarGrupoMensaje(result.mensaje);
+    } catch (deleteError) {
+      setEliminarGrupoError(deleteError.message);
     }
   }
 
@@ -281,6 +316,8 @@ function Dashboard({
         </form>
 
         {editarGrupoMensaje ? <p className="success" role="status">{editarGrupoMensaje}</p> : null}
+        {eliminarGrupoMensaje ? <p className="success" role="status">{eliminarGrupoMensaje}</p> : null}
+        {eliminarGrupoError ? <p className="error" role="alert">{eliminarGrupoError}</p> : null}
 
         {gruposLoading ? <p className="subtle">Cargando grupos...</p> : null}
         {gruposError ? <p className="error" role="alert">{gruposError}</p> : null}
@@ -338,15 +375,45 @@ function Dashboard({
                         <p>{grupo.descripcion ?? "Sin descripción."}</p>
                       </div>
                       {ROLES_GESTION_GRUPO.has(grupo.rol) ? (
-                        <button
-                          className="secondary-button compact"
-                          type="button"
-                          onClick={() => startEditGroup(grupo)}
-                        >
-                          Editar
-                        </button>
+                        <div className="group-card-actions">
+                          <button
+                            className="secondary-button compact"
+                            type="button"
+                            onClick={() => startEditGroup(grupo)}
+                          >
+                            Editar
+                          </button>
+                          {ROLES_ELIMINAR_GRUPO.has(grupo.rol) ? (
+                            <button
+                              className="danger-button compact"
+                              type="button"
+                              onClick={() => requestDeleteGroup(grupo.id)}
+                            >
+                              Eliminar
+                            </button>
+                          ) : null}
+                        </div>
                       ) : null}
                     </div>
+
+                    {grupoConfirmandoEliminarId === grupo.id ? (
+                      <div className="delete-confirmation" role="alert">
+                        <p>Confirmar eliminacion del grupo.</p>
+                        <div className="group-actions">
+                          <button className="secondary-button compact" type="button" onClick={cancelDeleteGroup}>
+                            Cancelar
+                          </button>
+                          <button
+                            className="danger-button compact"
+                            disabled={grupoEliminandoId === grupo.id}
+                            type="button"
+                            onClick={() => confirmDeleteGroup(grupo.id)}
+                          >
+                            {grupoEliminandoId === grupo.id ? "Eliminando..." : "Confirmar"}
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
 
                     <div className="group-meta">
                       <span>{grupo.rol}</span>
@@ -376,6 +443,7 @@ export default function App() {
   const [gruposLoading, setGruposLoading] = useState(false);
   const [grupoCreando, setGrupoCreando] = useState(false);
   const [grupoActualizandoId, setGrupoActualizandoId] = useState(null);
+  const [grupoEliminandoId, setGrupoEliminandoId] = useState(null);
   const [confirmingLogout, setConfirmingLogout] = useState(false);
   const [loading, setLoading] = useState(Boolean(token));
 
@@ -484,6 +552,20 @@ export default function App() {
     }
   }
 
+  async function handleDeleteGroup(groupId) {
+    setGrupoEliminandoId(groupId);
+
+    try {
+      const result = await deleteGroup(token, groupId);
+      setGrupos((currentGroups) => currentGroups.filter((grupo) => grupo.id !== result.grupo_id));
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+      return result;
+    } finally {
+      setGrupoEliminandoId(null);
+    }
+  }
+
   function requestLogout() {
     setConfirmingLogout(true);
   }
@@ -505,6 +587,7 @@ export default function App() {
       setGruposError("");
       setGrupoCreando(false);
       setGrupoActualizandoId(null);
+      setGrupoEliminandoId(null);
       setConfirmingLogout(false);
     }
   }
@@ -521,9 +604,11 @@ export default function App() {
           gruposLoading={gruposLoading}
           grupoCreando={grupoCreando}
           grupoActualizandoId={grupoActualizandoId}
+          grupoEliminandoId={grupoEliminandoId}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
           onCreateGroup={handleCreateGroup}
+          onDeleteGroup={handleDeleteGroup}
           onRequestLogout={requestLogout}
           onUpdateGroup={handleUpdateGroup}
           usuario={usuario}

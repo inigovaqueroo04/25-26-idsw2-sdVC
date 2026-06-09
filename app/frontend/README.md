@@ -27,4 +27,5 @@ npm run dev
 - Filtrar grupos por nombre desde el frontend.
 - Crear un grupo nuevo desde el dashboard.
 - Editar nombre y descripcion de un grupo propio desde su tarjeta.
+- Eliminar un grupo propio con confirmacion desde su tarjeta.
 - Cerrar sesion y volver a `SESION_CERRADA`.

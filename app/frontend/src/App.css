@@ -112,7 +112,8 @@ input:focus {
 }
 
 .primary-button,
-.secondary-button {
+.secondary-button,
+.danger-button {
   align-items: center;
   border-radius: 6px;
   cursor: pointer;
@@ -154,6 +155,23 @@ input:focus {
 .secondary-button:hover {
   background: #f8fafc;
   border-color: #6b7788;
+}
+
+.danger-button {
+  background: #ffffff;
+  border: 1px solid #f43f5e;
+  color: #9f1239;
+}
+
+.danger-button:hover {
+  background: #fff1f2;
+  border-color: #be123c;
+}
+
+.danger-button:disabled {
+  background: #f8d7dd;
+  border-color: #f8d7dd;
+  cursor: wait;
 }
 
 .compact {
@@ -346,6 +364,13 @@ input:focus {
   justify-content: space-between;
 }
 
+.group-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .group-meta {
   display: flex;
   flex-wrap: wrap;
@@ -372,6 +397,21 @@ input:focus {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-end;
+}
+
+.delete-confirmation {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  color: #7c2d12;
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+}
+
+.delete-confirmation p {
+  font-weight: 800;
+  margin: 0;
 }
 
 .empty-state {
@@ -404,6 +444,11 @@ input:focus {
 
   .group-actions {
     flex-direction: column;
+  }
+
+  .group-card-actions {
+    flex-direction: column;
+    width: 100%;
   }
 
   .create-group-actions {

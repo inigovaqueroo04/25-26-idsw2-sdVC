@@ -423,3 +423,17 @@
 **Decision:** El modulo de grupos queda en progreso con `abrirGrupos()`, `crearGrupo()` y `editarGrupo()` implementados. La edicion cubre solo nombre y descripcion; quedan fuera eliminar grupos, invitaciones y gestion de miembros. El siguiente incremento recomendable es `eliminarGrupo()` para cerrar el CRUD basico de grupos antes de pasar a colaboracion.
 
 ---
+
+## [2026-06-09 17:56] Implementacion de eliminarGrupo()
+
+**Prompt:** El usuario pidio publicar en GitHub la edicion de grupos ya implementada y avanzar con la eliminacion confirmada de grupos, respetando que solo los grupos administrados muestren la accion de borrar, que el usuario pueda cancelar antes de eliminar y que al confirmar el grupo desaparezca del listado.
+
+**Resultado:** Se hizo commit y push de `editarGrupo()` con el mensaje `feat: editar grupos propios del usuario`. Despues se implemento `eliminarGrupo()` como cierre del CRUD basico de grupos. Se anadio `DELETE /api/groups/{group_id}` en FastAPI, con validacion de sesion, disponibilidad del grupo y rol `Administrador` dentro del grupo. En React se anadio boton `Eliminar` solo para grupos administrados, confirmacion inline, cancelacion y retirada de la tarjeta tras borrar correctamente.
+
+**Ajustes tecnicos:** La eliminacion limpia primero las membresias directas en `miembros_grupo` y despues elimina el registro en `grupos`. Las comprobaciones sobre tareas e invitaciones quedan aplazadas porque esas tablas y casos de uso todavia no existen en la base tecnica.
+
+**Verificacion:** Se ejecuto compileall del backend, smoke de backend con SQLite temporal para borrado valido, usuario sin permisos, grupo inexistente y sesion ausente, `npm run build` del frontend, borrado desde UI en navegador integrado con grupo temporal, cancelacion desde UI y revision visual en desktop y viewport movil. No se crearon ni modificaron PUML en esta iteracion, por lo que no hubo SVG nuevo que regenerar.
+
+**Decision:** El modulo de grupos queda en progreso con CRUD basico implementado: abrir, crear, editar y eliminar grupos. Quedan pendientes invitaciones y gestion de miembros; el siguiente incremento recomendable es `invitarUsuario()` para empezar la colaboracion real dentro de grupos.
+
+---

@@ -51,3 +51,13 @@ export function updateGroup(token, groupId, group) {
     method: "PUT",
   });
 }
+
+
+export function deleteGroup(token, groupId) {
+  return request(`/groups/${groupId}`, {
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "DELETE",
+  });
+}
