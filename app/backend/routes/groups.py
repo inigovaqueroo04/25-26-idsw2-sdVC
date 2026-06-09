@@ -4,13 +4,23 @@ from schemas.groups import (
     GroupCreateRequest,
     GroupCreateResponse,
     GroupDeleteResponse,
+    GroupInvitationCreateRequest,
+    GroupInvitationCreateResponse,
+    GroupInvitationResponse,
     GroupListResponse,
     GroupResponse,
     GroupUpdateRequest,
     GroupUpdateResponse,
 )
 from services.auth_service import AuthError, obtener_usuario
-from services.group_service import GroupError, crear_grupo, editar_grupo, eliminar_grupo, listar_grupos_usuario
+from services.group_service import (
+    GroupError,
+    crear_grupo,
+    editar_grupo,
+    eliminar_grupo,
+    invitar_usuario,
+    listar_grupos_usuario,
+)
 
 
 router = APIRouter()
@@ -103,4 +113,31 @@ def delete_group(
         estado="GRUPOS_ABIERTO",
         grupo_id=group_id,
         mensaje="Grupo eliminado correctamente.",
+    )
+
+
+@router.post("/{group_id}/invitations", response_model=GroupInvitationCreateResponse, status_code=201)
+def invite_user(
+    group_id: int,
+    payload: GroupInvitationCreateRequest,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        invitacion = invitar_usuario(
+            usuario,
+            group_id,
+            payload.email,
+            payload.rol,
+            payload.fecha_limite,
+        )
+    except AuthError as error:
+        raise_auth_error(error)
+    except GroupError as error:
+        raise_group_error(error)
+
+    return GroupInvitationCreateResponse(
+        estado="INVITACION_ABIERTA",
+        invitacion=GroupInvitationResponse(**invitacion),
+        mensaje="Invitacion registrada correctamente.",
     )

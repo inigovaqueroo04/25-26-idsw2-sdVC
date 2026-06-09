@@ -1,3 +1,6 @@
+from datetime import date
+import re
+
 from database import get_connection
 from models.group import GrupoResumen
 from models.user import Usuario
@@ -13,6 +16,8 @@ class GroupError(Exception):
 
 ROLES_GESTION_GRUPO = {"Administrador", "Miembro Administrador"}
 ROL_ELIMINAR_GRUPO = "Administrador"
+ROLES_INVITACION = {"Miembro Administrador", "Miembro"}
+EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
 def listar_grupos_usuario(usuario: Usuario) -> list[GrupoResumen]:
@@ -119,6 +124,54 @@ def validar_nombre_duplicado(connection, usuario_id: int, nombre: str, grupo_id:
         )
 
 
+def validar_email_invitacion(email: str) -> str:
+    email_normalizado = (email or "").strip().lower()
+
+    if not email_normalizado or not EMAIL_PATTERN.match(email_normalizado):
+        raise GroupError(
+            code="email_invalido",
+            message="El email de la invitacion no es valido.",
+            status_code=400,
+        )
+
+    return email_normalizado
+
+
+def validar_fecha_limite(fecha_limite: str) -> str:
+    fecha_normalizada = (fecha_limite or "").strip()
+
+    try:
+        fecha = date.fromisoformat(fecha_normalizada)
+    except ValueError as error:
+        raise GroupError(
+            code="fecha_limite_invalida",
+            message="La fecha limite debe tener formato AAAA-MM-DD.",
+            status_code=400,
+        ) from error
+
+    if fecha < date.today():
+        raise GroupError(
+            code="fecha_limite_caducada",
+            message="La fecha limite no puede estar en el pasado.",
+            status_code=400,
+        )
+
+    return fecha.isoformat()
+
+
+def validar_rol_invitacion(rol: str) -> str:
+    rol_normalizado = (rol or "").strip() or "Miembro"
+
+    if rol_normalizado not in ROLES_INVITACION:
+        raise GroupError(
+            code="rol_invitacion_invalido",
+            message="El rol propuesto para la invitacion no es valido.",
+            status_code=400,
+        )
+
+    return rol_normalizado
+
+
 def crear_grupo(usuario: Usuario, nombre: str, descripcion: str | None) -> GrupoResumen:
     if usuario.rol != "Administrador":
         raise GroupError(
@@ -204,6 +257,13 @@ def eliminar_grupo(usuario: Usuario, grupo_id: int) -> None:
 
         connection.execute(
             """
+            DELETE FROM invitaciones
+            WHERE grupo_id = ?
+            """,
+            (grupo_id,),
+        )
+        connection.execute(
+            """
             DELETE FROM miembros_grupo
             WHERE grupo_id = ?
             """,
@@ -216,3 +276,88 @@ def eliminar_grupo(usuario: Usuario, grupo_id: int) -> None:
             """,
             (grupo_id,),
         )
+
+
+def invitar_usuario(
+    usuario: Usuario,
+    grupo_id: int,
+    email: str,
+    rol: str,
+    fecha_limite: str,
+) -> dict:
+    email_normalizado = validar_email_invitacion(email)
+    rol_normalizado = validar_rol_invitacion(rol)
+    fecha_normalizada = validar_fecha_limite(fecha_limite)
+
+    with get_connection() as connection:
+        grupo_actual = obtener_resumen_grupo_usuario(connection, grupo_id, usuario.id)
+
+        if grupo_actual.rol not in ROLES_GESTION_GRUPO:
+            raise GroupError(
+                code="usuario_sin_permisos",
+                message="No tienes permisos para invitar usuarios a este grupo.",
+                status_code=403,
+            )
+
+        miembro_existente = connection.execute(
+            """
+            SELECT 1
+            FROM usuarios u
+            INNER JOIN miembros_grupo mg ON mg.usuario_id = u.id
+            WHERE mg.grupo_id = ?
+              AND lower(u.email) = ?
+            LIMIT 1
+            """,
+            (grupo_id, email_normalizado),
+        ).fetchone()
+
+        if miembro_existente is not None:
+            raise GroupError(
+                code="usuario_ya_miembro",
+                message="Ese usuario ya pertenece al grupo.",
+                status_code=409,
+            )
+
+        invitacion_existente = connection.execute(
+            """
+            SELECT 1
+            FROM invitaciones
+            WHERE grupo_id = ?
+              AND email_invitado = ?
+              AND estado = 'Pendiente'
+            LIMIT 1
+            """,
+            (grupo_id, email_normalizado),
+        ).fetchone()
+
+        if invitacion_existente is not None:
+            raise GroupError(
+                code="invitacion_duplicada",
+                message="Ya existe una invitacion pendiente para ese email.",
+                status_code=409,
+            )
+
+        cursor = connection.execute(
+            """
+            INSERT INTO invitaciones (
+                grupo_id,
+                email_invitado,
+                rol_propuesto,
+                fecha_limite,
+                estado,
+                invitado_por
+            )
+            VALUES (?, ?, ?, ?, 'Pendiente', ?)
+            """,
+            (grupo_id, email_normalizado, rol_normalizado, fecha_normalizada, usuario.id),
+        )
+        invitacion_id = cursor.lastrowid
+
+    return {
+        "id": invitacion_id,
+        "grupo_id": grupo_id,
+        "email": email_normalizado,
+        "rol": rol_normalizado,
+        "fecha_limite": fecha_normalizada,
+        "estado": "Pendiente",
+    }

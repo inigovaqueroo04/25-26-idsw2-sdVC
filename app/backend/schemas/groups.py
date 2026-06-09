@@ -11,6 +11,12 @@ class GroupUpdateRequest(BaseModel):
     descripcion: str | None = None
 
 
+class GroupInvitationCreateRequest(BaseModel):
+    email: str
+    rol: str = "Miembro"
+    fecha_limite: str
+
+
 class GroupResponse(BaseModel):
     id: int
     nombre: str
@@ -40,4 +46,19 @@ class GroupUpdateResponse(BaseModel):
 class GroupDeleteResponse(BaseModel):
     estado: str
     grupo_id: int
+    mensaje: str
+
+
+class GroupInvitationResponse(BaseModel):
+    id: int
+    grupo_id: int
+    email: str
+    rol: str
+    fecha_limite: str
+    estado: str
+
+
+class GroupInvitationCreateResponse(BaseModel):
+    estado: str
+    invitacion: GroupInvitationResponse
     mensaje: str

@@ -25,8 +25,9 @@ app/
 - `crearGrupo()`: crea un grupo nuevo y vincula al usuario creador como `Administrador`.
 - `editarGrupo()`: modifica nombre y descripcion de un grupo propio con permisos de gestion.
 - `eliminarGrupo()`: elimina un grupo propio con rol `Administrador` tras confirmacion.
+- `invitarUsuario()`: registra una invitacion pendiente con email, rol propuesto y fecha limite.
 
-No se han implementado todavia invitaciones, tareas, planificacion ni recordatorios.
+No se han implementado todavia aceptacion de invitaciones, gestion de miembros, tareas, planificacion ni recordatorios.
 
 ## Inicializar la base de datos
 

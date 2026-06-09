@@ -437,3 +437,13 @@
 **Decision:** El modulo de grupos queda en progreso con CRUD basico implementado: abrir, crear, editar y eliminar grupos. Quedan pendientes invitaciones y gestion de miembros; el siguiente incremento recomendable es `invitarUsuario()` para empezar la colaboracion real dentro de grupos.
 
 ---
+
+## [2026-06-09 18:12] Registro de invitaciones pendientes
+
+**Prompt:** El usuario pidio continuar despues de publicar la eliminacion de grupos, avanzando hacia la colaboracion entre usuarios: desde una tarjeta de grupo gestionable debe poder abrirse un formulario para introducir email, rol propuesto y fecha limite, registrar una invitacion pendiente, evitar duplicados y no convertir todavia al invitado en miembro.
+
+**Resultado:** Se implemento `invitarUsuario()` como registro de invitaciones pendientes. La base de datos incorpora una tabla `invitaciones` para guardar grupo, email invitado, rol propuesto, fecha limite, estado e invitador. El backend expone `POST /api/groups/{group_id}/invitations` y valida sesion, permisos dentro del grupo, formato del email, fecha limite, usuario ya miembro e invitacion pendiente duplicada. En el frontend aparece un boton `Invitar` en los grupos donde el usuario puede gestionar miembros, con formulario inline para email, rol y fecha limite, opcion de cancelar y mensaje de resultado. Se verifico con compilacion del backend, build del frontend, pruebas de API y revision visual en navegador.
+
+**Decision:** La colaboracion dentro de grupos empieza guardando invitaciones en estado `Pendiente`, pero una invitacion todavia no convierte al destinatario en miembro. Esa conversion queda reservada para una iteracion posterior donde se puedan abrir, aceptar o rechazar invitaciones. No se tocaron PUML en esta iteracion, asi que no hubo SVG nuevo que regenerar.
+
+---

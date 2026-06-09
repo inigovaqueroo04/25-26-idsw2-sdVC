@@ -27,6 +27,7 @@ uvicorn main:app --reload --port 8000
 - `POST /api/groups`
 - `PUT /api/groups/{group_id}`
 - `DELETE /api/groups/{group_id}`
+- `POST /api/groups/{group_id}/invitations`
 
 Los endpoints `logout`, `me` y `groups` usan la cabecera `X-Session-Token` recibida en el login.
 
@@ -39,6 +40,10 @@ solo nombre y descripcion.
 
 `DELETE /api/groups/{group_id}` exige rol `Administrador` dentro del grupo,
 borra las membresias directas y retira el grupo de la lista.
+
+`POST /api/groups/{group_id}/invitations` exige rol `Administrador` o
+`Miembro Administrador`, valida email y fecha limite, evita miembros existentes
+e invitaciones pendientes duplicadas, y registra la invitacion como `Pendiente`.
 
 ## Usuario de prueba
 

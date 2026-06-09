@@ -61,3 +61,14 @@ export function deleteGroup(token, groupId) {
     method: "DELETE",
   });
 }
+
+
+export function inviteUser(token, groupId, invitation) {
+  return request(`/groups/${groupId}/invitations`, {
+    body: JSON.stringify(invitation),
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "POST",
+  });
+}

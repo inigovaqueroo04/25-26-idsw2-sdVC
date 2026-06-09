@@ -25,7 +25,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -96,7 +97,8 @@ label {
   gap: 8px;
 }
 
-input {
+input,
+select {
   border: 1px solid #c7d0dc;
   border-radius: 6px;
   color: #111827;
@@ -105,7 +107,8 @@ input {
   width: 100%;
 }
 
-input:focus {
+input:focus,
+select:focus {
   border-color: #0f766e;
   box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.16);
   outline: none;
@@ -392,6 +395,19 @@ input:focus {
   gap: 14px;
 }
 
+.invite-user-form {
+  border-top: 1px solid #d7dee8;
+  display: grid;
+  gap: 14px;
+  padding-top: 14px;
+}
+
+.invite-user-fields {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .group-actions {
   display: flex;
   flex-wrap: wrap;
@@ -449,6 +465,10 @@ input:focus {
   .group-card-actions {
     flex-direction: column;
     width: 100%;
+  }
+
+  .invite-user-fields {
+    grid-template-columns: 1fr;
   }
 
   .create-group-actions {

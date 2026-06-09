@@ -29,6 +29,23 @@ CREATE TABLE IF NOT EXISTS miembros_grupo (
     UNIQUE (usuario_id, grupo_id)
 );
 
+CREATE TABLE IF NOT EXISTS invitaciones (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    grupo_id INTEGER NOT NULL,
+    email_invitado TEXT NOT NULL,
+    rol_propuesto TEXT NOT NULL CHECK (rol_propuesto IN ('Miembro Administrador', 'Miembro')),
+    fecha_limite TEXT NOT NULL,
+    estado TEXT NOT NULL CHECK (estado IN ('Pendiente', 'Aceptada', 'Rechazada', 'Caducada', 'Cancelada')),
+    invitado_por INTEGER NOT NULL,
+    creado_en TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (grupo_id) REFERENCES grupos(id),
+    FOREIGN KEY (invitado_por) REFERENCES usuarios(id)
+);
+
 CREATE INDEX IF NOT EXISTS idx_grupos_creado_por ON grupos(creado_por);
 CREATE INDEX IF NOT EXISTS idx_miembros_grupo_usuario ON miembros_grupo(usuario_id);
 CREATE INDEX IF NOT EXISTS idx_miembros_grupo_grupo ON miembros_grupo(grupo_id);
+CREATE INDEX IF NOT EXISTS idx_invitaciones_grupo ON invitaciones(grupo_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_invitaciones_pendientes_email_grupo
+ON invitaciones(grupo_id, email_invitado)
+WHERE estado = 'Pendiente';

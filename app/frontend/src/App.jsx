@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { getCurrentUser, login, logout } from "./api/auth";
-import { createGroup, deleteGroup, getGroups, updateGroup } from "./api/groups";
+import { createGroup, deleteGroup, getGroups, inviteUser, updateGroup } from "./api/groups";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -11,6 +11,7 @@ const ESTADO_LABELS = {
   SISTEMA_DISPONIBLE: "Sesión activa",
   GRUPOS_ABIERTO: "Grupos disponibles",
   GRUPO_ABIERTO: "Grupo abierto",
+  INVITACION_ABIERTA: "Invitación abierta",
 };
 
 const ROLES_GESTION_GRUPO = new Set(["Administrador", "Miembro Administrador"]);
@@ -94,10 +95,12 @@ function Dashboard({
   grupoCreando,
   grupoActualizandoId,
   grupoEliminandoId,
+  grupoInvitandoId,
   onCancelLogout,
   onConfirmLogout,
   onCreateGroup,
   onDeleteGroup,
+  onInviteUser,
   onRequestLogout,
   onUpdateGroup,
   usuario,
@@ -115,6 +118,12 @@ function Dashboard({
   const [grupoConfirmandoEliminarId, setGrupoConfirmandoEliminarId] = useState(null);
   const [eliminarGrupoError, setEliminarGrupoError] = useState("");
   const [eliminarGrupoMensaje, setEliminarGrupoMensaje] = useState("");
+  const [grupoInvitandoFormularioId, setGrupoInvitandoFormularioId] = useState(null);
+  const [invitacionEmail, setInvitacionEmail] = useState("");
+  const [invitacionRol, setInvitacionRol] = useState("Miembro");
+  const [invitacionFechaLimite, setInvitacionFechaLimite] = useState("");
+  const [invitarUsuarioError, setInvitarUsuarioError] = useState("");
+  const [invitarUsuarioMensaje, setInvitarUsuarioMensaje] = useState("");
   const gruposFiltrados = grupos.filter((grupo) =>
     grupo.nombre.toLowerCase().includes(filtroGrupos.trim().toLowerCase()),
   );
@@ -125,6 +134,7 @@ function Dashboard({
     setCrearGrupoMensaje("");
     setEditarGrupoMensaje("");
     setEliminarGrupoMensaje("");
+    setInvitarUsuarioMensaje("");
 
     if (!grupoNombre.trim()) {
       setCrearGrupoError("El nombre del grupo es obligatorio.");
@@ -152,7 +162,9 @@ function Dashboard({
     setEditarGrupoMensaje("");
     setCrearGrupoMensaje("");
     setEliminarGrupoMensaje("");
+    setInvitarUsuarioMensaje("");
     setGrupoConfirmandoEliminarId(null);
+    setGrupoInvitandoFormularioId(null);
   }
 
   function cancelEditGroup() {
@@ -192,6 +204,8 @@ function Dashboard({
     setEliminarGrupoMensaje("");
     setEditarGrupoMensaje("");
     setCrearGrupoMensaje("");
+    setInvitarUsuarioMensaje("");
+    setGrupoInvitandoFormularioId(null);
   }
 
   function cancelDeleteGroup() {
@@ -209,6 +223,54 @@ function Dashboard({
       setEliminarGrupoMensaje(result.mensaje);
     } catch (deleteError) {
       setEliminarGrupoError(deleteError.message);
+    }
+  }
+
+  function startInviteUser(grupoId) {
+    setGrupoInvitandoFormularioId(grupoId);
+    setGrupoConfirmandoEliminarId(null);
+    setGrupoEditandoId(null);
+    setInvitacionEmail("");
+    setInvitacionRol("Miembro");
+    setInvitacionFechaLimite("");
+    setInvitarUsuarioError("");
+    setInvitarUsuarioMensaje("");
+    setCrearGrupoMensaje("");
+    setEditarGrupoMensaje("");
+    setEliminarGrupoMensaje("");
+  }
+
+  function cancelInviteUser() {
+    setGrupoInvitandoFormularioId(null);
+    setInvitacionEmail("");
+    setInvitacionRol("Miembro");
+    setInvitacionFechaLimite("");
+    setInvitarUsuarioError("");
+  }
+
+  async function handleInviteUser(event, grupoId) {
+    event.preventDefault();
+    setInvitarUsuarioError("");
+    setInvitarUsuarioMensaje("");
+
+    if (!invitacionEmail.trim() || !invitacionFechaLimite) {
+      setInvitarUsuarioError("Email y fecha limite son obligatorios.");
+      return;
+    }
+
+    try {
+      const result = await onInviteUser(grupoId, {
+        email: invitacionEmail,
+        rol: invitacionRol,
+        fecha_limite: invitacionFechaLimite,
+      });
+      setGrupoInvitandoFormularioId(null);
+      setInvitacionEmail("");
+      setInvitacionRol("Miembro");
+      setInvitacionFechaLimite("");
+      setInvitarUsuarioMensaje(result.mensaje);
+    } catch (inviteError) {
+      setInvitarUsuarioError(inviteError.message);
     }
   }
 
@@ -318,6 +380,8 @@ function Dashboard({
         {editarGrupoMensaje ? <p className="success" role="status">{editarGrupoMensaje}</p> : null}
         {eliminarGrupoMensaje ? <p className="success" role="status">{eliminarGrupoMensaje}</p> : null}
         {eliminarGrupoError ? <p className="error" role="alert">{eliminarGrupoError}</p> : null}
+        {invitarUsuarioMensaje ? <p className="success" role="status">{invitarUsuarioMensaje}</p> : null}
+        {invitarUsuarioError ? <p className="error" role="alert">{invitarUsuarioError}</p> : null}
 
         {gruposLoading ? <p className="subtle">Cargando grupos...</p> : null}
         {gruposError ? <p className="error" role="alert">{gruposError}</p> : null}
@@ -383,6 +447,13 @@ function Dashboard({
                           >
                             Editar
                           </button>
+                          <button
+                            className="secondary-button compact"
+                            type="button"
+                            onClick={() => startInviteUser(grupo.id)}
+                          >
+                            Invitar
+                          </button>
                           {ROLES_ELIMINAR_GRUPO.has(grupo.rol) ? (
                             <button
                               className="danger-button compact"
@@ -415,6 +486,56 @@ function Dashboard({
                       </div>
                     ) : null}
 
+                    {grupoInvitandoFormularioId === grupo.id ? (
+                      <form className="invite-user-form" onSubmit={(event) => handleInviteUser(event, grupo.id)}>
+                        <label>
+                          Email
+                          <input
+                            inputMode="email"
+                            maxLength={120}
+                            onChange={(event) => setInvitacionEmail(event.target.value)}
+                            type="email"
+                            value={invitacionEmail}
+                          />
+                        </label>
+
+                        <div className="invite-user-fields">
+                          <label>
+                            Rol
+                            <select
+                              onChange={(event) => setInvitacionRol(event.target.value)}
+                              value={invitacionRol}
+                            >
+                              <option value="Miembro">Miembro</option>
+                              <option value="Miembro Administrador">Miembro Administrador</option>
+                            </select>
+                          </label>
+
+                          <label>
+                            Fecha limite
+                            <input
+                              onChange={(event) => setInvitacionFechaLimite(event.target.value)}
+                              type="date"
+                              value={invitacionFechaLimite}
+                            />
+                          </label>
+                        </div>
+
+                        <div className="group-actions">
+                          <button className="secondary-button compact" type="button" onClick={cancelInviteUser}>
+                            Cancelar
+                          </button>
+                          <button
+                            className="primary-button compact"
+                            disabled={grupoInvitandoId === grupo.id}
+                            type="submit"
+                          >
+                            {grupoInvitandoId === grupo.id ? "Invitando..." : "Enviar"}
+                          </button>
+                        </div>
+                      </form>
+                    ) : null}
+
                     <div className="group-meta">
                       <span>{grupo.rol}</span>
                       <span>
@@ -444,6 +565,7 @@ export default function App() {
   const [grupoCreando, setGrupoCreando] = useState(false);
   const [grupoActualizandoId, setGrupoActualizandoId] = useState(null);
   const [grupoEliminandoId, setGrupoEliminandoId] = useState(null);
+  const [grupoInvitandoId, setGrupoInvitandoId] = useState(null);
   const [confirmingLogout, setConfirmingLogout] = useState(false);
   const [loading, setLoading] = useState(Boolean(token));
 
@@ -566,6 +688,19 @@ export default function App() {
     }
   }
 
+  async function handleInviteUser(groupId, invitationInput) {
+    setGrupoInvitandoId(groupId);
+
+    try {
+      const result = await inviteUser(token, groupId, invitationInput);
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+      return result;
+    } finally {
+      setGrupoInvitandoId(null);
+    }
+  }
+
   function requestLogout() {
     setConfirmingLogout(true);
   }
@@ -588,6 +723,7 @@ export default function App() {
       setGrupoCreando(false);
       setGrupoActualizandoId(null);
       setGrupoEliminandoId(null);
+      setGrupoInvitandoId(null);
       setConfirmingLogout(false);
     }
   }
@@ -605,10 +741,12 @@ export default function App() {
           grupoCreando={grupoCreando}
           grupoActualizandoId={grupoActualizandoId}
           grupoEliminandoId={grupoEliminandoId}
+          grupoInvitandoId={grupoInvitandoId}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
           onCreateGroup={handleCreateGroup}
           onDeleteGroup={handleDeleteGroup}
+          onInviteUser={handleInviteUser}
           onRequestLogout={requestLogout}
           onUpdateGroup={handleUpdateGroup}
           usuario={usuario}
