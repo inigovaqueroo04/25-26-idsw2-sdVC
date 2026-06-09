@@ -17,6 +17,7 @@ class GroupError(Exception):
 ROLES_GESTION_GRUPO = {"Administrador", "Miembro Administrador"}
 ROL_ELIMINAR_GRUPO = "Administrador"
 ROLES_INVITACION = {"Miembro Administrador", "Miembro"}
+ESTADOS_INVITACION = {"Pendiente", "Aceptada", "Rechazada", "Caducada", "Cancelada"}
 EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
@@ -170,6 +171,22 @@ def validar_rol_invitacion(rol: str) -> str:
         )
 
     return rol_normalizado
+
+
+def validar_estado_invitacion(estado: str | None) -> str | None:
+    estado_normalizado = (estado or "").strip()
+
+    if not estado_normalizado:
+        return None
+
+    if estado_normalizado not in ESTADOS_INVITACION:
+        raise GroupError(
+            code="estado_invitacion_invalido",
+            message="El estado de invitacion solicitado no es valido.",
+            status_code=400,
+        )
+
+    return estado_normalizado
 
 
 def crear_grupo(usuario: Usuario, nombre: str, descripcion: str | None) -> GrupoResumen:
@@ -361,3 +378,75 @@ def invitar_usuario(
         "fecha_limite": fecha_normalizada,
         "estado": "Pendiente",
     }
+
+
+def listar_invitaciones_usuario(usuario: Usuario, estado: str | None = None) -> list[dict]:
+    estado_normalizado = validar_estado_invitacion(estado)
+    email_usuario = usuario.email.lower()
+    params: list[object] = [email_usuario, usuario.id, email_usuario]
+    estado_filter = ""
+
+    if estado_normalizado is not None:
+        estado_filter = "AND i.estado = ?"
+        params.append(estado_normalizado)
+
+    with get_connection() as connection:
+        rows = connection.execute(
+            f"""
+            SELECT
+                i.id,
+                i.grupo_id,
+                g.nombre AS grupo_nombre,
+                i.email_invitado AS email,
+                i.rol_propuesto AS rol,
+                i.fecha_limite,
+                i.estado,
+                u.nombre AS invitado_por,
+                CASE
+                    WHEN lower(i.email_invitado) = lower(?) THEN 1
+                    ELSE 0
+                END AS es_destinatario,
+                CASE
+                    WHEN mg.rol IN ('Administrador', 'Miembro Administrador') THEN 1
+                    ELSE 0
+                END AS es_gestionable
+            FROM invitaciones i
+            INNER JOIN grupos g ON g.id = i.grupo_id
+            INNER JOIN usuarios u ON u.id = i.invitado_por
+            LEFT JOIN miembros_grupo mg
+                ON mg.grupo_id = i.grupo_id
+               AND mg.usuario_id = ?
+            WHERE (
+                lower(i.email_invitado) = lower(?)
+                OR mg.rol IN ('Administrador', 'Miembro Administrador')
+            )
+            {estado_filter}
+            ORDER BY
+                CASE i.estado
+                    WHEN 'Pendiente' THEN 0
+                    WHEN 'Aceptada' THEN 1
+                    WHEN 'Rechazada' THEN 2
+                    WHEN 'Caducada' THEN 3
+                    ELSE 4
+                END,
+                i.fecha_limite ASC,
+                g.nombre COLLATE NOCASE
+            """,
+            params,
+        ).fetchall()
+
+    return [
+        {
+            "id": row["id"],
+            "grupo_id": row["grupo_id"],
+            "grupo_nombre": row["grupo_nombre"],
+            "email": row["email"],
+            "rol": row["rol"],
+            "fecha_limite": row["fecha_limite"],
+            "estado": row["estado"],
+            "invitado_por": row["invitado_por"],
+            "es_destinatario": bool(row["es_destinatario"]),
+            "es_gestionable": bool(row["es_gestionable"]),
+        }
+        for row in rows
+    ]

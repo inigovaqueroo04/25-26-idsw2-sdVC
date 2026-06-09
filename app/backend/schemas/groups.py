@@ -62,3 +62,22 @@ class GroupInvitationCreateResponse(BaseModel):
     estado: str
     invitacion: GroupInvitationResponse
     mensaje: str
+
+
+class InvitationListItemResponse(BaseModel):
+    id: int
+    grupo_id: int
+    grupo_nombre: str
+    email: str
+    rol: str
+    fecha_limite: str
+    estado: str
+    invitado_por: str
+    es_destinatario: bool
+    es_gestionable: bool
+
+
+class InvitationListResponse(BaseModel):
+    estado: str
+    invitaciones: list[InvitationListItemResponse]
+    mensaje: str

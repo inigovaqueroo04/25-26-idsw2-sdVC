@@ -11,6 +11,8 @@ from schemas.groups import (
     GroupResponse,
     GroupUpdateRequest,
     GroupUpdateResponse,
+    InvitationListItemResponse,
+    InvitationListResponse,
 )
 from services.auth_service import AuthError, obtener_usuario
 from services.group_service import (
@@ -19,6 +21,7 @@ from services.group_service import (
     editar_grupo,
     eliminar_grupo,
     invitar_usuario,
+    listar_invitaciones_usuario,
     listar_grupos_usuario,
 )
 
@@ -52,6 +55,26 @@ def list_groups(x_session_token: str | None = Header(default=None, alias="X-Sess
         estado="GRUPOS_ABIERTO",
         grupos=[GroupResponse(**grupo.to_response()) for grupo in grupos],
         mensaje="Grupos cargados correctamente.",
+    )
+
+
+@router.get("/invitations", response_model=InvitationListResponse)
+def list_invitations(
+    estado: str | None = None,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        invitaciones = listar_invitaciones_usuario(usuario, estado)
+    except AuthError as error:
+        raise_auth_error(error)
+    except GroupError as error:
+        raise_group_error(error)
+
+    return InvitationListResponse(
+        estado="INVITACIONES_ABIERTO",
+        invitaciones=[InvitationListItemResponse(**invitacion) for invitacion in invitaciones],
+        mensaje="Invitaciones cargadas correctamente.",
     )
 
 

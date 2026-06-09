@@ -29,4 +29,5 @@ npm run dev
 - Editar nombre y descripcion de un grupo propio desde su tarjeta.
 - Eliminar un grupo propio con confirmacion desde su tarjeta.
 - Registrar una invitacion pendiente desde la tarjeta de un grupo gestionable.
+- Mostrar `Mis invitaciones` con invitaciones pendientes por defecto y filtro por estado.
 - Cerrar sesion y volver a `SESION_CERRADA`.

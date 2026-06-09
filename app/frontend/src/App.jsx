@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { getCurrentUser, login, logout } from "./api/auth";
-import { createGroup, deleteGroup, getGroups, inviteUser, updateGroup } from "./api/groups";
+import { createGroup, deleteGroup, getGroups, getInvitations, inviteUser, updateGroup } from "./api/groups";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -11,6 +11,7 @@ const ESTADO_LABELS = {
   SISTEMA_DISPONIBLE: "Sesión activa",
   GRUPOS_ABIERTO: "Grupos disponibles",
   GRUPO_ABIERTO: "Grupo abierto",
+  INVITACIONES_ABIERTO: "Invitaciones abiertas",
   INVITACION_ABIERTA: "Invitación abierta",
 };
 
@@ -96,6 +97,9 @@ function Dashboard({
   grupoActualizandoId,
   grupoEliminandoId,
   grupoInvitandoId,
+  invitaciones,
+  invitacionesError,
+  invitacionesLoading,
   onCancelLogout,
   onConfirmLogout,
   onCreateGroup,
@@ -124,8 +128,12 @@ function Dashboard({
   const [invitacionFechaLimite, setInvitacionFechaLimite] = useState("");
   const [invitarUsuarioError, setInvitarUsuarioError] = useState("");
   const [invitarUsuarioMensaje, setInvitarUsuarioMensaje] = useState("");
+  const [filtroInvitacionesEstado, setFiltroInvitacionesEstado] = useState("Pendiente");
   const gruposFiltrados = grupos.filter((grupo) =>
     grupo.nombre.toLowerCase().includes(filtroGrupos.trim().toLowerCase()),
+  );
+  const invitacionesFiltradas = invitaciones.filter((invitacion) =>
+    filtroInvitacionesEstado === "Todas" ? true : invitacion.estado === filtroInvitacionesEstado,
   );
 
   async function handleCreateGroup(event) {
@@ -549,6 +557,57 @@ function Dashboard({
           </div>
         ) : null}
       </section>
+
+      <section className="invitations-section" aria-labelledby="invitations-title">
+        <div className="section-header">
+          <div>
+            <p className="eyebrow">Invitaciones</p>
+            <h2 id="invitations-title">Mis invitaciones</h2>
+          </div>
+          <label className="filter-field">
+            Estado
+            <select
+              onChange={(event) => setFiltroInvitacionesEstado(event.target.value)}
+              value={filtroInvitacionesEstado}
+            >
+              <option value="Pendiente">Pendientes</option>
+              <option value="Aceptada">Aceptadas</option>
+              <option value="Rechazada">Rechazadas</option>
+              <option value="Caducada">Caducadas</option>
+              <option value="Cancelada">Canceladas</option>
+              <option value="Todas">Todas</option>
+            </select>
+          </label>
+        </div>
+
+        {invitacionesLoading ? <p className="subtle">Cargando invitaciones...</p> : null}
+        {invitacionesError ? <p className="error" role="alert">{invitacionesError}</p> : null}
+
+        {!invitacionesLoading && !invitacionesError && invitacionesFiltradas.length === 0 ? (
+          <p className="empty-state">No hay invitaciones para este filtro.</p>
+        ) : null}
+
+        {!invitacionesLoading && !invitacionesError && invitacionesFiltradas.length > 0 ? (
+          <div className="invitations-list">
+            {invitacionesFiltradas.map((invitacion) => (
+              <article className="invitation-item" key={invitacion.id}>
+                <div>
+                  <h3>{invitacion.grupo_nombre}</h3>
+                  <p>{invitacion.email}</p>
+                </div>
+
+                <div className="invitation-meta">
+                  <span>{invitacion.estado}</span>
+                  <span>{invitacion.rol}</span>
+                  <span>Limite {invitacion.fecha_limite}</span>
+                  {invitacion.es_destinatario ? <span>Recibida</span> : null}
+                  {invitacion.es_gestionable ? <span>Gestionable</span> : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : null}
+      </section>
     </section>
   );
 }
@@ -562,6 +621,9 @@ export default function App() {
   const [grupos, setGrupos] = useState([]);
   const [gruposError, setGruposError] = useState("");
   const [gruposLoading, setGruposLoading] = useState(false);
+  const [invitaciones, setInvitaciones] = useState([]);
+  const [invitacionesError, setInvitacionesError] = useState("");
+  const [invitacionesLoading, setInvitacionesLoading] = useState(false);
   const [grupoCreando, setGrupoCreando] = useState(false);
   const [grupoActualizandoId, setGrupoActualizandoId] = useState(null);
   const [grupoEliminandoId, setGrupoEliminandoId] = useState(null);
@@ -586,6 +648,23 @@ export default function App() {
     }
   }
 
+  async function cargarInvitaciones(sessionToken) {
+    setInvitacionesLoading(true);
+    setInvitacionesError("");
+
+    try {
+      const result = await getInvitations(sessionToken);
+      setInvitaciones(result.invitaciones);
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+    } catch (invitationsError) {
+      setInvitaciones([]);
+      setInvitacionesError(invitationsError.message);
+    } finally {
+      setInvitacionesLoading(false);
+    }
+  }
+
   useEffect(() => {
     let active = true;
 
@@ -602,6 +681,7 @@ export default function App() {
         }
         setUsuario(currentUser);
         await cargarGrupos(token);
+        await cargarInvitaciones(token);
       } catch {
         localStorage.removeItem(SESSION_TOKEN_KEY);
         if (active) {
@@ -609,6 +689,7 @@ export default function App() {
           setUsuario(null);
           setEstado("SESION_CERRADA");
           setGrupos([]);
+          setInvitaciones([]);
         }
       } finally {
         if (active) {
@@ -633,6 +714,7 @@ export default function App() {
     setGestionMensaje("Todo listo. Has iniciado sesión correctamente.");
     setConfirmingLogout(false);
     await cargarGrupos(result.token);
+    await cargarInvitaciones(result.token);
     setLoading(false);
   }
 
@@ -666,6 +748,13 @@ export default function App() {
             firstGroup.nombre.localeCompare(secondGroup.nombre, "es", { sensitivity: "base" }),
           ),
       );
+      setInvitaciones((currentInvitations) =>
+        currentInvitations.map((invitacion) =>
+          invitacion.grupo_id === result.grupo.id
+            ? { ...invitacion, grupo_nombre: result.grupo.nombre }
+            : invitacion,
+        ),
+      );
       setEstado(result.estado);
       setGestionMensaje(result.mensaje);
       return result;
@@ -680,6 +769,9 @@ export default function App() {
     try {
       const result = await deleteGroup(token, groupId);
       setGrupos((currentGroups) => currentGroups.filter((grupo) => grupo.id !== result.grupo_id));
+      setInvitaciones((currentInvitations) =>
+        currentInvitations.filter((invitacion) => invitacion.grupo_id !== result.grupo_id),
+      );
       setEstado(result.estado);
       setGestionMensaje(result.mensaje);
       return result;
@@ -693,6 +785,7 @@ export default function App() {
 
     try {
       const result = await inviteUser(token, groupId, invitationInput);
+      await cargarInvitaciones(token);
       setEstado(result.estado);
       setGestionMensaje(result.mensaje);
       return result;
@@ -720,6 +813,8 @@ export default function App() {
       setGestionMensaje("Todo listo. Has iniciado sesión correctamente.");
       setGrupos([]);
       setGruposError("");
+      setInvitaciones([]);
+      setInvitacionesError("");
       setGrupoCreando(false);
       setGrupoActualizandoId(null);
       setGrupoEliminandoId(null);
@@ -742,6 +837,9 @@ export default function App() {
           grupoActualizandoId={grupoActualizandoId}
           grupoEliminandoId={grupoEliminandoId}
           grupoInvitandoId={grupoInvitandoId}
+          invitaciones={invitaciones}
+          invitacionesError={invitacionesError}
+          invitacionesLoading={invitacionesLoading}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
           onCreateGroup={handleCreateGroup}

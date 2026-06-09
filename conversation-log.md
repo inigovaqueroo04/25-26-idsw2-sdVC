@@ -447,3 +447,11 @@
 **Decision:** La colaboracion dentro de grupos empieza guardando invitaciones en estado `Pendiente`, pero una invitacion todavia no convierte al destinatario en miembro. Esa conversion queda reservada para una iteracion posterior donde se puedan abrir, aceptar o rechazar invitaciones. No se tocaron PUML en esta iteracion, asi que no hubo SVG nuevo que regenerar.
 
 ---
+
+## [2026-06-09 23:03] Consulta de invitaciones del usuario
+
+**Prompt:** Se continuo con el siguiente paso natural tras registrar invitaciones: permitir que una persona autenticada abra una seccion de `Mis invitaciones`, vea las invitaciones pendientes asociadas a ella o a grupos que puede gestionar, y pueda cambiar el filtro para revisar otros estados sin aceptar ni rechazar todavia ninguna invitacion.
+
+**Resultado:** Se implemento `abrirInvitaciones()` como consulta de invitaciones. El backend expone `GET /api/groups/invitations`, valida la sesion, acepta un filtro opcional de estado y devuelve invitaciones recibidas por el email del usuario o visibles por su rol de gestion en el grupo. El frontend carga esas invitaciones al iniciar sesion, las refresca despues de enviar una nueva invitacion y muestra la seccion `Mis invitaciones` con filtro por estado. Se actualizaron los README de app, backend, frontend, desarrollo, pruebas y seguimiento. La verificacion incluyo compilacion del backend con el entorno virtual, smoke de rutas y servicios con SQLite temporal, build del frontend, prueba contra el backend local vivo, revision visual en navegador integrado y comprobacion movil sin desbordamiento horizontal.
+
+**Decision:** La consulta queda limitada a abrir y filtrar invitaciones, dejando aceptar, rechazar, cancelar o caducar automaticamente para incrementos posteriores. La vista prioriza `Pendiente` porque es el estado que normalmente requiere accion, pero mantiene los demas estados disponibles para historial o seguimiento. No se tocaron PUML en esta iteracion, asi que no hubo SVG nuevo que regenerar.

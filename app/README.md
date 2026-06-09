@@ -26,8 +26,9 @@ app/
 - `editarGrupo()`: modifica nombre y descripcion de un grupo propio con permisos de gestion.
 - `eliminarGrupo()`: elimina un grupo propio con rol `Administrador` tras confirmacion.
 - `invitarUsuario()`: registra una invitacion pendiente con email, rol propuesto y fecha limite.
+- `abrirInvitaciones()`: muestra invitaciones recibidas o gestionables por el usuario con filtro por estado.
 
-No se han implementado todavia aceptacion de invitaciones, gestion de miembros, tareas, planificacion ni recordatorios.
+No se han implementado todavia aceptacion o rechazo de invitaciones, gestion de miembros, tareas, planificacion ni recordatorios.
 
 ## Inicializar la base de datos
 
@@ -79,8 +80,8 @@ El usuario de prueba pertenece a:
 
 ## Pendiente para siguientes iteraciones
 
-- Crear, editar y eliminar grupos.
-- Invitaciones y gestion de miembros.
+- Aceptar o rechazar invitaciones.
+- Gestion de miembros.
 - Gestion de tareas.
 - Planificacion y configuracion.
 - Recordatorios.

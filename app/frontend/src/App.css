@@ -287,7 +287,8 @@ select:focus {
   margin-bottom: 0;
 }
 
-.groups-section {
+.groups-section,
+.invitations-section {
   display: grid;
   gap: 18px;
 }
@@ -381,6 +382,51 @@ select:focus {
 }
 
 .group-meta span {
+  background: #eef2f6;
+  border: 1px solid #d7dee8;
+  border-radius: 999px;
+  color: #283345;
+  font-size: 0.84rem;
+  font-weight: 800;
+  padding: 6px 10px;
+}
+
+.invitations-list {
+  display: grid;
+  gap: 12px;
+}
+
+.invitation-item {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #d7dee8;
+  border-radius: 8px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(180px, 1fr) minmax(260px, 1.4fr);
+  padding: 16px 18px;
+}
+
+.invitation-item h3 {
+  color: #111827;
+  font-size: 1rem;
+  margin: 0 0 4px;
+}
+
+.invitation-item p {
+  color: #536173;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.invitation-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.invitation-meta span {
   background: #eef2f6;
   border: 1px solid #d7dee8;
   border-radius: 999px;
@@ -490,6 +536,15 @@ select:focus {
 
   .groups-grid {
     grid-template-columns: 1fr;
+  }
+
+  .invitation-item {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+
+  .invitation-meta {
+    justify-content: flex-start;
   }
 
   .filter-field {

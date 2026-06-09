@@ -31,6 +31,15 @@ export function getGroups(token) {
 }
 
 
+export function getInvitations(token) {
+  return request("/groups/invitations", {
+    headers: {
+      "X-Session-Token": token,
+    },
+  });
+}
+
+
 export function createGroup(token, group) {
   return request("/groups", {
     body: JSON.stringify(group),
