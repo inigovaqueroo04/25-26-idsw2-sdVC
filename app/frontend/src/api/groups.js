@@ -82,6 +82,16 @@ export function updateGroupMember(token, groupId, memberId, memberUpdate) {
 }
 
 
+export function deleteGroupMember(token, groupId, memberId) {
+  return request(`/groups/${groupId}/members/${memberId}`, {
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "DELETE",
+  });
+}
+
+
 export function deleteGroup(token, groupId) {
   return request(`/groups/${groupId}`, {
     headers: {

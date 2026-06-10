@@ -511,9 +511,14 @@ select:focus {
   overflow-wrap: anywhere;
 }
 
+.member-row .danger-button,
 .member-row .primary-button {
   min-width: 0;
   width: 100%;
+}
+
+.member-delete-confirmation {
+  grid-column: 1 / -1;
 }
 
 .group-actions {

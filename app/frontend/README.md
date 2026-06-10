@@ -32,4 +32,5 @@ npm run dev
 - Mostrar `Mis invitaciones` con invitaciones pendientes por defecto y filtro por estado.
 - Aceptar o rechazar invitaciones pendientes recibidas desde `Mis invitaciones`.
 - Abrir `Miembros` en grupos gestionables y cambiar el rol de un miembro.
+- Eliminar un miembro de un grupo gestionable con confirmacion.
 - Cerrar sesion y volver a `SESION_CERRADA`.

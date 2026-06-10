@@ -4,6 +4,7 @@ import { getCurrentUser, login, logout } from "./api/auth";
 import {
   createGroup,
   deleteGroup,
+  deleteGroupMember,
   getGroupMembers,
   getGroups,
   getInvitations,
@@ -113,10 +114,12 @@ function Dashboard({
   invitacionesLoading,
   invitacionActualizandoId,
   miembroActualizandoId,
+  miembroEliminandoId,
   onCancelLogout,
   onConfirmLogout,
   onCreateGroup,
   onDeleteGroup,
+  onDeleteGroupMember,
   onLoadGroupMembers,
   onUpdateInvitation,
   onInviteUser,
@@ -142,6 +145,7 @@ function Dashboard({
   const [grupoMiembrosAbiertoId, setGrupoMiembrosAbiertoId] = useState(null);
   const [miembrosPorGrupo, setMiembrosPorGrupo] = useState({});
   const [miembroRolesEditados, setMiembroRolesEditados] = useState({});
+  const [miembroConfirmandoEliminarId, setMiembroConfirmandoEliminarId] = useState(null);
   const [editarMiembroError, setEditarMiembroError] = useState("");
   const [editarMiembroMensaje, setEditarMiembroMensaje] = useState("");
   const [invitacionEmail, setInvitacionEmail] = useState("");
@@ -240,6 +244,7 @@ function Dashboard({
     setCrearGrupoMensaje("");
     setInvitarUsuarioMensaje("");
     setEditarMiembroMensaje("");
+    setMiembroConfirmandoEliminarId(null);
     setGrupoInvitandoFormularioId(null);
     setGrupoMiembrosAbiertoId(null);
   }
@@ -289,6 +294,7 @@ function Dashboard({
   async function toggleGroupMembers(grupoId) {
     setEditarMiembroError("");
     setEditarMiembroMensaje("");
+    setMiembroConfirmandoEliminarId(null);
     setGrupoInvitandoFormularioId(null);
     setGrupoConfirmandoEliminarId(null);
     setGrupoEditandoId(null);
@@ -342,6 +348,39 @@ function Dashboard({
         ...currentRoles,
         [result.miembro.id]: result.miembro.rol,
       }));
+      setEditarMiembroMensaje(result.mensaje);
+    } catch (memberError) {
+      setEditarMiembroError(memberError.message);
+    }
+  }
+
+  function requestDeleteMember(memberId) {
+    setMiembroConfirmandoEliminarId(memberId);
+    setEditarMiembroError("");
+    setEditarMiembroMensaje("");
+  }
+
+  function cancelDeleteMember() {
+    setMiembroConfirmandoEliminarId(null);
+    setEditarMiembroError("");
+  }
+
+  async function confirmDeleteMember(grupoId, memberId) {
+    setEditarMiembroError("");
+    setEditarMiembroMensaje("");
+
+    try {
+      const result = await onDeleteGroupMember(grupoId, memberId);
+      setMiembrosPorGrupo((currentMembers) => ({
+        ...currentMembers,
+        [grupoId]: (currentMembers[grupoId] ?? []).filter((miembro) => miembro.id !== result.miembro_id),
+      }));
+      setMiembroRolesEditados((currentRoles) => {
+        const nextRoles = { ...currentRoles };
+        delete nextRoles[result.miembro_id];
+        return nextRoles;
+      });
+      setMiembroConfirmandoEliminarId(null);
       setEditarMiembroMensaje(result.mensaje);
     } catch (memberError) {
       setEditarMiembroError(memberError.message);
@@ -675,6 +714,7 @@ function Dashboard({
                             <label>
                               Rol
                               <select
+                                disabled={miembroEliminandoId === miembro.id}
                                 onChange={(event) => handleMemberRoleDraft(miembro.id, event.target.value)}
                                 value={miembroRolesEditados[miembro.id] ?? miembro.rol}
                               >
@@ -687,6 +727,7 @@ function Dashboard({
                             <button
                               className="primary-button compact"
                               disabled={
+                                miembroEliminandoId === miembro.id ||
                                 miembroActualizandoId === miembro.id ||
                                 (miembroRolesEditados[miembro.id] ?? miembro.rol) === miembro.rol
                               }
@@ -700,6 +741,34 @@ function Dashboard({
                             >
                               {miembroActualizandoId === miembro.id ? "Guardando..." : "Guardar"}
                             </button>
+
+                            <button
+                              className="danger-button compact"
+                              disabled={miembroActualizandoId === miembro.id || miembroEliminandoId === miembro.id}
+                              type="button"
+                              onClick={() => requestDeleteMember(miembro.id)}
+                            >
+                              Eliminar
+                            </button>
+
+                            {miembroConfirmandoEliminarId === miembro.id ? (
+                              <div className="delete-confirmation member-delete-confirmation" role="alert">
+                                <p>Confirmar eliminacion del miembro.</p>
+                                <div className="group-actions">
+                                  <button className="secondary-button compact" type="button" onClick={cancelDeleteMember}>
+                                    Cancelar
+                                  </button>
+                                  <button
+                                    className="danger-button compact"
+                                    disabled={miembroEliminandoId === miembro.id}
+                                    type="button"
+                                    onClick={() => confirmDeleteMember(grupo.id, miembro.id)}
+                                  >
+                                    {miembroEliminandoId === miembro.id ? "Eliminando..." : "Confirmar"}
+                                  </button>
+                                </div>
+                              </div>
+                            ) : null}
                           </div>
                         ))}
                       </div>
@@ -815,6 +884,7 @@ export default function App() {
   const [grupoMiembrosLoadingId, setGrupoMiembrosLoadingId] = useState(null);
   const [invitacionActualizandoId, setInvitacionActualizandoId] = useState(null);
   const [miembroActualizandoId, setMiembroActualizandoId] = useState(null);
+  const [miembroEliminandoId, setMiembroEliminandoId] = useState(null);
   const [confirmingLogout, setConfirmingLogout] = useState(false);
   const [loading, setLoading] = useState(Boolean(token));
 
@@ -994,6 +1064,20 @@ export default function App() {
     }
   }
 
+  async function handleDeleteGroupMember(groupId, memberId) {
+    setMiembroEliminandoId(memberId);
+
+    try {
+      const result = await deleteGroupMember(token, groupId, memberId);
+      await cargarGrupos(token);
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+      return result;
+    } finally {
+      setMiembroEliminandoId(null);
+    }
+  }
+
   async function handleInviteUser(groupId, invitationInput) {
     setGrupoInvitandoId(groupId);
 
@@ -1057,6 +1141,7 @@ export default function App() {
       setGrupoMiembrosLoadingId(null);
       setInvitacionActualizandoId(null);
       setMiembroActualizandoId(null);
+      setMiembroEliminandoId(null);
       setConfirmingLogout(false);
     }
   }
@@ -1081,10 +1166,12 @@ export default function App() {
           invitacionesLoading={invitacionesLoading}
           invitacionActualizandoId={invitacionActualizandoId}
           miembroActualizandoId={miembroActualizandoId}
+          miembroEliminandoId={miembroEliminandoId}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
           onCreateGroup={handleCreateGroup}
           onDeleteGroup={handleDeleteGroup}
+          onDeleteGroupMember={handleDeleteGroupMember}
           onInviteUser={handleInviteUser}
           onLoadGroupMembers={handleLoadGroupMembers}
           onUpdateInvitation={handleUpdateInvitation}

@@ -733,3 +733,63 @@ def editar_miembro(usuario: Usuario, grupo_id: int, miembro_id: int, rol: str) -
         ).fetchone()
 
     return miembro_row_to_response(row, usuario.id)
+
+
+def eliminar_miembro(usuario: Usuario, grupo_id: int, miembro_id: int) -> None:
+    with get_connection() as connection:
+        grupo_actual = obtener_resumen_grupo_usuario(connection, grupo_id, usuario.id)
+
+        if grupo_actual.rol not in ROLES_GESTION_GRUPO:
+            raise GroupError(
+                code="usuario_sin_permisos",
+                message="No tienes permisos para eliminar miembros de este grupo.",
+                status_code=403,
+            )
+
+        miembro = connection.execute(
+            """
+            SELECT
+                mg.id,
+                mg.usuario_id,
+                mg.rol
+            FROM miembros_grupo mg
+            WHERE mg.id = ?
+              AND mg.grupo_id = ?
+            """,
+            (miembro_id, grupo_id),
+        ).fetchone()
+
+        if miembro is None:
+            raise GroupError(
+                code="miembro_no_disponible",
+                message="El miembro no existe o no pertenece a este grupo.",
+                status_code=404,
+            )
+
+        if miembro["rol"] in ROLES_GESTION_GRUPO:
+            gestores_restantes = connection.execute(
+                """
+                SELECT COUNT(*) AS total
+                FROM miembros_grupo
+                WHERE grupo_id = ?
+                  AND id <> ?
+                  AND rol IN ('Administrador', 'Miembro Administrador')
+                """,
+                (grupo_id, miembro_id),
+            ).fetchone()["total"]
+
+            if gestores_restantes == 0:
+                raise GroupError(
+                    code="grupo_sin_gestion",
+                    message="El grupo debe conservar al menos un miembro con permisos de gestion.",
+                    status_code=409,
+                )
+
+        connection.execute(
+            """
+            DELETE FROM miembros_grupo
+            WHERE id = ?
+              AND grupo_id = ?
+            """,
+            (miembro_id, grupo_id),
+        )

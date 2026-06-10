@@ -485,3 +485,13 @@
 **Resultado:** Se ajusto la maquetacion de las tarjetas de grupo y del panel de miembros. La grid de grupos ya no estira todas las tarjetas a la altura de la tarjeta mas alta, el panel de miembros queda contenido dentro de su tarjeta, las filas de miembros se compactan y las etiquetas mantienen una altura normal. Tambien se corrigio el guardado desde UI para leer el rol seleccionado de la fila al pulsar `Guardar`. Se valido en navegador integrado con datos temporales: desktop, movil, panel abierto, tarjeta vecina, chips, guardado de rol, seccion de invitaciones y limpieza posterior de datos temporales.
 
 **Decision:** El panel de miembros se mantiene inline dentro de cada tarjeta para conservar el flujo actual del dashboard, pero su layout queda limitado por la propia tarjeta. A partir de esta revision, los cambios visuales se validan midiendo overflow, solapamientos y tamaños en desktop y movil antes de darlos por terminados.
+
+---
+
+## [2026-06-10 17:08] Baja confirmada de miembros de un grupo
+
+**Prompt:** Se pidio continuar con el siguiente avance conveniente del desarrollo. Tras tener implementado el panel para abrir miembros y cambiar roles, se abordo la retirada de un miembro de un grupo: el usuario con permisos debe poder pulsar `Eliminar`, confirmar la decision en la propia fila y actualizar la composicion del grupo sin borrar la cuenta del usuario.
+
+**Resultado:** Se implemento `eliminarMiembro()`. El backend expone `DELETE /api/groups/{group_id}/members/{member_id}`, valida sesion, pertenencia al grupo, permisos de gestion, existencia del miembro y que no se elimine el ultimo `Administrador` o `Miembro Administrador`. En React se añadio la llamada `deleteGroupMember`, un boton `Eliminar` por miembro, confirmacion inline, estado de carga durante la baja y actualizacion de la lista de miembros junto con el contador del grupo. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
+
+**Decision:** La operacion elimina solo la relacion `MiembroGrupo`; la entidad `Usuario` se conserva porque puede pertenecer a otros grupos o volver a ser invitada mas adelante. La confirmacion queda dentro de la fila para reducir ambiguedad sobre que persona se va a retirar. La gestion de tareas asociadas no se implementa en este incremento porque el subsistema de tareas todavia no existe en codigo.

@@ -118,3 +118,10 @@ class GroupMemberUpdateResponse(BaseModel):
     grupo_id: int
     miembro: GroupMemberResponse
     mensaje: str
+
+
+class GroupMemberDeleteResponse(BaseModel):
+    estado: str
+    grupo_id: int
+    miembro_id: int
+    mensaje: str

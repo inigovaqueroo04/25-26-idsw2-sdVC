@@ -11,6 +11,7 @@ from schemas.groups import (
     GroupInvitationUpdateResponse,
     GroupListResponse,
     GroupMemberListResponse,
+    GroupMemberDeleteResponse,
     GroupMemberResponse,
     GroupMemberUpdateRequest,
     GroupMemberUpdateResponse,
@@ -28,6 +29,7 @@ from services.group_service import (
     editar_invitacion,
     editar_miembro,
     eliminar_grupo,
+    eliminar_miembro,
     invitar_usuario,
     listar_invitaciones_usuario,
     listar_grupos_usuario,
@@ -149,6 +151,28 @@ def update_group_member(
         grupo_id=group_id,
         miembro=GroupMemberResponse(**miembro),
         mensaje="Miembro actualizado correctamente.",
+    )
+
+
+@router.delete("/{group_id}/members/{member_id}", response_model=GroupMemberDeleteResponse)
+def delete_group_member(
+    group_id: int,
+    member_id: int,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        eliminar_miembro(usuario, group_id, member_id)
+    except AuthError as error:
+        raise_auth_error(error)
+    except GroupError as error:
+        raise_group_error(error)
+
+    return GroupMemberDeleteResponse(
+        estado="GRUPO_ABIERTO",
+        grupo_id=group_id,
+        miembro_id=member_id,
+        mensaje="Miembro eliminado correctamente.",
     )
 
 

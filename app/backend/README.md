@@ -31,6 +31,7 @@ uvicorn main:app --reload --port 8000
 - `PATCH /api/groups/invitations/{invitation_id}`
 - `GET /api/groups/{group_id}/members`
 - `PATCH /api/groups/{group_id}/members/{member_id}`
+- `DELETE /api/groups/{group_id}/members/{member_id}`
 - `POST /api/groups/{group_id}/invitations`
 
 Los endpoints `logout`, `me` y `groups` usan la cabecera `X-Session-Token` recibida en el login.
@@ -61,6 +62,9 @@ con el rol propuesto; si rechaza, solo actualiza el estado de la invitacion.
 `GET /api/groups/{group_id}/members` lista miembros de un grupo gestionable.
 `PATCH /api/groups/{group_id}/members/{member_id}` cambia el rol del miembro y
 evita dejar el grupo sin ningun miembro con permisos de gestion.
+`DELETE /api/groups/{group_id}/members/{member_id}` retira la pertenencia del
+miembro al grupo, sin borrar el usuario global, y aplica la misma proteccion
+para conservar al menos un gestor.
 
 ## Usuario de prueba
 
