@@ -28,6 +28,7 @@ npm run dev
 - Mostrar la seccion `Mis tareas` con tareas de los grupos accesibles.
 - Filtrar tareas por texto, grupo y estado.
 - Crear una tarea programada desde `Mis tareas` en grupos gestionables.
+- Editar titulo, descripcion, fecha y horario de tareas gestionables desde `Mis tareas`.
 - Crear un grupo nuevo desde el dashboard.
 - Editar nombre y descripcion de un grupo propio desde su tarjeta.
 - Eliminar un grupo propio con confirmacion desde su tarjeta.

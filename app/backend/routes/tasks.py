@@ -1,8 +1,15 @@
 from fastapi import APIRouter, Header, HTTPException
 
-from schemas.tasks import TaskCreateRequest, TaskCreateResponse, TaskListResponse, TaskResponse
+from schemas.tasks import (
+    TaskCreateRequest,
+    TaskCreateResponse,
+    TaskListResponse,
+    TaskResponse,
+    TaskUpdateRequest,
+    TaskUpdateResponse,
+)
 from services.auth_service import AuthError, obtener_usuario
-from services.task_service import TaskError, crear_tarea, listar_tareas_usuario
+from services.task_service import TaskError, crear_tarea, editar_tarea, listar_tareas_usuario
 
 
 router = APIRouter()
@@ -62,4 +69,33 @@ def create_task(
         estado="TAREA_ABIERTO",
         tarea=TaskResponse(**tarea),
         mensaje="Tarea creada correctamente.",
+    )
+
+
+@router.patch("/{task_id}", response_model=TaskUpdateResponse)
+def update_task(
+    task_id: int,
+    payload: TaskUpdateRequest,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        tarea = editar_tarea(
+            usuario,
+            task_id,
+            payload.titulo,
+            payload.descripcion,
+            payload.fecha,
+            payload.hora_inicio,
+            payload.hora_fin,
+        )
+    except AuthError as error:
+        raise_auth_error(error)
+    except TaskError as error:
+        raise_task_error(error)
+
+    return TaskUpdateResponse(
+        estado="TAREA_ABIERTO",
+        tarea=TaskResponse(**tarea),
+        mensaje="Tarea actualizada correctamente.",
     )

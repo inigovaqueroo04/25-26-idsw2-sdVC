@@ -13,7 +13,7 @@ import {
   updateGroupMember,
   updateInvitation,
 } from "./api/groups";
-import { createTask, getTasks } from "./api/tasks";
+import { createTask, getTasks, updateTask } from "./api/tasks";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -31,6 +31,7 @@ const ESTADO_LABELS = {
 
 const ROLES_GESTION_GRUPO = new Set(["Administrador", "Miembro Administrador"]);
 const ROLES_ELIMINAR_GRUPO = new Set(["Administrador"]);
+const ESTADOS_TAREA_NO_EDITABLES = new Set(["Finalizada", "Cancelada"]);
 
 
 function formatEstado(estado) {
@@ -121,6 +122,7 @@ function Dashboard({
   tareas,
   tareasError,
   tareasLoading,
+  tareaActualizandoId,
   tareaCreando,
   onCancelLogout,
   onConfirmLogout,
@@ -132,6 +134,7 @@ function Dashboard({
   onUpdateInvitation,
   onInviteUser,
   onRequestLogout,
+  onUpdateTask,
   onUpdateGroup,
   onUpdateGroupMember,
   usuario,
@@ -148,6 +151,14 @@ function Dashboard({
   const [tareaHoraFin, setTareaHoraFin] = useState("");
   const [crearTareaError, setCrearTareaError] = useState("");
   const [crearTareaMensaje, setCrearTareaMensaje] = useState("");
+  const [tareaEditandoId, setTareaEditandoId] = useState(null);
+  const [tareaEditadaTitulo, setTareaEditadaTitulo] = useState("");
+  const [tareaEditadaDescripcion, setTareaEditadaDescripcion] = useState("");
+  const [tareaEditadaFecha, setTareaEditadaFecha] = useState("");
+  const [tareaEditadaHoraInicio, setTareaEditadaHoraInicio] = useState("");
+  const [tareaEditadaHoraFin, setTareaEditadaHoraFin] = useState("");
+  const [editarTareaError, setEditarTareaError] = useState("");
+  const [editarTareaMensaje, setEditarTareaMensaje] = useState("");
   const [grupoNombre, setGrupoNombre] = useState("");
   const [grupoDescripcion, setGrupoDescripcion] = useState("");
   const [crearGrupoError, setCrearGrupoError] = useState("");
@@ -206,6 +217,7 @@ function Dashboard({
     event.preventDefault();
     setCrearTareaError("");
     setCrearTareaMensaje("");
+    setEditarTareaMensaje("");
 
     if (!tareaGrupoId || !tareaTitulo.trim() || !tareaFecha || !tareaHoraInicio || !tareaHoraFin) {
       setCrearTareaError("Grupo, titulo, fecha, hora de inicio y hora de fin son obligatorios.");
@@ -229,6 +241,58 @@ function Dashboard({
       setCrearTareaMensaje(result.mensaje);
     } catch (taskError) {
       setCrearTareaError(taskError.message);
+    }
+  }
+
+  function startEditTask(tarea) {
+    setTareaEditandoId(tarea.id);
+    setTareaEditadaTitulo(tarea.titulo);
+    setTareaEditadaDescripcion(tarea.descripcion ?? "");
+    setTareaEditadaFecha(tarea.fecha ?? "");
+    setTareaEditadaHoraInicio(tarea.hora_inicio ?? "");
+    setTareaEditadaHoraFin(tarea.hora_fin ?? "");
+    setEditarTareaError("");
+    setEditarTareaMensaje("");
+    setCrearTareaMensaje("");
+  }
+
+  function cancelEditTask() {
+    setTareaEditandoId(null);
+    setTareaEditadaTitulo("");
+    setTareaEditadaDescripcion("");
+    setTareaEditadaFecha("");
+    setTareaEditadaHoraInicio("");
+    setTareaEditadaHoraFin("");
+    setEditarTareaError("");
+  }
+
+  async function handleUpdateTask(event) {
+    event.preventDefault();
+    setEditarTareaError("");
+    setEditarTareaMensaje("");
+
+    if (
+      !tareaEditadaTitulo.trim() ||
+      !tareaEditadaFecha ||
+      !tareaEditadaHoraInicio ||
+      !tareaEditadaHoraFin
+    ) {
+      setEditarTareaError("Titulo, fecha, hora de inicio y hora de fin son obligatorios.");
+      return;
+    }
+
+    try {
+      const result = await onUpdateTask(tareaEditandoId, {
+        titulo: tareaEditadaTitulo,
+        descripcion: tareaEditadaDescripcion,
+        fecha: tareaEditadaFecha,
+        hora_inicio: tareaEditadaHoraInicio,
+        hora_fin: tareaEditadaHoraFin,
+      });
+      cancelEditTask();
+      setEditarTareaMensaje(result.mensaje);
+    } catch (taskError) {
+      setEditarTareaError(taskError.message);
     }
   }
 
@@ -993,6 +1057,7 @@ function Dashboard({
 
         {tareasLoading ? <p className="subtle">Cargando tareas...</p> : null}
         {tareasError ? <p className="error" role="alert">{tareasError}</p> : null}
+        {editarTareaMensaje ? <p className="success" role="status">{editarTareaMensaje}</p> : null}
 
         {!tareasLoading && !tareasError && tareasFiltradas.length === 0 ? (
           <p className="empty-state">No hay tareas para este filtro.</p>
@@ -1002,22 +1067,103 @@ function Dashboard({
           <div className="tasks-list">
             {tareasFiltradas.map((tarea) => (
               <article className="task-item" key={tarea.id}>
-                <div>
-                  <h3>{tarea.titulo}</h3>
-                  <p>{tarea.descripcion ?? "Sin descripcion."}</p>
-                </div>
-                <div className="task-meta">
-                  <span>{tarea.estado}</span>
-                  {tarea.fecha ? <span>{tarea.fecha}</span> : null}
-                  {tarea.hora_inicio && tarea.hora_fin ? (
-                    <span>
-                      {tarea.hora_inicio}-{tarea.hora_fin}
-                    </span>
-                  ) : null}
-                  <span>{tarea.grupo_nombre}</span>
-                  <span>{tarea.rol_grupo}</span>
-                  {tarea.es_gestionable ? <span>Gestionable</span> : null}
-                </div>
+                {tareaEditandoId === tarea.id ? (
+                  <form className="edit-task-form" onSubmit={handleUpdateTask}>
+                    <div className="edit-task-fields">
+                      <label>
+                        Titulo
+                        <input
+                          maxLength={100}
+                          onChange={(event) => setTareaEditadaTitulo(event.target.value)}
+                          type="text"
+                          value={tareaEditadaTitulo}
+                        />
+                      </label>
+
+                      <label>
+                        Fecha
+                        <input
+                          onChange={(event) => setTareaEditadaFecha(event.target.value)}
+                          type="date"
+                          value={tareaEditadaFecha}
+                        />
+                      </label>
+
+                      <label>
+                        Inicio
+                        <input
+                          onChange={(event) => setTareaEditadaHoraInicio(event.target.value)}
+                          type="time"
+                          value={tareaEditadaHoraInicio}
+                        />
+                      </label>
+
+                      <label>
+                        Fin
+                        <input
+                          onChange={(event) => setTareaEditadaHoraFin(event.target.value)}
+                          type="time"
+                          value={tareaEditadaHoraFin}
+                        />
+                      </label>
+
+                      <label className="edit-task-description">
+                        Descripcion
+                        <input
+                          maxLength={180}
+                          onChange={(event) => setTareaEditadaDescripcion(event.target.value)}
+                          type="text"
+                          value={tareaEditadaDescripcion}
+                        />
+                      </label>
+                    </div>
+
+                    {editarTareaError ? <p className="error" role="alert">{editarTareaError}</p> : null}
+
+                    <div className="edit-task-actions">
+                      <button className="secondary-button compact" type="button" onClick={cancelEditTask}>
+                        Cancelar
+                      </button>
+                      <button
+                        className="primary-button compact"
+                        disabled={tareaActualizandoId === tarea.id}
+                        type="submit"
+                      >
+                        {tareaActualizandoId === tarea.id ? "Guardando..." : "Guardar"}
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <div>
+                      <h3>{tarea.titulo}</h3>
+                      <p>{tarea.descripcion ?? "Sin descripcion."}</p>
+                    </div>
+                    <div className="task-meta">
+                      <span>{tarea.estado}</span>
+                      {tarea.fecha ? <span>{tarea.fecha}</span> : null}
+                      {tarea.hora_inicio && tarea.hora_fin ? (
+                        <span>
+                          {tarea.hora_inicio}-{tarea.hora_fin}
+                        </span>
+                      ) : null}
+                      <span>{tarea.grupo_nombre}</span>
+                      <span>{tarea.rol_grupo}</span>
+                      {tarea.es_gestionable ? <span>Gestionable</span> : null}
+                    </div>
+                    {tarea.es_gestionable && !ESTADOS_TAREA_NO_EDITABLES.has(tarea.estado) ? (
+                      <div className="task-actions">
+                        <button
+                          className="secondary-button compact"
+                          type="button"
+                          onClick={() => startEditTask(tarea)}
+                        >
+                          Editar
+                        </button>
+                      </div>
+                    ) : null}
+                  </>
+                )}
               </article>
             ))}
           </div>
@@ -1148,6 +1294,7 @@ export default function App() {
   const [tareas, setTareas] = useState([]);
   const [tareasError, setTareasError] = useState("");
   const [tareasLoading, setTareasLoading] = useState(false);
+  const [tareaActualizandoId, setTareaActualizandoId] = useState(null);
   const [tareaCreando, setTareaCreando] = useState(false);
   const [grupoCreando, setGrupoCreando] = useState(false);
   const [grupoActualizandoId, setGrupoActualizandoId] = useState(null);
@@ -1303,6 +1450,22 @@ export default function App() {
     }
   }
 
+  async function handleUpdateTask(taskId, taskInput) {
+    setTareaActualizandoId(taskId);
+
+    try {
+      const result = await updateTask(token, taskId, taskInput);
+      setTareas((currentTasks) =>
+        currentTasks.map((tarea) => (tarea.id === result.tarea.id ? result.tarea : tarea)),
+      );
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+      return result;
+    } finally {
+      setTareaActualizandoId(null);
+    }
+  }
+
   async function handleUpdateGroup(groupId, groupInput) {
     setGrupoActualizandoId(groupId);
 
@@ -1448,6 +1611,7 @@ export default function App() {
       setInvitacionesError("");
       setTareas([]);
       setTareasError("");
+      setTareaActualizandoId(null);
       setTareaCreando(false);
       setGrupoCreando(false);
       setGrupoActualizandoId(null);
@@ -1486,6 +1650,7 @@ export default function App() {
           tareas={tareas}
           tareasError={tareasError}
           tareasLoading={tareasLoading}
+          tareaActualizandoId={tareaActualizandoId}
           tareaCreando={tareaCreando}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
@@ -1497,6 +1662,7 @@ export default function App() {
           onLoadGroupMembers={handleLoadGroupMembers}
           onUpdateInvitation={handleUpdateInvitation}
           onRequestLogout={requestLogout}
+          onUpdateTask={handleUpdateTask}
           onUpdateGroup={handleUpdateGroup}
           onUpdateGroupMember={handleUpdateGroupMember}
           usuario={usuario}

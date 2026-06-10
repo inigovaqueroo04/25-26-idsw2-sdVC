@@ -5,6 +5,7 @@ from models.user import Usuario
 
 
 ROLES_GESTION_TAREAS = {"Administrador", "Miembro Administrador"}
+ESTADOS_TAREA_NO_EDITABLES = {"Finalizada", "Cancelada"}
 
 
 class TaskError(Exception):
@@ -193,6 +194,103 @@ def crear_tarea(
             ),
         )
         tarea_id = cursor.lastrowid
+
+        row = connection.execute(
+            """
+            SELECT
+                t.id,
+                t.grupo_id,
+                g.nombre AS grupo_nombre,
+                t.titulo,
+                t.descripcion,
+                t.fecha,
+                t.hora_inicio,
+                t.hora_fin,
+                t.estado,
+                mg.rol AS rol_grupo
+            FROM tareas t
+            INNER JOIN grupos g ON g.id = t.grupo_id
+            INNER JOIN miembros_grupo mg
+                ON mg.grupo_id = t.grupo_id
+               AND mg.usuario_id = ?
+            WHERE t.id = ?
+            """,
+            (usuario.id, tarea_id),
+        ).fetchone()
+
+    return tarea_row_to_response(row)
+
+
+def editar_tarea(
+    usuario: Usuario,
+    tarea_id: int,
+    titulo: str,
+    descripcion: str | None,
+    fecha: str,
+    hora_inicio: str,
+    hora_fin: str,
+) -> dict:
+    titulo_normalizado = validar_titulo_tarea(titulo)
+    descripcion_normalizada = (descripcion or "").strip() or None
+    fecha_normalizada = validar_fecha_tarea(fecha)
+    inicio_normalizado, fin_normalizado = validar_horario_tarea(hora_inicio, hora_fin)
+
+    with get_connection() as connection:
+        tarea = connection.execute(
+            """
+            SELECT
+                t.id,
+                t.estado,
+                mg.rol AS rol_grupo
+            FROM tareas t
+            INNER JOIN miembros_grupo mg
+                ON mg.grupo_id = t.grupo_id
+               AND mg.usuario_id = ?
+            WHERE t.id = ?
+            """,
+            (usuario.id, tarea_id),
+        ).fetchone()
+
+        if tarea is None:
+            raise TaskError(
+                code="tarea_no_disponible",
+                message="La tarea no existe o no esta disponible para este usuario.",
+                status_code=404,
+            )
+
+        if tarea["rol_grupo"] not in ROLES_GESTION_TAREAS:
+            raise TaskError(
+                code="usuario_sin_permisos",
+                message="No tienes permisos para editar esta tarea.",
+                status_code=403,
+            )
+
+        if tarea["estado"] in ESTADOS_TAREA_NO_EDITABLES:
+            raise TaskError(
+                code="tarea_no_editable",
+                message="No se puede editar una tarea finalizada o cancelada.",
+                status_code=409,
+            )
+
+        connection.execute(
+            """
+            UPDATE tareas
+               SET titulo = ?,
+                   descripcion = ?,
+                   fecha = ?,
+                   hora_inicio = ?,
+                   hora_fin = ?
+             WHERE id = ?
+            """,
+            (
+                titulo_normalizado,
+                descripcion_normalizada,
+                fecha_normalizada,
+                inicio_normalizado,
+                fin_normalizado,
+                tarea_id,
+            ),
+        )
 
         row = connection.execute(
             """

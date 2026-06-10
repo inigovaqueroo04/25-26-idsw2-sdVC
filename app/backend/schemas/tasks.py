@@ -10,6 +10,14 @@ class TaskCreateRequest(BaseModel):
     hora_fin: str
 
 
+class TaskUpdateRequest(BaseModel):
+    titulo: str
+    descripcion: str | None = None
+    fecha: str
+    hora_inicio: str
+    hora_fin: str
+
+
 class TaskResponse(BaseModel):
     id: int
     grupo_id: int
@@ -31,6 +39,12 @@ class TaskListResponse(BaseModel):
 
 
 class TaskCreateResponse(BaseModel):
+    estado: str
+    tarea: TaskResponse
+    mensaje: str
+
+
+class TaskUpdateResponse(BaseModel):
     estado: str
     tarea: TaskResponse
     mensaje: str

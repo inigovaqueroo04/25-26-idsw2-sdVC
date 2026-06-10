@@ -40,3 +40,14 @@ export function createTask(token, task) {
     method: "POST",
   });
 }
+
+
+export function updateTask(token, taskId, task) {
+  return request(`/tasks/${taskId}`, {
+    body: JSON.stringify(task),
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "PATCH",
+  });
+}

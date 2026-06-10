@@ -502,7 +502,7 @@ select:focus {
   border-radius: 8px;
   display: grid;
   gap: 16px;
-  grid-template-columns: minmax(220px, 1fr) minmax(260px, 1.2fr);
+  grid-template-columns: minmax(220px, 1fr) minmax(260px, 1.2fr) auto;
   padding: 16px 18px;
 }
 
@@ -533,6 +533,34 @@ select:focus {
   font-size: 0.84rem;
   font-weight: 800;
   padding: 6px 10px;
+}
+
+.task-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.edit-task-form {
+  display: grid;
+  gap: 14px;
+  grid-column: 1 / -1;
+}
+
+.edit-task-fields {
+  align-items: end;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(180px, 1.2fr) repeat(3, minmax(110px, 0.7fr));
+}
+
+.edit-task-description {
+  grid-column: 1 / -1;
+}
+
+.edit-task-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .edit-group-form {
@@ -673,19 +701,30 @@ select:focus {
 
   .tasks-filters,
   .create-task-fields,
+  .edit-task-fields,
   .task-item {
     grid-template-columns: 1fr;
   }
 
-  .create-task-description {
+  .create-task-description,
+  .edit-task-description {
     grid-column: auto;
   }
 
-  .create-task-actions {
+  .create-task-actions,
+  .edit-task-actions,
+  .task-actions {
     justify-content: stretch;
   }
 
-  .create-task-actions .primary-button {
+  .edit-task-actions {
+    flex-direction: column;
+  }
+
+  .create-task-actions .primary-button,
+  .edit-task-actions .primary-button,
+  .edit-task-actions .secondary-button,
+  .task-actions .secondary-button {
     width: 100%;
   }
 

@@ -525,3 +525,13 @@
 **Resultado:** Se implemento `crearTarea()`. La tabla `tareas` se amplio con fecha y horario, se añadió una migracion ligera para bases SQLite existentes y el backend expone `POST /api/tasks` con validacion de sesion, grupo accesible, permisos de gestion, titulo obligatorio, fecha valida y horario coherente. En React se incorporo el formulario de creacion dentro de `Mis tareas`, se conecto `createTask` y la tarea nueva se añade a la lista sin recargar. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
 
 **Decision:** Las tareas creadas quedan en estado `Programada` porque el analisis exige horario valido al guardar. Los conflictos horarios se dejan para un incremento posterior, cuando existan asignaciones de usuarios y notificaciones; en este paso se valida solo la coherencia del intervalo de la tarea.
+
+---
+
+## [2026-06-10 18:16] Edicion basica de tareas programadas
+
+**Prompt:** Se continuo con el siguiente avance conveniente del modulo de tareas y se decidio trabajar `editarTarea()`: permitir que una persona con permisos de gestion sobre el grupo pueda abrir una tarea gestionable desde `Mis tareas`, modificar titulo, descripcion, fecha, hora de inicio y hora de fin, cancelar la edicion o guardar los cambios sin salir del panel.
+
+**Resultado:** Se implemento `editarTarea()`. El backend expone `PATCH /api/tasks/{task_id}` y reutiliza las validaciones de titulo, fecha y horario de `crearTarea()`, comprobando ademas que la tarea sea visible para el usuario, que su rol en el grupo permita gestion y que la tarea no este `Finalizada` ni `Cancelada`. En React se anadio la llamada `updateTask`, un boton `Editar` solo para tareas gestionables abiertas, un formulario inline con los datos actuales y actualizacion de la lista tras guardar. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
+
+**Decision:** La edicion queda limitada a los datos base ya implementados de la tarea. No se permite mover una tarea de grupo ni modificar asignaciones, relaciones, conflictos o recordatorios porque esos comportamientos pertenecen a casos de uso posteriores. Las tareas `Finalizada` y `Cancelada` se tratan como registros cerrados hasta que exista una regla especifica para reabrirlas o corregirlas.
