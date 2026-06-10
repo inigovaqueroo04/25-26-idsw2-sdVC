@@ -155,6 +155,7 @@ function Dashboard({
   const [invitarUsuarioMensaje, setInvitarUsuarioMensaje] = useState("");
   const [editarInvitacionError, setEditarInvitacionError] = useState("");
   const [editarInvitacionMensaje, setEditarInvitacionMensaje] = useState("");
+  const [invitacionConfirmandoCancelarId, setInvitacionConfirmandoCancelarId] = useState(null);
   const [filtroInvitacionesEstado, setFiltroInvitacionesEstado] = useState("Pendiente");
   const gruposFiltrados = grupos.filter((grupo) =>
     grupo.nombre.toLowerCase().includes(filtroGrupos.trim().toLowerCase()),
@@ -420,10 +421,22 @@ function Dashboard({
 
     try {
       const result = await onUpdateInvitation(invitationId, estadoDestino);
+      setInvitacionConfirmandoCancelarId(null);
       setEditarInvitacionMensaje(result.mensaje);
     } catch (invitationError) {
       setEditarInvitacionError(invitationError.message);
     }
+  }
+
+  function requestCancelInvitation(invitationId) {
+    setInvitacionConfirmandoCancelarId(invitationId);
+    setEditarInvitacionError("");
+    setEditarInvitacionMensaje("");
+  }
+
+  function cancelCancelInvitation() {
+    setInvitacionConfirmandoCancelarId(null);
+    setEditarInvitacionError("");
   }
 
   return (
@@ -854,6 +867,38 @@ function Dashboard({
                     >
                       {invitacionActualizandoId === invitacion.id ? "Guardando..." : "Aceptar"}
                     </button>
+                  </div>
+                ) : null}
+
+                {invitacion.es_gestionable && invitacion.estado === "Pendiente" ? (
+                  <div className="invitation-actions">
+                    <button
+                      className="danger-button compact"
+                      disabled={invitacionActualizandoId === invitacion.id}
+                      type="button"
+                      onClick={() => requestCancelInvitation(invitacion.id)}
+                    >
+                      Cancelar invitacion
+                    </button>
+                  </div>
+                ) : null}
+
+                {invitacionConfirmandoCancelarId === invitacion.id ? (
+                  <div className="delete-confirmation invitation-cancel-confirmation" role="alert">
+                    <p>Confirmar cancelacion de la invitacion.</p>
+                    <div className="group-actions">
+                      <button className="secondary-button compact" type="button" onClick={cancelCancelInvitation}>
+                        Cancelar
+                      </button>
+                      <button
+                        className="danger-button compact"
+                        disabled={invitacionActualizandoId === invitacion.id}
+                        type="button"
+                        onClick={() => handleUpdateInvitation(invitacion.id, "Cancelada")}
+                      >
+                        {invitacionActualizandoId === invitacion.id ? "Cancelando..." : "Confirmar"}
+                      </button>
+                    </div>
                   </div>
                 ) : null}
               </article>

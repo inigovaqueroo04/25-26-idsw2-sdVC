@@ -19,7 +19,7 @@ ROL_ELIMINAR_GRUPO = "Administrador"
 ROLES_MIEMBRO_GRUPO = {"Administrador", "Miembro Administrador", "Miembro"}
 ROLES_INVITACION = {"Miembro Administrador", "Miembro"}
 ESTADOS_INVITACION = {"Pendiente", "Aceptada", "Rechazada", "Caducada", "Cancelada"}
-ESTADOS_DECISION_INVITACION = {"Aceptada", "Rechazada"}
+ESTADOS_DECISION_INVITACION = {"Aceptada", "Rechazada", "Cancelada"}
 EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
@@ -210,7 +210,7 @@ def validar_decision_invitacion(estado: str) -> str:
     if estado_normalizado not in ESTADOS_DECISION_INVITACION:
         raise GroupError(
             code="decision_invitacion_invalida",
-            message="La invitacion solo puede aceptarse o rechazarse.",
+            message="La invitacion solo puede aceptarse, rechazarse o cancelarse.",
             status_code=400,
         )
 
@@ -505,11 +505,18 @@ def editar_invitacion(usuario: Usuario, invitacion_id: int, estado: str) -> dict
                 i.email_invitado,
                 i.rol_propuesto,
                 i.fecha_limite,
-                i.estado
+                i.estado,
+                CASE
+                    WHEN mg.rol IN ('Administrador', 'Miembro Administrador') THEN 1
+                    ELSE 0
+                END AS es_gestionable
             FROM invitaciones i
+            LEFT JOIN miembros_grupo mg
+                ON mg.grupo_id = i.grupo_id
+               AND mg.usuario_id = ?
             WHERE i.id = ?
             """,
-            (invitacion_id,),
+            (usuario.id, invitacion_id),
         ).fetchone()
 
         if invitacion is None:
@@ -519,7 +526,17 @@ def editar_invitacion(usuario: Usuario, invitacion_id: int, estado: str) -> dict
                 status_code=404,
             )
 
-        if invitacion["email_invitado"].lower() != email_usuario:
+        es_destinatario = invitacion["email_invitado"].lower() == email_usuario
+        es_gestionable = bool(invitacion["es_gestionable"])
+
+        if decision == "Cancelada":
+            if not es_gestionable:
+                raise GroupError(
+                    code="invitacion_sin_permisos",
+                    message="No tienes permisos para cancelar esta invitacion.",
+                    status_code=403,
+                )
+        elif not es_destinatario:
             raise GroupError(
                 code="invitacion_sin_permisos",
                 message="No tienes permisos para gestionar esta invitacion.",
@@ -534,6 +551,11 @@ def editar_invitacion(usuario: Usuario, invitacion_id: int, estado: str) -> dict
             )
 
         if date.fromisoformat(invitacion["fecha_limite"]) < date.today():
+            mensaje_caducidad = (
+                "La invitacion ha caducado y no puede cancelarse."
+                if decision == "Cancelada"
+                else "La invitacion ha caducado y no puede aceptarse ni rechazarse."
+            )
             connection.execute(
                 """
                 UPDATE invitaciones
@@ -545,7 +567,7 @@ def editar_invitacion(usuario: Usuario, invitacion_id: int, estado: str) -> dict
             connection.commit()
             raise GroupError(
                 code="invitacion_caducada",
-                message="La invitacion ha caducado y no puede aceptarse ni rechazarse.",
+                message=mensaje_caducidad,
                 status_code=409,
             )
 
@@ -596,7 +618,10 @@ def editar_invitacion(usuario: Usuario, invitacion_id: int, estado: str) -> dict
                 i.fecha_limite,
                 i.estado,
                 u.nombre AS invitado_por,
-                1 AS es_destinatario,
+                CASE
+                    WHEN lower(i.email_invitado) = lower(?) THEN 1
+                    ELSE 0
+                END AS es_destinatario,
                 CASE
                     WHEN mg.rol IN ('Administrador', 'Miembro Administrador') THEN 1
                     ELSE 0
@@ -609,7 +634,7 @@ def editar_invitacion(usuario: Usuario, invitacion_id: int, estado: str) -> dict
                AND mg.usuario_id = ?
             WHERE i.id = ?
             """,
-            (usuario.id, invitacion_id),
+            (usuario.email, usuario.id, invitacion_id),
         ).fetchone()
 
     return invitacion_row_to_response(row)

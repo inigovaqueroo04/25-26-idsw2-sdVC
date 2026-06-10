@@ -521,6 +521,10 @@ select:focus {
   grid-column: 1 / -1;
 }
 
+.invitation-cancel-confirmation {
+  grid-column: 1 / -1;
+}
+
 .group-actions {
   display: flex;
   flex-wrap: wrap;

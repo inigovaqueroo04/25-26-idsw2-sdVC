@@ -31,6 +31,7 @@ npm run dev
 - Registrar una invitacion pendiente desde la tarjeta de un grupo gestionable.
 - Mostrar `Mis invitaciones` con invitaciones pendientes por defecto y filtro por estado.
 - Aceptar o rechazar invitaciones pendientes recibidas desde `Mis invitaciones`.
+- Cancelar invitaciones pendientes gestionables desde `Mis invitaciones`.
 - Abrir `Miembros` en grupos gestionables y cambiar el rol de un miembro.
 - Eliminar un miembro de un grupo gestionable con confirmacion.
 - Cerrar sesion y volver a `SESION_CERRADA`.

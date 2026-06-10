@@ -495,3 +495,13 @@
 **Resultado:** Se implemento `eliminarMiembro()`. El backend expone `DELETE /api/groups/{group_id}/members/{member_id}`, valida sesion, pertenencia al grupo, permisos de gestion, existencia del miembro y que no se elimine el ultimo `Administrador` o `Miembro Administrador`. En React se añadio la llamada `deleteGroupMember`, un boton `Eliminar` por miembro, confirmacion inline, estado de carga durante la baja y actualizacion de la lista de miembros junto con el contador del grupo. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
 
 **Decision:** La operacion elimina solo la relacion `MiembroGrupo`; la entidad `Usuario` se conserva porque puede pertenecer a otros grupos o volver a ser invitada mas adelante. La confirmacion queda dentro de la fila para reducir ambiguedad sobre que persona se va a retirar. La gestion de tareas asociadas no se implementa en este incremento porque el subsistema de tareas todavia no existe en codigo.
+
+---
+
+## [2026-06-10 17:30] Cancelacion de invitaciones pendientes
+
+**Prompt:** Tras cerrar la eliminacion de miembros, se pidio continuar con el siguiente avance conveniente. Como las invitaciones ya podian crearse, listarse, aceptarse y rechazarse, se completo el flujo permitiendo que un usuario con permisos de gestion sobre el grupo cancele una invitacion pendiente antes de que el destinatario la acepte o rechace.
+
+**Resultado:** Se amplio `editarInvitacion()` para admitir el estado `Cancelada` con permisos distintos a aceptar o rechazar. El destinatario sigue siendo el unico que puede aceptar o rechazar; en cambio, `Administrador` y `Miembro Administrador` del grupo pueden cancelar invitaciones pendientes gestionables. En React se añadio el boton `Cancelar invitacion`, una confirmacion inline y la actualizacion del estado en `Mis invitaciones`. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
+
+**Decision:** La cancelacion se mantiene dentro de `editarInvitacion()` porque tecnicamente cambia el estado de una invitacion existente y no crea una entidad nueva. Cancelar no elimina la invitacion ni al usuario invitado: conserva el registro como historial funcional y evita crear una membresia.

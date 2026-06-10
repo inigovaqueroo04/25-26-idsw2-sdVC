@@ -32,7 +32,8 @@ Casos cubiertos en codigo:
 - `abrirInvitaciones()`: listado de invitaciones recibidas o gestionables con
   filtro por estado.
 - `editarInvitacion()`: aceptacion o rechazo de invitaciones pendientes
-  recibidas; aceptar crea la membresia en el grupo.
+  recibidas y cancelacion de invitaciones pendientes gestionables; aceptar crea
+  la membresia en el grupo.
 - `editarMiembro()`: listado de miembros de grupos gestionables y cambio de rol
   dentro de `MiembroGrupo`.
 - `eliminarMiembro()`: retirada confirmada de una pertenencia al grupo sin
@@ -40,7 +41,7 @@ Casos cubiertos en codigo:
 
 Pendiente del modulo de grupos:
 
-- cancelar invitaciones enviadas.
+- sin pendientes funcionales inmediatos en grupos antes de iniciar tareas.
 
 ## Criterio de seguimiento
 

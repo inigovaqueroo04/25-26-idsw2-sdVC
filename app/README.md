@@ -27,11 +27,11 @@ app/
 - `eliminarGrupo()`: elimina un grupo propio con rol `Administrador` tras confirmacion.
 - `invitarUsuario()`: registra una invitacion pendiente con email, rol propuesto y fecha limite.
 - `abrirInvitaciones()`: muestra invitaciones recibidas o gestionables por el usuario con filtro por estado.
-- `editarInvitacion()`: permite aceptar o rechazar invitaciones pendientes recibidas.
+- `editarInvitacion()`: permite aceptar o rechazar invitaciones pendientes recibidas y cancelar invitaciones gestionables.
 - `editarMiembro()`: permite consultar miembros de un grupo gestionable y cambiar su rol dentro del grupo.
 - `eliminarMiembro()`: retira un miembro de un grupo gestionable tras confirmacion.
 
-No se han implementado todavia cancelacion de invitaciones enviadas, tareas, planificacion ni recordatorios.
+No se han implementado todavia tareas, planificacion ni recordatorios.
 
 ## Inicializar la base de datos
 
@@ -83,7 +83,6 @@ El usuario de prueba pertenece a:
 
 ## Pendiente para siguientes iteraciones
 
-- Cancelar invitaciones enviadas.
 - Gestion de tareas.
 - Planificacion y configuracion.
 - Recordatorios.

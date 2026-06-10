@@ -58,6 +58,8 @@ filtro opcional `estado`.
 `PATCH /api/groups/invitations/{invitation_id}` permite al destinatario aceptar
 o rechazar una invitacion pendiente. Si acepta, crea la membresia en el grupo
 con el rol propuesto; si rechaza, solo actualiza el estado de la invitacion.
+Tambien permite a un `Administrador` o `Miembro Administrador` del grupo
+cancelar invitaciones pendientes.
 
 `GET /api/groups/{group_id}/members` lista miembros de un grupo gestionable.
 `PATCH /api/groups/{group_id}/members/{member_id}` cambia el rol del miembro y
