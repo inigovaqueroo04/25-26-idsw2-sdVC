@@ -3,13 +3,14 @@ from fastapi import APIRouter, Header, HTTPException
 from schemas.tasks import (
     TaskCreateRequest,
     TaskCreateResponse,
+    TaskDeleteResponse,
     TaskListResponse,
     TaskResponse,
     TaskUpdateRequest,
     TaskUpdateResponse,
 )
 from services.auth_service import AuthError, obtener_usuario
-from services.task_service import TaskError, crear_tarea, editar_tarea, listar_tareas_usuario
+from services.task_service import TaskError, crear_tarea, editar_tarea, eliminar_tarea, listar_tareas_usuario
 
 
 router = APIRouter()
@@ -98,4 +99,24 @@ def update_task(
         estado="TAREA_ABIERTO",
         tarea=TaskResponse(**tarea),
         mensaje="Tarea actualizada correctamente.",
+    )
+
+
+@router.delete("/{task_id}", response_model=TaskDeleteResponse)
+def delete_task(
+    task_id: int,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        tarea_id = eliminar_tarea(usuario, task_id)
+    except AuthError as error:
+        raise_auth_error(error)
+    except TaskError as error:
+        raise_task_error(error)
+
+    return TaskDeleteResponse(
+        estado="TAREAS_ABIERTO",
+        tarea_id=tarea_id,
+        mensaje="Tarea eliminada correctamente.",
     )

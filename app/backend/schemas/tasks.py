@@ -48,3 +48,9 @@ class TaskUpdateResponse(BaseModel):
     estado: str
     tarea: TaskResponse
     mensaje: str
+
+
+class TaskDeleteResponse(BaseModel):
+    estado: str
+    tarea_id: int
+    mensaje: str

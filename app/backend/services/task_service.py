@@ -316,3 +316,38 @@ def editar_tarea(
         ).fetchone()
 
     return tarea_row_to_response(row)
+
+
+def eliminar_tarea(usuario: Usuario, tarea_id: int) -> int:
+    with get_connection() as connection:
+        tarea = connection.execute(
+            """
+            SELECT
+                t.id,
+                mg.rol AS rol_grupo
+            FROM tareas t
+            INNER JOIN miembros_grupo mg
+                ON mg.grupo_id = t.grupo_id
+               AND mg.usuario_id = ?
+            WHERE t.id = ?
+            """,
+            (usuario.id, tarea_id),
+        ).fetchone()
+
+        if tarea is None:
+            raise TaskError(
+                code="tarea_no_disponible",
+                message="La tarea no existe o no esta disponible para este usuario.",
+                status_code=404,
+            )
+
+        if tarea["rol_grupo"] not in ROLES_GESTION_TAREAS:
+            raise TaskError(
+                code="usuario_sin_permisos",
+                message="No tienes permisos para eliminar esta tarea.",
+                status_code=403,
+            )
+
+        connection.execute("DELETE FROM tareas WHERE id = ?", (tarea_id,))
+
+    return tarea_id

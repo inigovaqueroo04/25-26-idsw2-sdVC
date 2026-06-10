@@ -13,7 +13,7 @@ import {
   updateGroupMember,
   updateInvitation,
 } from "./api/groups";
-import { createTask, getTasks, updateTask } from "./api/tasks";
+import { createTask, deleteTask, getTasks, updateTask } from "./api/tasks";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -124,9 +124,11 @@ function Dashboard({
   tareasLoading,
   tareaActualizandoId,
   tareaCreando,
+  tareaEliminandoId,
   onCancelLogout,
   onConfirmLogout,
   onCreateTask,
+  onDeleteTask,
   onCreateGroup,
   onDeleteGroup,
   onDeleteGroupMember,
@@ -159,6 +161,9 @@ function Dashboard({
   const [tareaEditadaHoraFin, setTareaEditadaHoraFin] = useState("");
   const [editarTareaError, setEditarTareaError] = useState("");
   const [editarTareaMensaje, setEditarTareaMensaje] = useState("");
+  const [tareaConfirmandoEliminarId, setTareaConfirmandoEliminarId] = useState(null);
+  const [eliminarTareaError, setEliminarTareaError] = useState("");
+  const [eliminarTareaMensaje, setEliminarTareaMensaje] = useState("");
   const [grupoNombre, setGrupoNombre] = useState("");
   const [grupoDescripcion, setGrupoDescripcion] = useState("");
   const [crearGrupoError, setCrearGrupoError] = useState("");
@@ -293,6 +298,32 @@ function Dashboard({
       setEditarTareaMensaje(result.mensaje);
     } catch (taskError) {
       setEditarTareaError(taskError.message);
+    }
+  }
+
+  function requestDeleteTask(taskId) {
+    setTareaConfirmandoEliminarId(taskId);
+    setEliminarTareaError("");
+    setEliminarTareaMensaje("");
+    setEditarTareaMensaje("");
+    setCrearTareaMensaje("");
+  }
+
+  function cancelDeleteTask() {
+    setTareaConfirmandoEliminarId(null);
+    setEliminarTareaError("");
+  }
+
+  async function handleDeleteTask(taskId) {
+    setEliminarTareaError("");
+    setEliminarTareaMensaje("");
+
+    try {
+      const result = await onDeleteTask(taskId);
+      setTareaConfirmandoEliminarId(null);
+      setEliminarTareaMensaje(result.mensaje);
+    } catch (taskError) {
+      setEliminarTareaError(taskError.message);
     }
   }
 
@@ -1058,6 +1089,8 @@ function Dashboard({
         {tareasLoading ? <p className="subtle">Cargando tareas...</p> : null}
         {tareasError ? <p className="error" role="alert">{tareasError}</p> : null}
         {editarTareaMensaje ? <p className="success" role="status">{editarTareaMensaje}</p> : null}
+        {eliminarTareaMensaje ? <p className="success" role="status">{eliminarTareaMensaje}</p> : null}
+        {eliminarTareaError ? <p className="error" role="alert">{eliminarTareaError}</p> : null}
 
         {!tareasLoading && !tareasError && tareasFiltradas.length === 0 ? (
           <p className="empty-state">No hay tareas para este filtro.</p>
@@ -1160,6 +1193,32 @@ function Dashboard({
                         >
                           Editar
                         </button>
+                        <button
+                          className="danger-button compact"
+                          disabled={tareaEliminandoId === tarea.id}
+                          type="button"
+                          onClick={() => requestDeleteTask(tarea.id)}
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    ) : null}
+                    {tareaConfirmandoEliminarId === tarea.id ? (
+                      <div className="delete-confirmation task-delete-confirmation" role="alert">
+                        <p>Confirmar eliminacion de la tarea.</p>
+                        <div className="task-actions">
+                          <button className="secondary-button compact" type="button" onClick={cancelDeleteTask}>
+                            Cancelar
+                          </button>
+                          <button
+                            className="danger-button compact"
+                            disabled={tareaEliminandoId === tarea.id}
+                            type="button"
+                            onClick={() => handleDeleteTask(tarea.id)}
+                          >
+                            {tareaEliminandoId === tarea.id ? "Eliminando..." : "Confirmar"}
+                          </button>
+                        </div>
                       </div>
                     ) : null}
                   </>
@@ -1296,6 +1355,7 @@ export default function App() {
   const [tareasLoading, setTareasLoading] = useState(false);
   const [tareaActualizandoId, setTareaActualizandoId] = useState(null);
   const [tareaCreando, setTareaCreando] = useState(false);
+  const [tareaEliminandoId, setTareaEliminandoId] = useState(null);
   const [grupoCreando, setGrupoCreando] = useState(false);
   const [grupoActualizandoId, setGrupoActualizandoId] = useState(null);
   const [grupoEliminandoId, setGrupoEliminandoId] = useState(null);
@@ -1466,6 +1526,20 @@ export default function App() {
     }
   }
 
+  async function handleDeleteTask(taskId) {
+    setTareaEliminandoId(taskId);
+
+    try {
+      const result = await deleteTask(token, taskId);
+      setTareas((currentTasks) => currentTasks.filter((tarea) => tarea.id !== result.tarea_id));
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+      return result;
+    } finally {
+      setTareaEliminandoId(null);
+    }
+  }
+
   async function handleUpdateGroup(groupId, groupInput) {
     setGrupoActualizandoId(groupId);
 
@@ -1613,6 +1687,7 @@ export default function App() {
       setTareasError("");
       setTareaActualizandoId(null);
       setTareaCreando(false);
+      setTareaEliminandoId(null);
       setGrupoCreando(false);
       setGrupoActualizandoId(null);
       setGrupoEliminandoId(null);
@@ -1652,9 +1727,11 @@ export default function App() {
           tareasLoading={tareasLoading}
           tareaActualizandoId={tareaActualizandoId}
           tareaCreando={tareaCreando}
+          tareaEliminandoId={tareaEliminandoId}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
           onCreateTask={handleCreateTask}
+          onDeleteTask={handleDeleteTask}
           onCreateGroup={handleCreateGroup}
           onDeleteGroup={handleDeleteGroup}
           onDeleteGroupMember={handleDeleteGroupMember}

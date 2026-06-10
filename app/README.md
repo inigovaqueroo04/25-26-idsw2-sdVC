@@ -36,8 +36,9 @@ app/
 - `abrirTareas()`: consulta las tareas visibles para los grupos del usuario y permite filtrarlas.
 - `crearTarea()`: registra una tarea programada con fecha y horario dentro de un grupo gestionable.
 - `editarTarea()`: permite corregir titulo, descripcion, fecha y horario de una tarea gestionable.
+- `eliminarTarea()`: elimina una tarea gestionable tras confirmacion.
 
-No se han implementado todavia eliminacion de tareas, planificacion avanzada ni recordatorios.
+No se han implementado todavia finalizacion de tareas, planificacion avanzada ni recordatorios.
 
 ## Inicializar la base de datos
 
@@ -89,7 +90,6 @@ El usuario de prueba pertenece a:
 
 ## Pendiente para siguientes iteraciones
 
-- Eliminar tareas.
 - Marcar tareas como completadas.
 - Planificacion y configuracion.
 - Recordatorios.

@@ -537,7 +537,13 @@ select:focus {
 
 .task-actions {
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   justify-content: flex-end;
+}
+
+.task-delete-confirmation {
+  grid-column: 1 / -1;
 }
 
 .edit-task-form {
@@ -717,6 +723,10 @@ select:focus {
     justify-content: stretch;
   }
 
+  .task-actions {
+    flex-direction: column;
+  }
+
   .edit-task-actions {
     flex-direction: column;
   }
@@ -724,6 +734,7 @@ select:focus {
   .create-task-actions .primary-button,
   .edit-task-actions .primary-button,
   .edit-task-actions .secondary-button,
+  .task-actions .danger-button,
   .task-actions .secondary-button {
     width: 100%;
   }

@@ -535,3 +535,13 @@
 **Resultado:** Se implemento `editarTarea()`. El backend expone `PATCH /api/tasks/{task_id}` y reutiliza las validaciones de titulo, fecha y horario de `crearTarea()`, comprobando ademas que la tarea sea visible para el usuario, que su rol en el grupo permita gestion y que la tarea no este `Finalizada` ni `Cancelada`. En React se anadio la llamada `updateTask`, un boton `Editar` solo para tareas gestionables abiertas, un formulario inline con los datos actuales y actualizacion de la lista tras guardar. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
 
 **Decision:** La edicion queda limitada a los datos base ya implementados de la tarea. No se permite mover una tarea de grupo ni modificar asignaciones, relaciones, conflictos o recordatorios porque esos comportamientos pertenecen a casos de uso posteriores. Las tareas `Finalizada` y `Cancelada` se tratan como registros cerrados hasta que exista una regla especifica para reabrirlas o corregirlas.
+
+---
+
+## [2026-06-10 18:29] Eliminacion confirmada de tareas
+
+**Prompt:** Tras publicar la edicion basica de tareas, se continuo con el siguiente avance conveniente del modulo y se decidio trabajar `eliminarTarea()`: permitir que una persona con permisos de gestion sobre el grupo pueda pulsar `Eliminar` en una tarea gestionable, revisar una confirmacion inline, cancelar si se equivoca o confirmar para retirarla del listado.
+
+**Resultado:** Se implemento `eliminarTarea()`. El backend expone `DELETE /api/tasks/{task_id}` y comprueba sesion activa, visibilidad de la tarea y permisos de gestion sobre el grupo antes de borrar la fila. En React se anadio la llamada `deleteTask`, el boton `Eliminar`, una confirmacion inline con `Cancelar` y `Confirmar`, el estado de eliminacion y la retirada de la tarea de `Mis tareas` tras una respuesta correcta. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
+
+**Decision:** El borrado vuelve al estado `TAREAS_ABIERTO` y se limita a la entidad `Tarea`. No se implementa todavia limpieza de subtareas, relaciones o conflictos porque esas estructuras no existen en codigo; cuando se incorporen, `eliminarTarea()` tendra que ampliar su regla de integridad.

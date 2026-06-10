@@ -51,3 +51,13 @@ export function updateTask(token, taskId, task) {
     method: "PATCH",
   });
 }
+
+
+export function deleteTask(token, taskId) {
+  return request(`/tasks/${taskId}`, {
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "DELETE",
+  });
+}
