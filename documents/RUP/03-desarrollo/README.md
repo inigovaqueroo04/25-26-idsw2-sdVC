@@ -13,6 +13,7 @@ ya se han transformado en codigo ejecutable.
 | --- | --- | --- | --- |
 | Gestion de sesion y navegacion | Implementado | [`app/`](../../../app/README.md) | Primer vertical con React, FastAPI y SQLite |
 | Gestion de grupos y usuarios | En progreso | [`app/`](../../../app/README.md) | CRUD basico de grupos, invitaciones recibidas y gestion de miembros implementados |
+| Gestion de tareas | En progreso | [`app/`](../../../app/README.md) | Consulta inicial de tareas implementada |
 
 Casos cubiertos en codigo:
 
@@ -38,10 +39,18 @@ Casos cubiertos en codigo:
   dentro de `MiembroGrupo`.
 - `eliminarMiembro()`: retirada confirmada de una pertenencia al grupo sin
   borrar el usuario global.
+- `abrirTareas()`: listado de tareas visibles para el usuario autenticado y
+  filtrado por texto, grupo y estado.
 
 Pendiente del modulo de grupos:
 
 - sin pendientes funcionales inmediatos en grupos antes de iniciar tareas.
+
+Pendiente del modulo de tareas:
+
+- crear tareas.
+- editar y eliminar tareas.
+- marcar tareas como completadas.
 
 ## Criterio de seguimiento
 

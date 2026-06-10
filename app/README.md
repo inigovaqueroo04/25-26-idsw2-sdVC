@@ -31,7 +31,11 @@ app/
 - `editarMiembro()`: permite consultar miembros de un grupo gestionable y cambiar su rol dentro del grupo.
 - `eliminarMiembro()`: retira un miembro de un grupo gestionable tras confirmacion.
 
-No se han implementado todavia tareas, planificacion ni recordatorios.
+### Gestion de tareas
+
+- `abrirTareas()`: consulta las tareas visibles para los grupos del usuario y permite filtrarlas.
+
+No se han implementado todavia creacion o edicion de tareas, planificacion ni recordatorios.
 
 ## Inicializar la base de datos
 
@@ -83,7 +87,9 @@ El usuario de prueba pertenece a:
 
 ## Pendiente para siguientes iteraciones
 
-- Gestion de tareas.
+- Crear tareas.
+- Editar y eliminar tareas.
+- Marcar tareas como completadas.
 - Planificacion y configuracion.
 - Recordatorios.
 - Seguridad de sesion mas robusta y persistente.

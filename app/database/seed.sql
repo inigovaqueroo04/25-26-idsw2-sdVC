@@ -16,3 +16,9 @@ INSERT OR IGNORE INTO miembros_grupo (id, usuario_id, grupo_id, rol)
 VALUES
     (1, 1, 1, 'Administrador'),
     (2, 1, 2, 'Miembro Administrador');
+
+INSERT OR IGNORE INTO tareas (id, grupo_id, titulo, descripcion, estado, creado_por)
+VALUES
+    (1, 1, 'Revisar compra semanal', 'Preparar la lista compartida antes del fin de semana.', 'Creada', 1),
+    (2, 1, 'Organizar limpieza', 'Coordinar turnos para las zonas comunes.', 'Programada', 1),
+    (3, 2, 'Preparar entrega de diseño', 'Revisar materiales antes de la siguiente reunion.', 'Creada', 1);

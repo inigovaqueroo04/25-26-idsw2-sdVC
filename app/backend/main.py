@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import init_db
 from routes.auth import router as auth_router
 from routes.groups import router as groups_router
+from routes.tasks import router as tasks_router
 
 
 @asynccontextmanager
@@ -34,8 +35,9 @@ app.add_middleware(
 
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 app.include_router(groups_router, prefix="/api/groups", tags=["groups"])
+app.include_router(tasks_router, prefix="/api/tasks", tags=["tasks"])
 
 
 @app.get("/api/health")
 def health_check():
-    return {"estado": "ok", "modulos": ["gestion-sesion-navegacion", "gestion-grupos-usuarios"]}
+    return {"estado": "ok", "modulos": ["gestion-sesion-navegacion", "gestion-grupos-usuarios", "gestion-tareas"]}

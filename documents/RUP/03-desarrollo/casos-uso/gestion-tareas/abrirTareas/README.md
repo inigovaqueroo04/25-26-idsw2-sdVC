@@ -1,9 +1,59 @@
-﻿# abrirTareas > Desarrollo
+# abrirTareas() > Desarrollo
 
-Plantilla de seguimiento de implementacion del caso de uso $name().
+Implementado como primer incremento vertical de gestion de tareas.
 
-## Pendiente
+## Alcance implementado
 
-- Registrar archivos de codigo asociados.
-- Registrar decisiones tomadas durante la implementacion.
-- Vincular endpoints, componentes o comandos cuando existan.
+- Crear la tabla `tareas` y datos iniciales de ejemplo.
+- Consultar tareas visibles para el usuario autenticado segun sus membresias de
+  grupo.
+- Mostrar titulo, descripcion, grupo, estado, rol del usuario en el grupo y si
+  la tarea sera gestionable en incrementos posteriores.
+- Filtrar tareas en frontend por texto, grupo y estado.
+
+## Backend
+
+Archivos principales:
+
+- `app/database/schema.sql`
+- `app/database/seed.sql`
+- `app/backend/routes/tasks.py`
+- `app/backend/services/task_service.py`
+- `app/backend/schemas/tasks.py`
+- `app/backend/main.py`
+
+Endpoint incorporado:
+
+```http
+GET /api/tasks
+```
+
+La consulta usa la sesion activa y solo devuelve tareas de grupos donde existe
+una fila en `miembros_grupo` para el usuario. No acepta todavia parametros de
+modificacion porque este caso de uso es de apertura y consulta.
+
+## Frontend
+
+Archivos principales:
+
+- `app/frontend/src/api/tasks.js`
+- `app/frontend/src/App.jsx`
+- `app/frontend/src/App.css`
+
+El dashboard incorpora la seccion `Mis tareas`, cargada al iniciar sesion y al
+restaurarla desde `localStorage`. La lista permite filtrar por texto, grupo y
+estado sin recargar la pagina.
+
+## Decisiones
+
+- `abrirTareas()` se limita a lectura y filtrado; crear, editar, eliminar o
+  marcar como completada quedan para casos de uso posteriores.
+- La visibilidad depende de la pertenencia al grupo, no del rol global del
+  usuario.
+- Al eliminar un grupo, el backend elimina tambien sus tareas para no dejar
+  registros huerfanos.
+
+## Estado resultante
+
+El modulo de tareas queda iniciado en codigo con consulta real sobre SQLite y
+una vista usable en el dashboard.

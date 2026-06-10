@@ -25,6 +25,8 @@ npm run dev
 - Mostrar el panel principal con estado de sesion activo.
 - Mostrar la seccion `Mis grupos` con los grupos del usuario autenticado.
 - Filtrar grupos por nombre desde el frontend.
+- Mostrar la seccion `Mis tareas` con tareas de los grupos accesibles.
+- Filtrar tareas por texto, grupo y estado.
 - Crear un grupo nuevo desde el dashboard.
 - Editar nombre y descripcion de un grupo propio desde su tarjeta.
 - Eliminar un grupo propio con confirmacion desde su tarjeta.

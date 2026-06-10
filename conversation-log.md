@@ -505,3 +505,13 @@
 **Resultado:** Se amplio `editarInvitacion()` para admitir el estado `Cancelada` con permisos distintos a aceptar o rechazar. El destinatario sigue siendo el unico que puede aceptar o rechazar; en cambio, `Administrador` y `Miembro Administrador` del grupo pueden cancelar invitaciones pendientes gestionables. En React se añadio el boton `Cancelar invitacion`, una confirmacion inline y la actualizacion del estado en `Mis invitaciones`. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
 
 **Decision:** La cancelacion se mantiene dentro de `editarInvitacion()` porque tecnicamente cambia el estado de una invitacion existente y no crea una entidad nueva. Cancelar no elimina la invitacion ni al usuario invitado: conserva el registro como historial funcional y evita crear una membresia.
+
+---
+
+## [2026-06-10 17:45] Consulta inicial de tareas
+
+**Prompt:** Despues de subir a GitHub los ultimos commits y cerrar los flujos principales de grupos, invitaciones y miembros, se inicio el modulo de tareas por su caso base: permitir que el usuario autenticado abra una lista de tareas visibles para sus grupos, consulte su titulo, descripcion, estado y grupo, y pueda filtrar la lista sin crear ni modificar tareas todavia.
+
+**Resultado:** Se implemento `abrirTareas()`. La base SQLite incorpora la tabla `tareas` y datos iniciales; el backend expone `GET /api/tasks`, que devuelve solo tareas de grupos donde el usuario tiene membresia; y React muestra la nueva seccion `Mis tareas` con filtros por texto, grupo y estado. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
+
+**Decision:** El primer incremento de tareas queda limitado a consulta y filtrado porque crear, editar, eliminar y marcar completada son casos de uso propios. La visibilidad se basa en `MiembroGrupo`, no en el rol global del usuario, para mantener coherencia con el diseño aplicado en grupos.

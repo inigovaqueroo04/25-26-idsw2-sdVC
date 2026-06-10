@@ -13,6 +13,7 @@ import {
   updateGroupMember,
   updateInvitation,
 } from "./api/groups";
+import { getTasks } from "./api/tasks";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -22,6 +23,7 @@ const ESTADO_LABELS = {
   SISTEMA_DISPONIBLE: "Sesión activa",
   GRUPOS_ABIERTO: "Grupos disponibles",
   GRUPO_ABIERTO: "Grupo abierto",
+  TAREAS_ABIERTO: "Tareas abiertas",
   INVITACIONES_ABIERTO: "Invitaciones abiertas",
   INVITACION_ABIERTA: "Invitación abierta",
 };
@@ -115,6 +117,9 @@ function Dashboard({
   invitacionActualizandoId,
   miembroActualizandoId,
   miembroEliminandoId,
+  tareas,
+  tareasError,
+  tareasLoading,
   onCancelLogout,
   onConfirmLogout,
   onCreateGroup,
@@ -129,6 +134,9 @@ function Dashboard({
   usuario,
 }) {
   const [filtroGrupos, setFiltroGrupos] = useState("");
+  const [filtroTareas, setFiltroTareas] = useState("");
+  const [filtroTareasEstado, setFiltroTareasEstado] = useState("Todas");
+  const [filtroTareasGrupo, setFiltroTareasGrupo] = useState("Todos");
   const [grupoNombre, setGrupoNombre] = useState("");
   const [grupoDescripcion, setGrupoDescripcion] = useState("");
   const [crearGrupoError, setCrearGrupoError] = useState("");
@@ -163,6 +171,18 @@ function Dashboard({
   const invitacionesFiltradas = invitaciones.filter((invitacion) =>
     filtroInvitacionesEstado === "Todas" ? true : invitacion.estado === filtroInvitacionesEstado,
   );
+  const gruposTareas = [...new Map(tareas.map((tarea) => [tarea.grupo_id, tarea.grupo_nombre])).entries()]
+    .map(([id, nombre]) => ({ id, nombre }))
+    .sort((firstGroup, secondGroup) =>
+      firstGroup.nombre.localeCompare(secondGroup.nombre, "es", { sensitivity: "base" }),
+    );
+  const tareasFiltradas = tareas.filter((tarea) => {
+    const texto = `${tarea.titulo} ${tarea.descripcion ?? ""} ${tarea.grupo_nombre}`.toLowerCase();
+    const coincideTexto = texto.includes(filtroTareas.trim().toLowerCase());
+    const coincideEstado = filtroTareasEstado === "Todas" || tarea.estado === filtroTareasEstado;
+    const coincideGrupo = filtroTareasGrupo === "Todos" || String(tarea.grupo_id) === filtroTareasGrupo;
+    return coincideTexto && coincideEstado && coincideGrupo;
+  });
 
   async function handleCreateGroup(event) {
     event.preventDefault();
@@ -801,6 +821,79 @@ function Dashboard({
         ) : null}
       </section>
 
+      <section className="tasks-section" aria-labelledby="tasks-title">
+        <div className="section-header">
+          <div>
+            <p className="eyebrow">Tareas</p>
+            <h2 id="tasks-title">Mis tareas</h2>
+          </div>
+          <div className="tasks-filters">
+            <label>
+              Buscar
+              <input
+                onChange={(event) => setFiltroTareas(event.target.value)}
+                type="search"
+                value={filtroTareas}
+              />
+            </label>
+            <label>
+              Grupo
+              <select
+                onChange={(event) => setFiltroTareasGrupo(event.target.value)}
+                value={filtroTareasGrupo}
+              >
+                <option value="Todos">Todos</option>
+                {gruposTareas.map((grupo) => (
+                  <option key={grupo.id} value={grupo.id}>
+                    {grupo.nombre}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Estado
+              <select
+                onChange={(event) => setFiltroTareasEstado(event.target.value)}
+                value={filtroTareasEstado}
+              >
+                <option value="Todas">Todas</option>
+                <option value="Creada">Creadas</option>
+                <option value="Programada">Programadas</option>
+                <option value="En ejecucion">En ejecucion</option>
+                <option value="Finalizada">Finalizadas</option>
+                <option value="Cancelada">Canceladas</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        {tareasLoading ? <p className="subtle">Cargando tareas...</p> : null}
+        {tareasError ? <p className="error" role="alert">{tareasError}</p> : null}
+
+        {!tareasLoading && !tareasError && tareasFiltradas.length === 0 ? (
+          <p className="empty-state">No hay tareas para este filtro.</p>
+        ) : null}
+
+        {!tareasLoading && !tareasError && tareasFiltradas.length > 0 ? (
+          <div className="tasks-list">
+            {tareasFiltradas.map((tarea) => (
+              <article className="task-item" key={tarea.id}>
+                <div>
+                  <h3>{tarea.titulo}</h3>
+                  <p>{tarea.descripcion ?? "Sin descripcion."}</p>
+                </div>
+                <div className="task-meta">
+                  <span>{tarea.estado}</span>
+                  <span>{tarea.grupo_nombre}</span>
+                  <span>{tarea.rol_grupo}</span>
+                  {tarea.es_gestionable ? <span>Gestionable</span> : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : null}
+      </section>
+
       <section className="invitations-section" aria-labelledby="invitations-title">
         <div className="section-header">
           <div>
@@ -922,6 +1015,9 @@ export default function App() {
   const [invitaciones, setInvitaciones] = useState([]);
   const [invitacionesError, setInvitacionesError] = useState("");
   const [invitacionesLoading, setInvitacionesLoading] = useState(false);
+  const [tareas, setTareas] = useState([]);
+  const [tareasError, setTareasError] = useState("");
+  const [tareasLoading, setTareasLoading] = useState(false);
   const [grupoCreando, setGrupoCreando] = useState(false);
   const [grupoActualizandoId, setGrupoActualizandoId] = useState(null);
   const [grupoEliminandoId, setGrupoEliminandoId] = useState(null);
@@ -967,6 +1063,23 @@ export default function App() {
     }
   }
 
+  async function cargarTareas(sessionToken) {
+    setTareasLoading(true);
+    setTareasError("");
+
+    try {
+      const result = await getTasks(sessionToken);
+      setTareas(result.tareas);
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+    } catch (tasksError) {
+      setTareas([]);
+      setTareasError(tasksError.message);
+    } finally {
+      setTareasLoading(false);
+    }
+  }
+
   useEffect(() => {
     let active = true;
 
@@ -984,6 +1097,7 @@ export default function App() {
         setUsuario(currentUser);
         await cargarGrupos(token);
         await cargarInvitaciones(token);
+        await cargarTareas(token);
       } catch {
         localStorage.removeItem(SESSION_TOKEN_KEY);
         if (active) {
@@ -992,6 +1106,7 @@ export default function App() {
           setEstado("SESION_CERRADA");
           setGrupos([]);
           setInvitaciones([]);
+          setTareas([]);
         }
       } finally {
         if (active) {
@@ -1017,6 +1132,7 @@ export default function App() {
     setConfirmingLogout(false);
     await cargarGrupos(result.token);
     await cargarInvitaciones(result.token);
+    await cargarTareas(result.token);
     setLoading(false);
   }
 
@@ -1074,6 +1190,7 @@ export default function App() {
       setInvitaciones((currentInvitations) =>
         currentInvitations.filter((invitacion) => invitacion.grupo_id !== result.grupo_id),
       );
+      setTareas((currentTasks) => currentTasks.filter((tarea) => tarea.grupo_id !== result.grupo_id));
       setEstado(result.estado);
       setGestionMensaje(result.mensaje);
       return result;
@@ -1149,6 +1266,7 @@ export default function App() {
       );
       if (estadoDestino === "Aceptada") {
         await cargarGrupos(token);
+        await cargarTareas(token);
       }
       setEstado(result.estado);
       setGestionMensaje(result.mensaje);
@@ -1179,6 +1297,8 @@ export default function App() {
       setGruposError("");
       setInvitaciones([]);
       setInvitacionesError("");
+      setTareas([]);
+      setTareasError("");
       setGrupoCreando(false);
       setGrupoActualizandoId(null);
       setGrupoEliminandoId(null);
@@ -1187,6 +1307,7 @@ export default function App() {
       setInvitacionActualizandoId(null);
       setMiembroActualizandoId(null);
       setMiembroEliminandoId(null);
+      setTareasLoading(false);
       setConfirmingLogout(false);
     }
   }
@@ -1212,6 +1333,9 @@ export default function App() {
           invitacionActualizandoId={invitacionActualizandoId}
           miembroActualizandoId={miembroActualizandoId}
           miembroEliminandoId={miembroEliminandoId}
+          tareas={tareas}
+          tareasError={tareasError}
+          tareasLoading={tareasLoading}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
           onCreateGroup={handleCreateGroup}

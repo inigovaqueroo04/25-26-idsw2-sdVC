@@ -335,6 +335,13 @@ def eliminar_grupo(usuario: Usuario, grupo_id: int) -> None:
         )
         connection.execute(
             """
+            DELETE FROM tareas
+            WHERE grupo_id = ?
+            """,
+            (grupo_id,),
+        )
+        connection.execute(
+            """
             DELETE FROM miembros_grupo
             WHERE grupo_id = ?
             """,
