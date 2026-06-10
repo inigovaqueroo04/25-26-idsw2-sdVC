@@ -455,3 +455,33 @@
 **Resultado:** Se implemento `abrirInvitaciones()` como consulta de invitaciones. El backend expone `GET /api/groups/invitations`, valida la sesion, acepta un filtro opcional de estado y devuelve invitaciones recibidas por el email del usuario o visibles por su rol de gestion en el grupo. El frontend carga esas invitaciones al iniciar sesion, las refresca despues de enviar una nueva invitacion y muestra la seccion `Mis invitaciones` con filtro por estado. Se actualizaron los README de app, backend, frontend, desarrollo, pruebas y seguimiento. La verificacion incluyo compilacion del backend con el entorno virtual, smoke de rutas y servicios con SQLite temporal, build del frontend, prueba contra el backend local vivo, revision visual en navegador integrado y comprobacion movil sin desbordamiento horizontal.
 
 **Decision:** La consulta queda limitada a abrir y filtrar invitaciones, dejando aceptar, rechazar, cancelar o caducar automaticamente para incrementos posteriores. La vista prioriza `Pendiente` porque es el estado que normalmente requiere accion, pero mantiene los demas estados disponibles para historial o seguimiento. No se tocaron PUML en esta iteracion, asi que no hubo SVG nuevo que regenerar.
+
+---
+
+## [2026-06-09 23:41] Decision sobre invitaciones recibidas
+
+**Prompt:** Se pidio cerrar el incremento anterior con commit y continuar con el siguiente paso funcional: permitir que el destinatario de una invitacion pendiente pueda decidir si la acepta o la rechaza desde `Mis invitaciones`, haciendo que aceptar lo incorpore al grupo con el rol propuesto y que rechazar solo deje registrada su decision.
+
+**Resultado:** Se hizo commit de `abrirInvitaciones()` con el mensaje `feat: consultar invitaciones del usuario`. Despues se implemento `editarInvitacion()`: el backend expone `PATCH /api/groups/invitations/{invitation_id}`, valida sesion, destinatario, estado pendiente, decision permitida y fecha limite; si la decision es `Aceptada`, crea la pertenencia en `miembros_grupo`, y si es `Rechazada`, solo actualiza la invitacion. En React se añadieron botones `Aceptar` y `Rechazar` en invitaciones recibidas y pendientes, con mensaje de resultado y refresco de grupos tras aceptar. Se actualizaron los README de app, backend, frontend, desarrollo, pruebas y seguimiento. La verificacion incluyo compilacion del backend, build del frontend, smoke con SQLite temporal y prueba visual en navegador integrado con datos temporales limpiados al terminar.
+
+**Decision:** Solo el destinatario puede aceptar o rechazar una invitacion; los gestores pueden verla, pero no decidir por otra persona. Las invitaciones finales no se reabren, y una invitacion vencida se marca como `Caducada` cuando alguien intenta gestionarla. No se tocaron PUML en esta iteracion, asi que no hubo SVG nuevo que regenerar.
+
+---
+
+## [2026-06-09 23:56] Cambio de rol de miembros del grupo
+
+**Prompt:** Se pidio continuar con el siguiente caso de uso respetando la pauta de analisis y diseño. A partir de `editarMiembro()`, se implemento una forma de abrir los miembros de un grupo gestionable, revisar sus roles y cambiar el rol de un miembro sin modificar el rol global del usuario ni dejar el grupo sin alguien que pueda administrarlo.
+
+**Resultado:** Se implemento `editarMiembro()`. El backend expone `GET /api/groups/{group_id}/members` para cargar miembros y `PATCH /api/groups/{group_id}/members/{member_id}` para cambiar su rol. La logica valida sesion, pertenencia al grupo, permisos de gestion, rol valido, existencia del miembro y que siga habiendo al menos un miembro con rol `Administrador` o `Miembro Administrador`. En React se añadio el boton `Miembros` en grupos gestionables, un panel inline con cada miembro, selector de rol y guardado por fila. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento. La verificacion incluyo compileall del backend, build del frontend, smoke con SQLite temporal, prueba contra API viva local y revision visual del panel en navegador integrado.
+
+**Decision:** El rol editable pertenece a `MiembroGrupo`, no a `Usuario`, porque el diseño indica que los permisos dependen del grupo concreto. Se permite que `Administrador` y `Miembro Administrador` gestionen roles, pero se bloquea degradar al ultimo gestor para no dejar el grupo sin administracion. No se tocaron PUML en esta iteracion, asi que no hubo SVG nuevo que regenerar.
+
+---
+
+## [2026-06-10 15:44] Correccion visual del panel de miembros
+
+**Prompt:** Se reviso el aspecto del panel `Miembros` tras abrirlo en una tarjeta de grupo y se detecto que la fila de miembros invadia la columna vecina, deformaba las tarjetas cercanas y hacia que las etiquetas de rol y numero de miembros se estirasen demasiado.
+
+**Resultado:** Se ajusto la maquetacion de las tarjetas de grupo y del panel de miembros. La grid de grupos ya no estira todas las tarjetas a la altura de la tarjeta mas alta, el panel de miembros queda contenido dentro de su tarjeta, las filas de miembros se compactan y las etiquetas mantienen una altura normal. Tambien se corrigio el guardado desde UI para leer el rol seleccionado de la fila al pulsar `Guardar`. Se valido en navegador integrado con datos temporales: desktop, movil, panel abierto, tarjeta vecina, chips, guardado de rol, seccion de invitaciones y limpieza posterior de datos temporales.
+
+**Decision:** El panel de miembros se mantiene inline dentro de cada tarjeta para conservar el flujo actual del dashboard, pero su layout queda limitado por la propia tarjeta. A partir de esta revision, los cambios visuales se validan midiendo overflow, solapamientos y tamaños en desktop y movil antes de darlos por terminados.

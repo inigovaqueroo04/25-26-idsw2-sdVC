@@ -17,6 +17,14 @@ class GroupInvitationCreateRequest(BaseModel):
     fecha_limite: str
 
 
+class GroupInvitationUpdateRequest(BaseModel):
+    estado: str
+
+
+class GroupMemberUpdateRequest(BaseModel):
+    rol: str
+
+
 class GroupResponse(BaseModel):
     id: int
     nombre: str
@@ -80,4 +88,33 @@ class InvitationListItemResponse(BaseModel):
 class InvitationListResponse(BaseModel):
     estado: str
     invitaciones: list[InvitationListItemResponse]
+    mensaje: str
+
+
+class GroupInvitationUpdateResponse(BaseModel):
+    estado: str
+    invitacion: InvitationListItemResponse
+    mensaje: str
+
+
+class GroupMemberResponse(BaseModel):
+    id: int
+    usuario_id: int
+    nombre: str
+    email: str
+    rol: str
+    es_usuario_actual: bool
+
+
+class GroupMemberListResponse(BaseModel):
+    estado: str
+    grupo_id: int
+    miembros: list[GroupMemberResponse]
+    mensaje: str
+
+
+class GroupMemberUpdateResponse(BaseModel):
+    estado: str
+    grupo_id: int
+    miembro: GroupMemberResponse
     mensaje: str

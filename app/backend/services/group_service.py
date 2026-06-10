@@ -16,8 +16,10 @@ class GroupError(Exception):
 
 ROLES_GESTION_GRUPO = {"Administrador", "Miembro Administrador"}
 ROL_ELIMINAR_GRUPO = "Administrador"
+ROLES_MIEMBRO_GRUPO = {"Administrador", "Miembro Administrador", "Miembro"}
 ROLES_INVITACION = {"Miembro Administrador", "Miembro"}
 ESTADOS_INVITACION = {"Pendiente", "Aceptada", "Rechazada", "Caducada", "Cancelada"}
+ESTADOS_DECISION_INVITACION = {"Aceptada", "Rechazada"}
 EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
@@ -173,6 +175,19 @@ def validar_rol_invitacion(rol: str) -> str:
     return rol_normalizado
 
 
+def validar_rol_miembro(rol: str) -> str:
+    rol_normalizado = (rol or "").strip()
+
+    if rol_normalizado not in ROLES_MIEMBRO_GRUPO:
+        raise GroupError(
+            code="rol_miembro_invalido",
+            message="El rol del miembro no es valido.",
+            status_code=400,
+        )
+
+    return rol_normalizado
+
+
 def validar_estado_invitacion(estado: str | None) -> str | None:
     estado_normalizado = (estado or "").strip()
 
@@ -187,6 +202,45 @@ def validar_estado_invitacion(estado: str | None) -> str | None:
         )
 
     return estado_normalizado
+
+
+def validar_decision_invitacion(estado: str) -> str:
+    estado_normalizado = (estado or "").strip()
+
+    if estado_normalizado not in ESTADOS_DECISION_INVITACION:
+        raise GroupError(
+            code="decision_invitacion_invalida",
+            message="La invitacion solo puede aceptarse o rechazarse.",
+            status_code=400,
+        )
+
+    return estado_normalizado
+
+
+def invitacion_row_to_response(row) -> dict:
+    return {
+        "id": row["id"],
+        "grupo_id": row["grupo_id"],
+        "grupo_nombre": row["grupo_nombre"],
+        "email": row["email"],
+        "rol": row["rol"],
+        "fecha_limite": row["fecha_limite"],
+        "estado": row["estado"],
+        "invitado_por": row["invitado_por"],
+        "es_destinatario": bool(row["es_destinatario"]),
+        "es_gestionable": bool(row["es_gestionable"]),
+    }
+
+
+def miembro_row_to_response(row, usuario_id: int) -> dict:
+    return {
+        "id": row["id"],
+        "usuario_id": row["usuario_id"],
+        "nombre": row["nombre"],
+        "email": row["email"],
+        "rol": row["rol"],
+        "es_usuario_actual": row["usuario_id"] == usuario_id,
+    }
 
 
 def crear_grupo(usuario: Usuario, nombre: str, descripcion: str | None) -> GrupoResumen:
@@ -435,18 +489,247 @@ def listar_invitaciones_usuario(usuario: Usuario, estado: str | None = None) -> 
             params,
         ).fetchall()
 
-    return [
-        {
-            "id": row["id"],
-            "grupo_id": row["grupo_id"],
-            "grupo_nombre": row["grupo_nombre"],
-            "email": row["email"],
-            "rol": row["rol"],
-            "fecha_limite": row["fecha_limite"],
-            "estado": row["estado"],
-            "invitado_por": row["invitado_por"],
-            "es_destinatario": bool(row["es_destinatario"]),
-            "es_gestionable": bool(row["es_gestionable"]),
-        }
-        for row in rows
-    ]
+    return [invitacion_row_to_response(row) for row in rows]
+
+
+def editar_invitacion(usuario: Usuario, invitacion_id: int, estado: str) -> dict:
+    decision = validar_decision_invitacion(estado)
+    email_usuario = usuario.email.lower()
+
+    with get_connection() as connection:
+        invitacion = connection.execute(
+            """
+            SELECT
+                i.id,
+                i.grupo_id,
+                i.email_invitado,
+                i.rol_propuesto,
+                i.fecha_limite,
+                i.estado
+            FROM invitaciones i
+            WHERE i.id = ?
+            """,
+            (invitacion_id,),
+        ).fetchone()
+
+        if invitacion is None:
+            raise GroupError(
+                code="invitacion_no_disponible",
+                message="La invitacion no existe o ya no esta disponible.",
+                status_code=404,
+            )
+
+        if invitacion["email_invitado"].lower() != email_usuario:
+            raise GroupError(
+                code="invitacion_sin_permisos",
+                message="No tienes permisos para gestionar esta invitacion.",
+                status_code=403,
+            )
+
+        if invitacion["estado"] != "Pendiente":
+            raise GroupError(
+                code="invitacion_finalizada",
+                message="Solo se pueden modificar invitaciones pendientes.",
+                status_code=409,
+            )
+
+        if date.fromisoformat(invitacion["fecha_limite"]) < date.today():
+            connection.execute(
+                """
+                UPDATE invitaciones
+                SET estado = 'Caducada'
+                WHERE id = ?
+                """,
+                (invitacion_id,),
+            )
+            connection.commit()
+            raise GroupError(
+                code="invitacion_caducada",
+                message="La invitacion ha caducado y no puede aceptarse ni rechazarse.",
+                status_code=409,
+            )
+
+        if decision == "Aceptada":
+            miembro_existente = connection.execute(
+                """
+                SELECT 1
+                FROM miembros_grupo
+                WHERE usuario_id = ?
+                  AND grupo_id = ?
+                LIMIT 1
+                """,
+                (usuario.id, invitacion["grupo_id"]),
+            ).fetchone()
+
+            if miembro_existente is not None:
+                raise GroupError(
+                    code="usuario_ya_miembro",
+                    message="Ya perteneces a este grupo.",
+                    status_code=409,
+                )
+
+            connection.execute(
+                """
+                INSERT INTO miembros_grupo (usuario_id, grupo_id, rol)
+                VALUES (?, ?, ?)
+                """,
+                (usuario.id, invitacion["grupo_id"], invitacion["rol_propuesto"]),
+            )
+
+        connection.execute(
+            """
+            UPDATE invitaciones
+            SET estado = ?
+            WHERE id = ?
+            """,
+            (decision, invitacion_id),
+        )
+
+        row = connection.execute(
+            """
+            SELECT
+                i.id,
+                i.grupo_id,
+                g.nombre AS grupo_nombre,
+                i.email_invitado AS email,
+                i.rol_propuesto AS rol,
+                i.fecha_limite,
+                i.estado,
+                u.nombre AS invitado_por,
+                1 AS es_destinatario,
+                CASE
+                    WHEN mg.rol IN ('Administrador', 'Miembro Administrador') THEN 1
+                    ELSE 0
+                END AS es_gestionable
+            FROM invitaciones i
+            INNER JOIN grupos g ON g.id = i.grupo_id
+            INNER JOIN usuarios u ON u.id = i.invitado_por
+            LEFT JOIN miembros_grupo mg
+                ON mg.grupo_id = i.grupo_id
+               AND mg.usuario_id = ?
+            WHERE i.id = ?
+            """,
+            (usuario.id, invitacion_id),
+        ).fetchone()
+
+    return invitacion_row_to_response(row)
+
+
+def listar_miembros_grupo(usuario: Usuario, grupo_id: int) -> list[dict]:
+    with get_connection() as connection:
+        grupo_actual = obtener_resumen_grupo_usuario(connection, grupo_id, usuario.id)
+
+        if grupo_actual.rol not in ROLES_GESTION_GRUPO:
+            raise GroupError(
+                code="usuario_sin_permisos",
+                message="No tienes permisos para gestionar miembros de este grupo.",
+                status_code=403,
+            )
+
+        rows = connection.execute(
+            """
+            SELECT
+                mg.id,
+                mg.usuario_id,
+                u.nombre,
+                u.email,
+                mg.rol
+            FROM miembros_grupo mg
+            INNER JOIN usuarios u ON u.id = mg.usuario_id
+            WHERE mg.grupo_id = ?
+            ORDER BY
+                CASE mg.rol
+                    WHEN 'Administrador' THEN 0
+                    WHEN 'Miembro Administrador' THEN 1
+                    ELSE 2
+                END,
+                u.nombre COLLATE NOCASE
+            """,
+            (grupo_id,),
+        ).fetchall()
+
+    return [miembro_row_to_response(row, usuario.id) for row in rows]
+
+
+def editar_miembro(usuario: Usuario, grupo_id: int, miembro_id: int, rol: str) -> dict:
+    rol_normalizado = validar_rol_miembro(rol)
+
+    with get_connection() as connection:
+        grupo_actual = obtener_resumen_grupo_usuario(connection, grupo_id, usuario.id)
+
+        if grupo_actual.rol not in ROLES_GESTION_GRUPO:
+            raise GroupError(
+                code="usuario_sin_permisos",
+                message="No tienes permisos para editar miembros de este grupo.",
+                status_code=403,
+            )
+
+        miembro = connection.execute(
+            """
+            SELECT
+                mg.id,
+                mg.usuario_id,
+                u.nombre,
+                u.email,
+                mg.rol
+            FROM miembros_grupo mg
+            INNER JOIN usuarios u ON u.id = mg.usuario_id
+            WHERE mg.id = ?
+              AND mg.grupo_id = ?
+            """,
+            (miembro_id, grupo_id),
+        ).fetchone()
+
+        if miembro is None:
+            raise GroupError(
+                code="miembro_no_disponible",
+                message="El miembro no existe o no pertenece a este grupo.",
+                status_code=404,
+            )
+
+        if miembro["rol"] in ROLES_GESTION_GRUPO and rol_normalizado not in ROLES_GESTION_GRUPO:
+            gestores_restantes = connection.execute(
+                """
+                SELECT COUNT(*) AS total
+                FROM miembros_grupo
+                WHERE grupo_id = ?
+                  AND id <> ?
+                  AND rol IN ('Administrador', 'Miembro Administrador')
+                """,
+                (grupo_id, miembro_id),
+            ).fetchone()["total"]
+
+            if gestores_restantes == 0:
+                raise GroupError(
+                    code="grupo_sin_gestion",
+                    message="El grupo debe conservar al menos un miembro con permisos de gestion.",
+                    status_code=409,
+                )
+
+        connection.execute(
+            """
+            UPDATE miembros_grupo
+            SET rol = ?
+            WHERE id = ?
+              AND grupo_id = ?
+            """,
+            (rol_normalizado, miembro_id, grupo_id),
+        )
+
+        row = connection.execute(
+            """
+            SELECT
+                mg.id,
+                mg.usuario_id,
+                u.nombre,
+                u.email,
+                mg.rol
+            FROM miembros_grupo mg
+            INNER JOIN usuarios u ON u.id = mg.usuario_id
+            WHERE mg.id = ?
+              AND mg.grupo_id = ?
+            """,
+            (miembro_id, grupo_id),
+        ).fetchone()
+
+    return miembro_row_to_response(row, usuario.id)

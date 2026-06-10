@@ -7,7 +7,13 @@ from schemas.groups import (
     GroupInvitationCreateRequest,
     GroupInvitationCreateResponse,
     GroupInvitationResponse,
+    GroupInvitationUpdateRequest,
+    GroupInvitationUpdateResponse,
     GroupListResponse,
+    GroupMemberListResponse,
+    GroupMemberResponse,
+    GroupMemberUpdateRequest,
+    GroupMemberUpdateResponse,
     GroupResponse,
     GroupUpdateRequest,
     GroupUpdateResponse,
@@ -19,10 +25,13 @@ from services.group_service import (
     GroupError,
     crear_grupo,
     editar_grupo,
+    editar_invitacion,
+    editar_miembro,
     eliminar_grupo,
     invitar_usuario,
     listar_invitaciones_usuario,
     listar_grupos_usuario,
+    listar_miembros_grupo,
 )
 
 
@@ -75,6 +84,71 @@ def list_invitations(
         estado="INVITACIONES_ABIERTO",
         invitaciones=[InvitationListItemResponse(**invitacion) for invitacion in invitaciones],
         mensaje="Invitaciones cargadas correctamente.",
+    )
+
+
+@router.patch("/invitations/{invitation_id}", response_model=GroupInvitationUpdateResponse)
+def update_invitation(
+    invitation_id: int,
+    payload: GroupInvitationUpdateRequest,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        invitacion = editar_invitacion(usuario, invitation_id, payload.estado)
+    except AuthError as error:
+        raise_auth_error(error)
+    except GroupError as error:
+        raise_group_error(error)
+
+    return GroupInvitationUpdateResponse(
+        estado="INVITACION_ABIERTA",
+        invitacion=InvitationListItemResponse(**invitacion),
+        mensaje="Invitacion actualizada correctamente.",
+    )
+
+
+@router.get("/{group_id}/members", response_model=GroupMemberListResponse)
+def list_group_members(
+    group_id: int,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        miembros = listar_miembros_grupo(usuario, group_id)
+    except AuthError as error:
+        raise_auth_error(error)
+    except GroupError as error:
+        raise_group_error(error)
+
+    return GroupMemberListResponse(
+        estado="GRUPO_ABIERTO",
+        grupo_id=group_id,
+        miembros=[GroupMemberResponse(**miembro) for miembro in miembros],
+        mensaje="Miembros cargados correctamente.",
+    )
+
+
+@router.patch("/{group_id}/members/{member_id}", response_model=GroupMemberUpdateResponse)
+def update_group_member(
+    group_id: int,
+    member_id: int,
+    payload: GroupMemberUpdateRequest,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        miembro = editar_miembro(usuario, group_id, member_id, payload.rol)
+    except AuthError as error:
+        raise_auth_error(error)
+    except GroupError as error:
+        raise_group_error(error)
+
+    return GroupMemberUpdateResponse(
+        estado="GRUPO_ABIERTO",
+        grupo_id=group_id,
+        miembro=GroupMemberResponse(**miembro),
+        mensaje="Miembro actualizado correctamente.",
     )
 
 

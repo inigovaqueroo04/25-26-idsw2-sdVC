@@ -28,6 +28,9 @@ uvicorn main:app --reload --port 8000
 - `PUT /api/groups/{group_id}`
 - `DELETE /api/groups/{group_id}`
 - `GET /api/groups/invitations`
+- `PATCH /api/groups/invitations/{invitation_id}`
+- `GET /api/groups/{group_id}/members`
+- `PATCH /api/groups/{group_id}/members/{member_id}`
 - `POST /api/groups/{group_id}/invitations`
 
 Los endpoints `logout`, `me` y `groups` usan la cabecera `X-Session-Token` recibida en el login.
@@ -50,6 +53,14 @@ e invitaciones pendientes duplicadas, y registra la invitacion como `Pendiente`.
 autenticado. Incluye invitaciones dirigidas a su email y las que puede revisar
 por tener rol `Administrador` o `Miembro Administrador` en el grupo. Admite el
 filtro opcional `estado`.
+
+`PATCH /api/groups/invitations/{invitation_id}` permite al destinatario aceptar
+o rechazar una invitacion pendiente. Si acepta, crea la membresia en el grupo
+con el rol propuesto; si rechaza, solo actualiza el estado de la invitacion.
+
+`GET /api/groups/{group_id}/members` lista miembros de un grupo gestionable.
+`PATCH /api/groups/{group_id}/members/{member_id}` cambia el rol del miembro y
+evita dejar el grupo sin ningun miembro con permisos de gestion.
 
 ## Usuario de prueba
 

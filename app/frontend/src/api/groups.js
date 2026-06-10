@@ -40,6 +40,15 @@ export function getInvitations(token) {
 }
 
 
+export function getGroupMembers(token, groupId) {
+  return request(`/groups/${groupId}/members`, {
+    headers: {
+      "X-Session-Token": token,
+    },
+  });
+}
+
+
 export function createGroup(token, group) {
   return request("/groups", {
     body: JSON.stringify(group),
@@ -62,6 +71,17 @@ export function updateGroup(token, groupId, group) {
 }
 
 
+export function updateGroupMember(token, groupId, memberId, memberUpdate) {
+  return request(`/groups/${groupId}/members/${memberId}`, {
+    body: JSON.stringify(memberUpdate),
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "PATCH",
+  });
+}
+
+
 export function deleteGroup(token, groupId) {
   return request(`/groups/${groupId}`, {
     headers: {
@@ -79,5 +99,16 @@ export function inviteUser(token, groupId, invitation) {
       "X-Session-Token": token,
     },
     method: "POST",
+  });
+}
+
+
+export function updateInvitation(token, invitationId, invitationUpdate) {
+  return request(`/groups/invitations/${invitationId}`, {
+    body: JSON.stringify(invitationUpdate),
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "PATCH",
   });
 }

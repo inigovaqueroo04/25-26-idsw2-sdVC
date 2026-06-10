@@ -12,7 +12,7 @@ ya se han transformado en codigo ejecutable.
 | Incremento | Estado | Codigo | Notas |
 | --- | --- | --- | --- |
 | Gestion de sesion y navegacion | Implementado | [`app/`](../../../app/README.md) | Primer vertical con React, FastAPI y SQLite |
-| Gestion de grupos y usuarios | En progreso | [`app/`](../../../app/README.md) | CRUD basico de grupos, invitacion pendiente y consulta de invitaciones implementados |
+| Gestion de grupos y usuarios | En progreso | [`app/`](../../../app/README.md) | CRUD basico de grupos, invitaciones recibidas y edicion de roles implementados |
 
 Casos cubiertos en codigo:
 
@@ -31,11 +31,15 @@ Casos cubiertos en codigo:
   y fecha limite.
 - `abrirInvitaciones()`: listado de invitaciones recibidas o gestionables con
   filtro por estado.
+- `editarInvitacion()`: aceptacion o rechazo de invitaciones pendientes
+  recibidas; aceptar crea la membresia en el grupo.
+- `editarMiembro()`: listado de miembros de grupos gestionables y cambio de rol
+  dentro de `MiembroGrupo`.
 
 Pendiente del modulo de grupos:
 
-- aceptar o rechazar invitaciones.
-- gestion de miembros.
+- cancelar invitaciones enviadas.
+- eliminar miembros.
 
 ## Criterio de seguimiento
 
