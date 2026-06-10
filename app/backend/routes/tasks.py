@@ -1,14 +1,21 @@
 from fastapi import APIRouter, Header, HTTPException
 
-from schemas.tasks import TaskListResponse, TaskResponse
+from schemas.tasks import TaskCreateRequest, TaskCreateResponse, TaskListResponse, TaskResponse
 from services.auth_service import AuthError, obtener_usuario
-from services.task_service import listar_tareas_usuario
+from services.task_service import TaskError, crear_tarea, listar_tareas_usuario
 
 
 router = APIRouter()
 
 
 def raise_auth_error(error: AuthError) -> None:
+    raise HTTPException(
+        status_code=error.status_code,
+        detail={"code": error.code, "message": error.message},
+    )
+
+
+def raise_task_error(error: TaskError) -> None:
     raise HTTPException(
         status_code=error.status_code,
         detail={"code": error.code, "message": error.message},
@@ -27,4 +34,32 @@ def list_tasks(x_session_token: str | None = Header(default=None, alias="X-Sessi
         estado="TAREAS_ABIERTO",
         tareas=[TaskResponse(**tarea) for tarea in tareas],
         mensaje="Tareas cargadas correctamente.",
+    )
+
+
+@router.post("", response_model=TaskCreateResponse, status_code=201)
+def create_task(
+    payload: TaskCreateRequest,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        tarea = crear_tarea(
+            usuario,
+            payload.grupo_id,
+            payload.titulo,
+            payload.descripcion,
+            payload.fecha,
+            payload.hora_inicio,
+            payload.hora_fin,
+        )
+    except AuthError as error:
+        raise_auth_error(error)
+    except TaskError as error:
+        raise_task_error(error)
+
+    return TaskCreateResponse(
+        estado="TAREA_ABIERTO",
+        tarea=TaskResponse(**tarea),
+        mensaje="Tarea creada correctamente.",
     )

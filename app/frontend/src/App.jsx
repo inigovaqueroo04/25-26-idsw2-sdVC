@@ -13,7 +13,7 @@ import {
   updateGroupMember,
   updateInvitation,
 } from "./api/groups";
-import { getTasks } from "./api/tasks";
+import { createTask, getTasks } from "./api/tasks";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -24,6 +24,7 @@ const ESTADO_LABELS = {
   GRUPOS_ABIERTO: "Grupos disponibles",
   GRUPO_ABIERTO: "Grupo abierto",
   TAREAS_ABIERTO: "Tareas abiertas",
+  TAREA_ABIERTO: "Tarea abierta",
   INVITACIONES_ABIERTO: "Invitaciones abiertas",
   INVITACION_ABIERTA: "Invitación abierta",
 };
@@ -120,8 +121,10 @@ function Dashboard({
   tareas,
   tareasError,
   tareasLoading,
+  tareaCreando,
   onCancelLogout,
   onConfirmLogout,
+  onCreateTask,
   onCreateGroup,
   onDeleteGroup,
   onDeleteGroupMember,
@@ -137,6 +140,14 @@ function Dashboard({
   const [filtroTareas, setFiltroTareas] = useState("");
   const [filtroTareasEstado, setFiltroTareasEstado] = useState("Todas");
   const [filtroTareasGrupo, setFiltroTareasGrupo] = useState("Todos");
+  const [tareaGrupoId, setTareaGrupoId] = useState("");
+  const [tareaTitulo, setTareaTitulo] = useState("");
+  const [tareaDescripcion, setTareaDescripcion] = useState("");
+  const [tareaFecha, setTareaFecha] = useState("");
+  const [tareaHoraInicio, setTareaHoraInicio] = useState("");
+  const [tareaHoraFin, setTareaHoraFin] = useState("");
+  const [crearTareaError, setCrearTareaError] = useState("");
+  const [crearTareaMensaje, setCrearTareaMensaje] = useState("");
   const [grupoNombre, setGrupoNombre] = useState("");
   const [grupoDescripcion, setGrupoDescripcion] = useState("");
   const [crearGrupoError, setCrearGrupoError] = useState("");
@@ -176,6 +187,7 @@ function Dashboard({
     .sort((firstGroup, secondGroup) =>
       firstGroup.nombre.localeCompare(secondGroup.nombre, "es", { sensitivity: "base" }),
     );
+  const gruposGestionTareas = grupos.filter((grupo) => ROLES_GESTION_GRUPO.has(grupo.rol));
   const tareasFiltradas = tareas.filter((tarea) => {
     const texto = `${tarea.titulo} ${tarea.descripcion ?? ""} ${tarea.grupo_nombre}`.toLowerCase();
     const coincideTexto = texto.includes(filtroTareas.trim().toLowerCase());
@@ -183,6 +195,42 @@ function Dashboard({
     const coincideGrupo = filtroTareasGrupo === "Todos" || String(tarea.grupo_id) === filtroTareasGrupo;
     return coincideTexto && coincideEstado && coincideGrupo;
   });
+
+  useEffect(() => {
+    if (!tareaGrupoId && gruposGestionTareas.length > 0) {
+      setTareaGrupoId(String(gruposGestionTareas[0].id));
+    }
+  }, [gruposGestionTareas, tareaGrupoId]);
+
+  async function handleCreateTask(event) {
+    event.preventDefault();
+    setCrearTareaError("");
+    setCrearTareaMensaje("");
+
+    if (!tareaGrupoId || !tareaTitulo.trim() || !tareaFecha || !tareaHoraInicio || !tareaHoraFin) {
+      setCrearTareaError("Grupo, titulo, fecha, hora de inicio y hora de fin son obligatorios.");
+      return;
+    }
+
+    try {
+      const result = await onCreateTask({
+        grupo_id: Number(tareaGrupoId),
+        titulo: tareaTitulo,
+        descripcion: tareaDescripcion,
+        fecha: tareaFecha,
+        hora_inicio: tareaHoraInicio,
+        hora_fin: tareaHoraFin,
+      });
+      setTareaTitulo("");
+      setTareaDescripcion("");
+      setTareaFecha("");
+      setTareaHoraInicio("");
+      setTareaHoraFin("");
+      setCrearTareaMensaje(result.mensaje);
+    } catch (taskError) {
+      setCrearTareaError(taskError.message);
+    }
+  }
 
   async function handleCreateGroup(event) {
     event.preventDefault();
@@ -867,6 +915,82 @@ function Dashboard({
           </div>
         </div>
 
+        {gruposGestionTareas.length > 0 ? (
+          <form className="create-task-form" onSubmit={handleCreateTask}>
+            <div className="create-task-fields">
+              <label>
+                Grupo
+                <select
+                  onChange={(event) => setTareaGrupoId(event.target.value)}
+                  value={tareaGrupoId}
+                >
+                  {gruposGestionTareas.map((grupo) => (
+                    <option key={grupo.id} value={grupo.id}>
+                      {grupo.nombre}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                Titulo
+                <input
+                  maxLength={100}
+                  onChange={(event) => setTareaTitulo(event.target.value)}
+                  type="text"
+                  value={tareaTitulo}
+                />
+              </label>
+
+              <label>
+                Fecha
+                <input
+                  onChange={(event) => setTareaFecha(event.target.value)}
+                  type="date"
+                  value={tareaFecha}
+                />
+              </label>
+
+              <label>
+                Inicio
+                <input
+                  onChange={(event) => setTareaHoraInicio(event.target.value)}
+                  type="time"
+                  value={tareaHoraInicio}
+                />
+              </label>
+
+              <label>
+                Fin
+                <input
+                  onChange={(event) => setTareaHoraFin(event.target.value)}
+                  type="time"
+                  value={tareaHoraFin}
+                />
+              </label>
+
+              <label className="create-task-description">
+                Descripcion
+                <input
+                  maxLength={180}
+                  onChange={(event) => setTareaDescripcion(event.target.value)}
+                  type="text"
+                  value={tareaDescripcion}
+                />
+              </label>
+            </div>
+
+            {crearTareaError ? <p className="error" role="alert">{crearTareaError}</p> : null}
+            {crearTareaMensaje ? <p className="success" role="status">{crearTareaMensaje}</p> : null}
+
+            <div className="create-task-actions">
+              <button className="primary-button compact" disabled={tareaCreando} type="submit">
+                {tareaCreando ? "Creando..." : "Crear tarea"}
+              </button>
+            </div>
+          </form>
+        ) : null}
+
         {tareasLoading ? <p className="subtle">Cargando tareas...</p> : null}
         {tareasError ? <p className="error" role="alert">{tareasError}</p> : null}
 
@@ -884,6 +1008,12 @@ function Dashboard({
                 </div>
                 <div className="task-meta">
                   <span>{tarea.estado}</span>
+                  {tarea.fecha ? <span>{tarea.fecha}</span> : null}
+                  {tarea.hora_inicio && tarea.hora_fin ? (
+                    <span>
+                      {tarea.hora_inicio}-{tarea.hora_fin}
+                    </span>
+                  ) : null}
                   <span>{tarea.grupo_nombre}</span>
                   <span>{tarea.rol_grupo}</span>
                   {tarea.es_gestionable ? <span>Gestionable</span> : null}
@@ -1018,6 +1148,7 @@ export default function App() {
   const [tareas, setTareas] = useState([]);
   const [tareasError, setTareasError] = useState("");
   const [tareasLoading, setTareasLoading] = useState(false);
+  const [tareaCreando, setTareaCreando] = useState(false);
   const [grupoCreando, setGrupoCreando] = useState(false);
   const [grupoActualizandoId, setGrupoActualizandoId] = useState(null);
   const [grupoEliminandoId, setGrupoEliminandoId] = useState(null);
@@ -1151,6 +1282,24 @@ export default function App() {
       return result;
     } finally {
       setGrupoCreando(false);
+    }
+  }
+
+  async function handleCreateTask(taskInput) {
+    setTareaCreando(true);
+
+    try {
+      const result = await createTask(token, taskInput);
+      setTareas((currentTasks) =>
+        [...currentTasks, result.tarea].sort((firstTask, secondTask) =>
+          firstTask.titulo.localeCompare(secondTask.titulo, "es", { sensitivity: "base" }),
+        ),
+      );
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+      return result;
+    } finally {
+      setTareaCreando(false);
     }
   }
 
@@ -1299,6 +1448,7 @@ export default function App() {
       setInvitacionesError("");
       setTareas([]);
       setTareasError("");
+      setTareaCreando(false);
       setGrupoCreando(false);
       setGrupoActualizandoId(null);
       setGrupoEliminandoId(null);
@@ -1336,8 +1486,10 @@ export default function App() {
           tareas={tareas}
           tareasError={tareasError}
           tareasLoading={tareasLoading}
+          tareaCreando={tareaCreando}
           onCancelLogout={cancelLogout}
           onConfirmLogout={confirmLogout}
+          onCreateTask={handleCreateTask}
           onCreateGroup={handleCreateGroup}
           onDeleteGroup={handleDeleteGroup}
           onDeleteGroupMember={handleDeleteGroupMember}

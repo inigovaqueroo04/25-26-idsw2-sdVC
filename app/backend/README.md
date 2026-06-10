@@ -25,6 +25,7 @@ uvicorn main:app --reload --port 8000
 - `GET /api/auth/me`
 - `GET /api/groups`
 - `GET /api/tasks`
+- `POST /api/tasks`
 - `POST /api/groups`
 - `PUT /api/groups/{group_id}`
 - `DELETE /api/groups/{group_id}`
@@ -40,6 +41,10 @@ Los endpoints `logout`, `me` y `groups` usan la cabecera `X-Session-Token` recib
 `GET /api/tasks` lista las tareas de los grupos a los que pertenece el usuario
 autenticado. Devuelve grupo, titulo, descripcion, estado, rol del usuario en
 ese grupo y si puede gestionar la tarea en incrementos posteriores.
+
+`POST /api/tasks` crea una tarea `Programada` dentro de un grupo gestionable.
+Valida titulo, fecha, hora de inicio, hora de fin, permisos de gestion y que
+la hora de inicio sea anterior a la hora de fin.
 
 `POST /api/groups` valida nombre obligatorio, evita duplicados para el usuario
 autenticado y crea la membresia inicial con rol `Administrador`.

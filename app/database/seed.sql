@@ -17,8 +17,8 @@ VALUES
     (1, 1, 1, 'Administrador'),
     (2, 1, 2, 'Miembro Administrador');
 
-INSERT OR IGNORE INTO tareas (id, grupo_id, titulo, descripcion, estado, creado_por)
+INSERT OR IGNORE INTO tareas (id, grupo_id, titulo, descripcion, fecha, hora_inicio, hora_fin, estado, creado_por)
 VALUES
-    (1, 1, 'Revisar compra semanal', 'Preparar la lista compartida antes del fin de semana.', 'Creada', 1),
-    (2, 1, 'Organizar limpieza', 'Coordinar turnos para las zonas comunes.', 'Programada', 1),
-    (3, 2, 'Preparar entrega de diseño', 'Revisar materiales antes de la siguiente reunion.', 'Creada', 1);
+    (1, 1, 'Revisar compra semanal', 'Preparar la lista compartida antes del fin de semana.', '2026-06-12', '10:00', '11:00', 'Programada', 1),
+    (2, 1, 'Organizar limpieza', 'Coordinar turnos para las zonas comunes.', '2026-06-13', '09:00', '10:30', 'Programada', 1),
+    (3, 2, 'Preparar entrega de diseño', 'Revisar materiales antes de la siguiente reunion.', '2026-06-14', '17:00', '18:00', 'Programada', 1);

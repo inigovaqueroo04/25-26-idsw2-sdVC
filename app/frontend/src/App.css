@@ -470,6 +470,31 @@ select:focus {
   gap: 12px;
 }
 
+.create-task-form {
+  background: #ffffff;
+  border: 1px solid #d7dee8;
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.create-task-fields {
+  align-items: end;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(140px, 0.9fr) minmax(180px, 1.2fr) repeat(3, minmax(110px, 0.7fr));
+}
+
+.create-task-description {
+  grid-column: 1 / -1;
+}
+
+.create-task-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .task-item {
   align-items: center;
   background: #ffffff;
@@ -647,8 +672,21 @@ select:focus {
   }
 
   .tasks-filters,
+  .create-task-fields,
   .task-item {
     grid-template-columns: 1fr;
+  }
+
+  .create-task-description {
+    grid-column: auto;
+  }
+
+  .create-task-actions {
+    justify-content: stretch;
+  }
+
+  .create-task-actions .primary-button {
+    width: 100%;
   }
 
   .task-meta {

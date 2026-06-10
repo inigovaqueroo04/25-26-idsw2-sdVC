@@ -29,3 +29,14 @@ export function getTasks(token) {
     },
   });
 }
+
+
+export function createTask(token, task) {
+  return request("/tasks", {
+    body: JSON.stringify(task),
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "POST",
+  });
+}

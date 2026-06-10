@@ -13,7 +13,7 @@ ya se han transformado en codigo ejecutable.
 | --- | --- | --- | --- |
 | Gestion de sesion y navegacion | Implementado | [`app/`](../../../app/README.md) | Primer vertical con React, FastAPI y SQLite |
 | Gestion de grupos y usuarios | En progreso | [`app/`](../../../app/README.md) | CRUD basico de grupos, invitaciones recibidas y gestion de miembros implementados |
-| Gestion de tareas | En progreso | [`app/`](../../../app/README.md) | Consulta inicial de tareas implementada |
+| Gestion de tareas | En progreso | [`app/`](../../../app/README.md) | Consulta inicial y creacion de tareas implementadas |
 
 Casos cubiertos en codigo:
 
@@ -41,6 +41,8 @@ Casos cubiertos en codigo:
   borrar el usuario global.
 - `abrirTareas()`: listado de tareas visibles para el usuario autenticado y
   filtrado por texto, grupo y estado.
+- `crearTarea()`: alta de tarea programada en un grupo gestionable con fecha y
+  horario obligatorio.
 
 Pendiente del modulo de grupos:
 
@@ -48,7 +50,6 @@ Pendiente del modulo de grupos:
 
 Pendiente del modulo de tareas:
 
-- crear tareas.
 - editar y eliminar tareas.
 - marcar tareas como completadas.
 

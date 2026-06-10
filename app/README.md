@@ -34,8 +34,9 @@ app/
 ### Gestion de tareas
 
 - `abrirTareas()`: consulta las tareas visibles para los grupos del usuario y permite filtrarlas.
+- `crearTarea()`: registra una tarea programada con fecha y horario dentro de un grupo gestionable.
 
-No se han implementado todavia creacion o edicion de tareas, planificacion ni recordatorios.
+No se han implementado todavia edicion de tareas, planificacion avanzada ni recordatorios.
 
 ## Inicializar la base de datos
 
@@ -87,7 +88,6 @@ El usuario de prueba pertenece a:
 
 ## Pendiente para siguientes iteraciones
 
-- Crear tareas.
 - Editar y eliminar tareas.
 - Marcar tareas como completadas.
 - Planificacion y configuracion.

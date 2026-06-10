@@ -515,3 +515,13 @@
 **Resultado:** Se implemento `abrirTareas()`. La base SQLite incorpora la tabla `tareas` y datos iniciales; el backend expone `GET /api/tasks`, que devuelve solo tareas de grupos donde el usuario tiene membresia; y React muestra la nueva seccion `Mis tareas` con filtros por texto, grupo y estado. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
 
 **Decision:** El primer incremento de tareas queda limitado a consulta y filtrado porque crear, editar, eliminar y marcar completada son casos de uso propios. La visibilidad se basa en `MiembroGrupo`, no en el rol global del usuario, para mantener coherencia con el diseño aplicado en grupos.
+
+---
+
+## [2026-06-10 18:02] Creacion de tareas programadas
+
+**Prompt:** Se continuo con el siguiente avance conveniente del modulo de tareas y se decidio trabajar `crearTarea()`: añadir un formulario en `Mis tareas` para que un usuario con permisos de gestion seleccione un grupo, introduzca titulo, descripcion opcional, fecha, hora de inicio y hora de fin, y registre una tarea programada visible en la lista.
+
+**Resultado:** Se implemento `crearTarea()`. La tabla `tareas` se amplio con fecha y horario, se añadió una migracion ligera para bases SQLite existentes y el backend expone `POST /api/tasks` con validacion de sesion, grupo accesible, permisos de gestion, titulo obligatorio, fecha valida y horario coherente. En React se incorporo el formulario de creacion dentro de `Mis tareas`, se conecto `createTask` y la tarea nueva se añade a la lista sin recargar. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
+
+**Decision:** Las tareas creadas quedan en estado `Programada` porque el analisis exige horario valido al guardar. Los conflictos horarios se dejan para un incremento posterior, cuando existan asignaciones de usuarios y notificaciones; en este paso se valida solo la coherencia del intervalo de la tarea.
