@@ -27,6 +27,7 @@ uvicorn main:app --reload --port 8000
 - `GET /api/tasks`
 - `POST /api/tasks`
 - `PATCH /api/tasks/{task_id}`
+- `PATCH /api/tasks/{task_id}/complete`
 - `DELETE /api/tasks/{task_id}`
 - `POST /api/groups`
 - `PUT /api/groups/{group_id}`
@@ -51,6 +52,9 @@ la hora de inicio sea anterior a la hora de fin.
 `PATCH /api/tasks/{task_id}` actualiza titulo, descripcion, fecha y horario de
 una tarea gestionable. Reutiliza las validaciones de creacion y bloquea tareas
 `Finalizada` o `Cancelada`.
+
+`PATCH /api/tasks/{task_id}/complete` marca como `Finalizada` una tarea visible
+para el usuario autenticado y registra `fecha_finalizacion`.
 
 `DELETE /api/tasks/{task_id}` elimina una tarea gestionable para el usuario
 autenticado y devuelve el listado al estado `TAREAS_ABIERTO`.

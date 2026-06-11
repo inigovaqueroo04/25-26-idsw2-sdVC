@@ -3,6 +3,7 @@ from fastapi import APIRouter, Header, HTTPException
 from schemas.tasks import (
     TaskCreateRequest,
     TaskCreateResponse,
+    TaskCompleteResponse,
     TaskDeleteResponse,
     TaskListResponse,
     TaskResponse,
@@ -10,7 +11,14 @@ from schemas.tasks import (
     TaskUpdateResponse,
 )
 from services.auth_service import AuthError, obtener_usuario
-from services.task_service import TaskError, crear_tarea, editar_tarea, eliminar_tarea, listar_tareas_usuario
+from services.task_service import (
+    TaskError,
+    crear_tarea,
+    editar_tarea,
+    eliminar_tarea,
+    listar_tareas_usuario,
+    marcar_tarea_completada,
+)
 
 
 router = APIRouter()
@@ -99,6 +107,26 @@ def update_task(
         estado="TAREA_ABIERTO",
         tarea=TaskResponse(**tarea),
         mensaje="Tarea actualizada correctamente.",
+    )
+
+
+@router.patch("/{task_id}/complete", response_model=TaskCompleteResponse)
+def complete_task(
+    task_id: int,
+    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+):
+    try:
+        usuario = obtener_usuario(x_session_token)
+        tarea = marcar_tarea_completada(usuario, task_id)
+    except AuthError as error:
+        raise_auth_error(error)
+    except TaskError as error:
+        raise_task_error(error)
+
+    return TaskCompleteResponse(
+        estado="TAREAS_ABIERTO",
+        tarea=TaskResponse(**tarea),
+        mensaje="Tarea marcada como completada.",
     )
 
 

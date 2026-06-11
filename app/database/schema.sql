@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS tareas (
     fecha TEXT,
     hora_inicio TEXT,
     hora_fin TEXT,
+    fecha_finalizacion TEXT,
     estado TEXT NOT NULL CHECK (estado IN ('Creada', 'Programada', 'En ejecucion', 'Finalizada', 'Cancelada')),
     creado_por INTEGER NOT NULL,
     creado_en TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,

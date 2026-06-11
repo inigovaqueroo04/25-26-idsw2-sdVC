@@ -61,3 +61,13 @@ export function deleteTask(token, taskId) {
     method: "DELETE",
   });
 }
+
+
+export function completeTask(token, taskId) {
+  return request(`/tasks/${taskId}/complete`, {
+    headers: {
+      "X-Session-Token": token,
+    },
+    method: "PATCH",
+  });
+}

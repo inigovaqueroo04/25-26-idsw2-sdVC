@@ -26,6 +26,7 @@ def tarea_row_to_response(row) -> dict:
         "fecha": row["fecha"],
         "hora_inicio": row["hora_inicio"],
         "hora_fin": row["hora_fin"],
+        "fecha_finalizacion": row["fecha_finalizacion"],
         "estado": row["estado"],
         "rol_grupo": row["rol_grupo"],
         "es_gestionable": row["rol_grupo"] in ROLES_GESTION_TAREAS,
@@ -102,6 +103,7 @@ def listar_tareas_usuario(usuario: Usuario) -> list[dict]:
                 t.fecha,
                 t.hora_inicio,
                 t.hora_fin,
+                t.fecha_finalizacion,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -206,6 +208,7 @@ def crear_tarea(
                 t.fecha,
                 t.hora_inicio,
                 t.hora_fin,
+                t.fecha_finalizacion,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -303,6 +306,83 @@ def editar_tarea(
                 t.fecha,
                 t.hora_inicio,
                 t.hora_fin,
+                t.fecha_finalizacion,
+                t.estado,
+                mg.rol AS rol_grupo
+            FROM tareas t
+            INNER JOIN grupos g ON g.id = t.grupo_id
+            INNER JOIN miembros_grupo mg
+                ON mg.grupo_id = t.grupo_id
+               AND mg.usuario_id = ?
+            WHERE t.id = ?
+            """,
+            (usuario.id, tarea_id),
+        ).fetchone()
+
+    return tarea_row_to_response(row)
+
+
+def marcar_tarea_completada(usuario: Usuario, tarea_id: int) -> dict:
+    fecha_finalizacion = date.today().isoformat()
+
+    with get_connection() as connection:
+        tarea = connection.execute(
+            """
+            SELECT
+                t.id,
+                t.estado
+            FROM tareas t
+            INNER JOIN miembros_grupo mg
+                ON mg.grupo_id = t.grupo_id
+               AND mg.usuario_id = ?
+            WHERE t.id = ?
+            """,
+            (usuario.id, tarea_id),
+        ).fetchone()
+
+        if tarea is None:
+            raise TaskError(
+                code="tarea_no_disponible",
+                message="La tarea no existe o no esta disponible para este usuario.",
+                status_code=404,
+            )
+
+        if tarea["estado"] == "Finalizada":
+            raise TaskError(
+                code="tarea_ya_finalizada",
+                message="La tarea ya esta finalizada.",
+                status_code=409,
+            )
+
+        if tarea["estado"] == "Cancelada":
+            raise TaskError(
+                code="tarea_no_completable",
+                message="No se puede completar una tarea cancelada.",
+                status_code=409,
+            )
+
+        connection.execute(
+            """
+            UPDATE tareas
+               SET estado = 'Finalizada',
+                   fecha_finalizacion = ?
+             WHERE id = ?
+            """,
+            (fecha_finalizacion, tarea_id),
+        )
+
+        row = connection.execute(
+            """
+            SELECT
+                t.id,
+                t.grupo_id,
+                g.nombre AS grupo_nombre,
+                t.titulo,
+                t.descripcion,
+                t.fecha,
+                t.hora_inicio,
+                t.hora_fin,
+                t.fecha_finalizacion,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t

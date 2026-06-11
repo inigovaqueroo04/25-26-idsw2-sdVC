@@ -13,7 +13,7 @@ ya se han transformado en codigo ejecutable.
 | --- | --- | --- | --- |
 | Gestion de sesion y navegacion | Implementado | [`app/`](../../../app/README.md) | Primer vertical con React, FastAPI y SQLite |
 | Gestion de grupos y usuarios | En progreso | [`app/`](../../../app/README.md) | CRUD basico de grupos, invitaciones recibidas y gestion de miembros implementados |
-| Gestion de tareas | En progreso | [`app/`](../../../app/README.md) | Consulta, creacion, edicion y eliminacion basica de tareas implementadas |
+| Gestion de tareas | En progreso | [`app/`](../../../app/README.md) | Consulta, creacion, edicion, eliminacion y finalizacion basica implementadas |
 
 Casos cubiertos en codigo:
 
@@ -46,6 +46,8 @@ Casos cubiertos en codigo:
 - `editarTarea()`: modificacion de titulo, descripcion, fecha y horario de una
   tarea gestionable.
 - `eliminarTarea()`: eliminacion confirmada de una tarea gestionable.
+- `marcarCompletada()`: cambio de estado a `Finalizada` para una tarea visible,
+  registrando la fecha de finalizacion.
 
 Pendiente del modulo de grupos:
 
@@ -53,7 +55,7 @@ Pendiente del modulo de grupos:
 
 Pendiente del modulo de tareas:
 
-- marcar tareas como completadas.
+- planificacion, asignaciones, conflictos y recordatorios.
 
 ## Criterio de seguimiento
 

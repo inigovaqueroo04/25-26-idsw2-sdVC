@@ -545,3 +545,13 @@
 **Resultado:** Se implemento `eliminarTarea()`. El backend expone `DELETE /api/tasks/{task_id}` y comprueba sesion activa, visibilidad de la tarea y permisos de gestion sobre el grupo antes de borrar la fila. En React se anadio la llamada `deleteTask`, el boton `Eliminar`, una confirmacion inline con `Cancelar` y `Confirmar`, el estado de eliminacion y la retirada de la tarea de `Mis tareas` tras una respuesta correcta. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
 
 **Decision:** El borrado vuelve al estado `TAREAS_ABIERTO` y se limita a la entidad `Tarea`. No se implementa todavia limpieza de subtareas, relaciones o conflictos porque esas estructuras no existen en codigo; cuando se incorporen, `eliminarTarea()` tendra que ampliar su regla de integridad.
+
+---
+
+## [2026-06-11 16:32] Finalizacion basica de tareas
+
+**Prompt:** Se continuo el modulo de tareas con un alcance mas compacto para avanzar rapido y se decidio trabajar `marcarCompletada()`: permitir que una persona autenticada marque como completada una tarea visible desde `Mis tareas`, registrando la fecha de finalizacion y dejando la tarjeta en estado cerrado.
+
+**Resultado:** Se implemento `marcarCompletada()`. La base de datos incorpora `fecha_finalizacion` con migracion ligera, el backend expone `PATCH /api/tasks/{task_id}/complete` y valida que la tarea exista para el usuario, que no este ya `Finalizada` y que no este `Cancelada`. En React se anadio `completeTask`, el boton `Completar`, el estado de guardado, el mensaje de exito y la visualizacion de la fecha de finalizacion en la tarjeta. Se actualizaron solo los README necesarios y el seguimiento RUP.
+
+**Decision:** La primera version permite completar cualquier tarea visible porque aun no existen asignaciones de tareas a usuarios. Cuando se implemente `asignarTareaAUsuario()`, la regla de finalizacion debera comprobar si la tarea esta asignada al usuario o si aplica a todo el grupo.

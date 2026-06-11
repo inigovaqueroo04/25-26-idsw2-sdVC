@@ -734,6 +734,7 @@ select:focus {
   .create-task-actions .primary-button,
   .edit-task-actions .primary-button,
   .edit-task-actions .secondary-button,
+  .task-actions .primary-button,
   .task-actions .danger-button,
   .task-actions .secondary-button {
     width: 100%;

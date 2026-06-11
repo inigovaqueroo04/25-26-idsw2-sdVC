@@ -37,8 +37,9 @@ app/
 - `crearTarea()`: registra una tarea programada con fecha y horario dentro de un grupo gestionable.
 - `editarTarea()`: permite corregir titulo, descripcion, fecha y horario de una tarea gestionable.
 - `eliminarTarea()`: elimina una tarea gestionable tras confirmacion.
+- `marcarCompletada()`: finaliza una tarea visible y registra la fecha de finalizacion.
 
-No se han implementado todavia finalizacion de tareas, planificacion avanzada ni recordatorios.
+No se han implementado todavia planificacion avanzada ni recordatorios.
 
 ## Inicializar la base de datos
 
@@ -90,7 +91,6 @@ El usuario de prueba pertenece a:
 
 ## Pendiente para siguientes iteraciones
 
-- Marcar tareas como completadas.
 - Planificacion y configuracion.
 - Recordatorios.
 - Seguridad de sesion mas robusta y persistente.

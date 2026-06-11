@@ -15,6 +15,7 @@ TASK_COLUMNS = {
     "fecha": "TEXT",
     "hora_inicio": "TEXT",
     "hora_fin": "TEXT",
+    "fecha_finalizacion": "TEXT",
 }
 
 

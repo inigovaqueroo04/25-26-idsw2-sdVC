@@ -13,7 +13,7 @@ import {
   updateGroupMember,
   updateInvitation,
 } from "./api/groups";
-import { createTask, deleteTask, getTasks, updateTask } from "./api/tasks";
+import { completeTask, createTask, deleteTask, getTasks, updateTask } from "./api/tasks";
 
 
 const SESSION_TOKEN_KEY = "brenotask_session_token";
@@ -123,9 +123,11 @@ function Dashboard({
   tareasError,
   tareasLoading,
   tareaActualizandoId,
+  tareaCompletandoId,
   tareaCreando,
   tareaEliminandoId,
   onCancelLogout,
+  onCompleteTask,
   onConfirmLogout,
   onCreateTask,
   onDeleteTask,
@@ -161,6 +163,8 @@ function Dashboard({
   const [tareaEditadaHoraFin, setTareaEditadaHoraFin] = useState("");
   const [editarTareaError, setEditarTareaError] = useState("");
   const [editarTareaMensaje, setEditarTareaMensaje] = useState("");
+  const [completarTareaError, setCompletarTareaError] = useState("");
+  const [completarTareaMensaje, setCompletarTareaMensaje] = useState("");
   const [tareaConfirmandoEliminarId, setTareaConfirmandoEliminarId] = useState(null);
   const [eliminarTareaError, setEliminarTareaError] = useState("");
   const [eliminarTareaMensaje, setEliminarTareaMensaje] = useState("");
@@ -223,6 +227,7 @@ function Dashboard({
     setCrearTareaError("");
     setCrearTareaMensaje("");
     setEditarTareaMensaje("");
+    setCompletarTareaMensaje("");
 
     if (!tareaGrupoId || !tareaTitulo.trim() || !tareaFecha || !tareaHoraInicio || !tareaHoraFin) {
       setCrearTareaError("Grupo, titulo, fecha, hora de inicio y hora de fin son obligatorios.");
@@ -258,6 +263,7 @@ function Dashboard({
     setTareaEditadaHoraFin(tarea.hora_fin ?? "");
     setEditarTareaError("");
     setEditarTareaMensaje("");
+    setCompletarTareaMensaje("");
     setCrearTareaMensaje("");
   }
 
@@ -306,6 +312,7 @@ function Dashboard({
     setEliminarTareaError("");
     setEliminarTareaMensaje("");
     setEditarTareaMensaje("");
+    setCompletarTareaMensaje("");
     setCrearTareaMensaje("");
   }
 
@@ -324,6 +331,20 @@ function Dashboard({
       setEliminarTareaMensaje(result.mensaje);
     } catch (taskError) {
       setEliminarTareaError(taskError.message);
+    }
+  }
+
+  async function handleCompleteTask(taskId) {
+    setCompletarTareaError("");
+    setCompletarTareaMensaje("");
+    setEditarTareaMensaje("");
+    setEliminarTareaMensaje("");
+
+    try {
+      const result = await onCompleteTask(taskId);
+      setCompletarTareaMensaje(result.mensaje);
+    } catch (taskError) {
+      setCompletarTareaError(taskError.message);
     }
   }
 
@@ -1089,6 +1110,8 @@ function Dashboard({
         {tareasLoading ? <p className="subtle">Cargando tareas...</p> : null}
         {tareasError ? <p className="error" role="alert">{tareasError}</p> : null}
         {editarTareaMensaje ? <p className="success" role="status">{editarTareaMensaje}</p> : null}
+        {completarTareaMensaje ? <p className="success" role="status">{completarTareaMensaje}</p> : null}
+        {completarTareaError ? <p className="error" role="alert">{completarTareaError}</p> : null}
         {eliminarTareaMensaje ? <p className="success" role="status">{eliminarTareaMensaje}</p> : null}
         {eliminarTareaError ? <p className="error" role="alert">{eliminarTareaError}</p> : null}
 
@@ -1180,27 +1203,40 @@ function Dashboard({
                           {tarea.hora_inicio}-{tarea.hora_fin}
                         </span>
                       ) : null}
+                      {tarea.fecha_finalizacion ? <span>Finalizada {tarea.fecha_finalizacion}</span> : null}
                       <span>{tarea.grupo_nombre}</span>
                       <span>{tarea.rol_grupo}</span>
                       {tarea.es_gestionable ? <span>Gestionable</span> : null}
                     </div>
-                    {tarea.es_gestionable && !ESTADOS_TAREA_NO_EDITABLES.has(tarea.estado) ? (
+                    {!ESTADOS_TAREA_NO_EDITABLES.has(tarea.estado) ? (
                       <div className="task-actions">
                         <button
-                          className="secondary-button compact"
+                          className="primary-button compact"
+                          disabled={tareaCompletandoId === tarea.id}
                           type="button"
-                          onClick={() => startEditTask(tarea)}
+                          onClick={() => handleCompleteTask(tarea.id)}
                         >
-                          Editar
+                          {tareaCompletandoId === tarea.id ? "Completando..." : "Completar"}
                         </button>
-                        <button
-                          className="danger-button compact"
-                          disabled={tareaEliminandoId === tarea.id}
-                          type="button"
-                          onClick={() => requestDeleteTask(tarea.id)}
-                        >
-                          Eliminar
-                        </button>
+                        {tarea.es_gestionable ? (
+                          <>
+                            <button
+                              className="secondary-button compact"
+                              type="button"
+                              onClick={() => startEditTask(tarea)}
+                            >
+                              Editar
+                            </button>
+                            <button
+                              className="danger-button compact"
+                              disabled={tareaEliminandoId === tarea.id}
+                              type="button"
+                              onClick={() => requestDeleteTask(tarea.id)}
+                            >
+                              Eliminar
+                            </button>
+                          </>
+                        ) : null}
                       </div>
                     ) : null}
                     {tareaConfirmandoEliminarId === tarea.id ? (
@@ -1354,6 +1390,7 @@ export default function App() {
   const [tareasError, setTareasError] = useState("");
   const [tareasLoading, setTareasLoading] = useState(false);
   const [tareaActualizandoId, setTareaActualizandoId] = useState(null);
+  const [tareaCompletandoId, setTareaCompletandoId] = useState(null);
   const [tareaCreando, setTareaCreando] = useState(false);
   const [tareaEliminandoId, setTareaEliminandoId] = useState(null);
   const [grupoCreando, setGrupoCreando] = useState(false);
@@ -1526,6 +1563,22 @@ export default function App() {
     }
   }
 
+  async function handleCompleteTask(taskId) {
+    setTareaCompletandoId(taskId);
+
+    try {
+      const result = await completeTask(token, taskId);
+      setTareas((currentTasks) =>
+        currentTasks.map((tarea) => (tarea.id === result.tarea.id ? result.tarea : tarea)),
+      );
+      setEstado(result.estado);
+      setGestionMensaje(result.mensaje);
+      return result;
+    } finally {
+      setTareaCompletandoId(null);
+    }
+  }
+
   async function handleDeleteTask(taskId) {
     setTareaEliminandoId(taskId);
 
@@ -1686,6 +1739,7 @@ export default function App() {
       setTareas([]);
       setTareasError("");
       setTareaActualizandoId(null);
+      setTareaCompletandoId(null);
       setTareaCreando(false);
       setTareaEliminandoId(null);
       setGrupoCreando(false);
@@ -1726,9 +1780,11 @@ export default function App() {
           tareasError={tareasError}
           tareasLoading={tareasLoading}
           tareaActualizandoId={tareaActualizandoId}
+          tareaCompletandoId={tareaCompletandoId}
           tareaCreando={tareaCreando}
           tareaEliminandoId={tareaEliminandoId}
           onCancelLogout={cancelLogout}
+          onCompleteTask={handleCompleteTask}
           onConfirmLogout={confirmLogout}
           onCreateTask={handleCreateTask}
           onDeleteTask={handleDeleteTask}

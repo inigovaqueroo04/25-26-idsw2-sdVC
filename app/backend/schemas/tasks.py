@@ -27,6 +27,7 @@ class TaskResponse(BaseModel):
     fecha: str | None
     hora_inicio: str | None
     hora_fin: str | None
+    fecha_finalizacion: str | None
     estado: str
     rol_grupo: str
     es_gestionable: bool
@@ -53,4 +54,10 @@ class TaskUpdateResponse(BaseModel):
 class TaskDeleteResponse(BaseModel):
     estado: str
     tarea_id: int
+    mensaje: str
+
+
+class TaskCompleteResponse(BaseModel):
+    estado: str
+    tarea: TaskResponse
     mensaje: str
