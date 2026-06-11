@@ -17,6 +17,7 @@
 
 ## Decision
 
-La primera version permite completar cualquier tarea visible porque todavia no
-existen asignaciones de tareas a usuarios. Cuando se implemente asignacion, esta
-regla debera ajustarse para comprobar si la tarea corresponde al usuario.
+La version actual permite completar cualquier tarea visible. Aunque ya existe
+asignacion de responsable, se mantiene esta regla para no bloquear tareas de
+grupo sin responsable o tareas compartidas. Una regla mas restrictiva puede
+definirse como mejora posterior.

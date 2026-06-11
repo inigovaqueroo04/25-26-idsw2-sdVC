@@ -54,11 +54,11 @@ recargar la aplicacion.
   permisos, miembros y futuras asignaciones.
 - No se permite editar tareas `Finalizada` o `Cancelada` para evitar alterar
   registros cerrados hasta que se defina una regla especifica.
-- Asignaciones, relaciones entre tareas, conflictos y recordatorios quedan para
-  sus casos de uso propios.
+- Asignaciones, relaciones entre tareas, conflictos y recordatorios se gestionan
+  desde este mismo formulario, pero se documentan en sus casos de uso propios.
 
 ## Estado resultante
 
 `editarTarea()` queda implementado en backend y frontend. La gestion de tareas
-permite consultar, crear y corregir tareas programadas; quedan pendientes
-eliminar tareas y marcarlas como completadas.
+permite consultar, crear, corregir, eliminar, finalizar y planificar tareas
+programadas.

@@ -28,7 +28,8 @@ DELETE /api/tasks/{task_id}
 La ruta valida sesion y delega en `eliminar_tarea()`. El servicio comprueba que
 la tarea exista para el usuario autenticado y que su rol en el grupo sea
 `Administrador` o `Miembro Administrador`. Si las comprobaciones son correctas,
-borra la fila de `tareas` y devuelve el id eliminado.
+limpia relaciones de precedencia asociadas, borra la fila de `tareas` y
+devuelve el id eliminado.
 
 ## Frontend
 
@@ -47,15 +48,15 @@ elimina mediante la API y desaparece del listado sin recargar la aplicacion.
 - La eliminacion es irreversible dentro de este incremento y vuelve al listado
   `TAREAS_ABIERTO`.
 - Solo se elimina la entidad `Tarea`; no se modifican grupos ni usuarios.
-- La eliminacion recursiva de subtareas y la limpieza de relaciones externas no
-  se implementan todavia porque esas estructuras no existen aun en codigo.
+- La eliminacion limpia las dependencias simples de `relaciones_tareas`. La
+  eliminacion recursiva de subtareas queda fuera porque las subtareas avanzadas
+  no forman parte de la version actual.
 - Las tareas `Finalizada` o `Cancelada` no se muestran como editables ni
   eliminables desde la UI actual para mantener un criterio prudente con
   registros cerrados.
 
 ## Estado resultante
 
-`eliminarTarea()` queda implementado en backend y frontend. La gestion basica
-de tareas ya permite consultar, crear, editar y eliminar tareas programadas.
-Queda pendiente marcar tareas como completadas y abordar planificacion,
-asignaciones, conflictos y recordatorios.
+`eliminarTarea()` queda implementado en backend y frontend. La gestion de
+tareas ya permite consultar, crear, editar, eliminar, finalizar y planificar
+tareas programadas.

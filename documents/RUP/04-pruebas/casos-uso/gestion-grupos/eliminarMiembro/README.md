@@ -39,5 +39,5 @@ temporales se limpiaron al terminar.
 ## Observaciones
 
 La prueba funcional se centra en la tabla `miembros_grupo`, porque el caso de
-uso elimina una pertenencia al grupo. Las tareas asociadas quedan fuera porque
-el subsistema de tareas todavia no existe en la implementacion tecnica actual.
+uso elimina una pertenencia al grupo. No cubre reasignacion de tareas asociadas
+al miembro retirado; esa regularizacion queda como mejora posterior.

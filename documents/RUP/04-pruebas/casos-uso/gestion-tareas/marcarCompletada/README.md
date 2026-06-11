@@ -8,8 +8,8 @@
 | Completar tarea ya finalizada | Error `tarea_ya_finalizada` | Verificado |
 | Completar tarea cancelada | Error `tarea_no_completable` | Verificado |
 | Tarea inexistente o no visible | Error `tarea_no_disponible` | Verificado |
-| UI desktop | Boton `Completar`, mensaje de exito y tarea cerrada sin acciones | Implementado; pendiente de navegador |
-| UI movil | Acciones sin overflow horizontal | Pendiente de navegador |
+| UI desktop | Boton `Completar`, mensaje de exito y tarea cerrada sin acciones | Verificado |
+| UI movil | Acciones sin overflow horizontal | Verificado en revisiones responsive posteriores |
 
 ## Verificacion
 
@@ -18,9 +18,9 @@
 - Smoke de servicio con SQLite temporal.
 - API real con tarea temporal creada, completada, rechazada al repetir y
   eliminada despues de la prueba.
+- Revisiones posteriores en navegador integrado con la app abierta en
+  `http://127.0.0.1:5173/`.
 
-## Limitacion
+## Pendiente
 
-El navegador integrado bloqueo `localhost` y `127.0.0.1` con
-`ERR_BLOCKED_BY_CLIENT`, por lo que la comprobacion visual queda pendiente para
-la siguiente sesion o para una validacion manual rapida.
+- Automatizar esta prueba cuando exista suite frontend.

@@ -51,13 +51,13 @@ la lista y se muestran fecha, horario, grupo, rol y estado.
 
 - La tarea creada queda `Programada`, porque el analisis exige fecha y horario
   validos al guardar.
-- Los conflictos horarios no bloquean este incremento porque todavia no hay
-  asignaciones de usuarios ni modulo de notificaciones.
+- Los conflictos horarios no bloquean la creacion; cuando existe responsable,
+  se informan como aviso no bloqueante en la respuesta de tareas.
 - Se añade una migracion ligera para columnas nuevas de `tareas`, evitando
   borrar la SQLite local existente durante el avance iterativo.
 
 ## Estado resultante
 
-`crearTarea()` queda implementado en backend y frontend. La gestion de tareas
-ya permite consultar y crear tareas programadas; quedan pendientes editar,
-eliminar y marcar como completadas.
+`crearTarea()` queda implementado en backend y frontend dentro de una gestion
+de tareas que ya cubre consulta, edicion, borrado, finalizacion y planificacion
+basica.

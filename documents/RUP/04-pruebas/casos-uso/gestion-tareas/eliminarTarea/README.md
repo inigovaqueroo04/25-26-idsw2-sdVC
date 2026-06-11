@@ -37,6 +37,6 @@ movil sin overflow horizontal.
 
 ## Observaciones
 
-La prueba no cubre subtareas ni relaciones entre tareas porque todavia no
-existen en la implementacion. Cuando se implementen, el borrado debera ampliar
-su verificacion para confirmar la limpieza de dependencias.
+La prueba de borrado se complemento con la limpieza de dependencias simples en
+`relacionarTareas()`. Las subtareas avanzadas siguen fuera de la version
+actual.

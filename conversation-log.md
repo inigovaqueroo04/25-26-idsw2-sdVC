@@ -635,3 +635,13 @@
 **Resultado:** Se sustituyeron las plantillas de `iniciarSesion()`, `cerrarSesion()`, `completarGestion()` y `abrirGrupos()` por descripciones breves de implementacion, decisiones y smoke manual. La busqueda posterior ya no encontro textos de plantilla en los casos de uso de desarrollo y pruebas.
 
 **Decision:** Esta limpieza no anade funcionalidad nueva. Mejora la coherencia de entrega y evita que alguien revise RUP y piense que esos casos siguen pendientes cuando ya estan implementados.
+
+---
+
+## [2026-06-11 22:29] Correccion de notas RUP desactualizadas
+
+**Prompt:** Se revisaron documentos de desarrollo y pruebas que conservaban frases antiguas sobre tareas, conflictos, relaciones o navegador pendiente, para ajustar la documentacion al estado real de la aplicacion despues de los ultimos incrementos.
+
+**Resultado:** Se actualizaron notas de `abrirTareas()`, `crearTarea()`, `editarTarea()`, `eliminarTarea()`, `marcarCompletada()`, `eliminarMiembro()` y pruebas relacionadas. La documentacion ya no afirma que no existan tareas, relaciones simples o comprobacion visual cuando esas partes ya estan cubiertas.
+
+**Decision:** Se mantuvieron como pendientes solo elementos que siguen fuera del alcance actual: notificaciones reales, mapas/rutas, subtareas avanzadas, resolucion guiada de conflictos y automatizacion completa de pruebas.

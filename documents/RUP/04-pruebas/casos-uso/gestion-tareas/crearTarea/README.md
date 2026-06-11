@@ -39,6 +39,5 @@ real, el layout movil y la limpieza posterior de datos temporales.
 
 ## Observaciones
 
-Los conflictos horarios quedan fuera de esta prueba porque todavia no existe
-asignacion de tareas a usuarios ni notificaciones. La validacion actual cubre
-el horario propio de la tarea.
+Los conflictos horarios se prueban en `validarConflicto()`. Esta prueba se
+limita al alta de la tarea y a la validacion del horario propio.

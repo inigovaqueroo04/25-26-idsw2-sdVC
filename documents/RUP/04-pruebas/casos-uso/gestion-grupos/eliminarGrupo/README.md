@@ -26,7 +26,6 @@
 ## Riesgos pendientes
 
 - No hay pruebas automatizadas todavia.
-- La comprobacion de tareas asociadas queda pendiente hasta que exista la
-  gestion tecnica de tareas.
-- Las invitaciones pendientes se limpiaran cuando exista persistencia tecnica
-  para invitaciones.
+- La prueba visual cubrio el borrado del grupo desde UI. Como mejora posterior
+  conviene ampliar una prueba especifica de integridad para tareas,
+  invitaciones y relaciones asociadas al grupo.

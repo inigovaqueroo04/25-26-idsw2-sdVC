@@ -53,8 +53,9 @@ refresca los grupos para actualizar el contador de miembros.
   persona con permisos de gestion.
 - La confirmacion queda dentro de la fila para que el usuario vea con claridad
   que miembro esta a punto de retirar.
-- No se actualizan tareas asociadas porque la parte de tareas todavia no esta
-  implementada en el vertical tecnico actual.
+- No se reasignan automaticamente tareas asociadas. Si un miembro retirado era
+  responsable de tareas, esa regularizacion queda para una mejora posterior de
+  administracion de asignaciones.
 
 ## Estado resultante
 

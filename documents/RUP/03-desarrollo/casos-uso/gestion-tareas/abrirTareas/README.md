@@ -8,7 +8,7 @@ Implementado como primer incremento vertical de gestion de tareas.
 - Consultar tareas visibles para el usuario autenticado segun sus membresias de
   grupo.
 - Mostrar titulo, descripcion, grupo, estado, rol del usuario en el grupo y si
-  la tarea sera gestionable en incrementos posteriores.
+  la tarea es gestionable para el usuario.
 - Filtrar tareas en frontend por texto, grupo y estado.
 
 ## Backend
@@ -46,8 +46,8 @@ estado sin recargar la pagina.
 
 ## Decisiones
 
-- `abrirTareas()` se limita a lectura y filtrado; crear, editar, eliminar o
-  marcar como completada quedan para casos de uso posteriores.
+- `abrirTareas()` se limita a lectura y filtrado; las mutaciones se documentan
+  en sus casos de uso especificos.
 - La visibilidad depende de la pertenencia al grupo, no del rol global del
   usuario.
 - Al eliminar un grupo, el backend elimina tambien sus tareas para no dejar
@@ -55,5 +55,5 @@ estado sin recargar la pagina.
 
 ## Estado resultante
 
-El modulo de tareas queda iniciado en codigo con consulta real sobre SQLite y
-una vista usable en el dashboard.
+El modulo de tareas permite consultar, filtrar y revisar informacion operativa
+de tareas desde el dashboard.
