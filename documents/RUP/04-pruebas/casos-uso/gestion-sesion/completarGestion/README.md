@@ -1,9 +1,13 @@
-﻿# completarGestion > Pruebas
+# completarGestion > Pruebas
 
-Plantilla de pruebas del caso de uso $name().
+## Smoke ejecutado
+
+| Escenario | Resultado esperado | Estado |
+| --- | --- | --- |
+| Login correcto | El panel principal queda disponible | Verificado |
+| Completar una accion del panel | Se mantiene el estado operativo y se muestra mensaje | Verificado |
+| Recargar con sesion activa | La app intenta recuperar el usuario actual | Verificado |
 
 ## Pendiente
 
-- Definir escenarios de prueba del flujo principal.
-- Definir escenarios alternativos y de error.
-- Registrar pruebas automatizadas cuando existan.
+- Endurecer persistencia de sesion si se exige mas alla de esta entrega.

@@ -625,3 +625,13 @@
 **Resultado:** El frontend incorpora una banda de planificacion con contadores y las proximas tareas planificadas del filtro actual. La agenda muestra fecha, tramo horario, grupo y responsable cuando existe. Se actualizaron README de app, frontend, desarrollo, pruebas y seguimiento RUP.
 
 **Decision:** La planificacion queda integrada en `Mis tareas` porque ahi ya se crean y editan los datos que la alimentan. Se evita una ruta separada para no duplicar flujos ni ampliar el alcance mas de lo necesario.
+
+---
+
+## [2026-06-11 22:29] Limpieza de plantillas RUP iniciales
+
+**Prompt:** En fase de cierre se revisaron los casos ya implementados que todavia conservaban README de plantilla en desarrollo o pruebas, especialmente sesion y apertura de grupos, para que la documentacion no contradiga el estado real de la app.
+
+**Resultado:** Se sustituyeron las plantillas de `iniciarSesion()`, `cerrarSesion()`, `completarGestion()` y `abrirGrupos()` por descripciones breves de implementacion, decisiones y smoke manual. La busqueda posterior ya no encontro textos de plantilla en los casos de uso de desarrollo y pruebas.
+
+**Decision:** Esta limpieza no anade funcionalidad nueva. Mejora la coherencia de entrega y evita que alguien revise RUP y piense que esos casos siguen pendientes cuando ya estan implementados.

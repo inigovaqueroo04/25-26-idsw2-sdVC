@@ -1,9 +1,14 @@
-﻿# abrirGrupos > Pruebas
+# abrirGrupos > Pruebas
 
-Plantilla de pruebas del caso de uso $name().
+## Smoke ejecutado
+
+| Escenario | Resultado esperado | Estado |
+| --- | --- | --- |
+| Usuario autenticado abre grupos | Se listan solo sus grupos | Verificado |
+| Grupo visible | Muestra nombre, descripcion, rol y numero de miembros | Verificado |
+| Filtro por nombre | La lista se reduce en frontend sin llamar al backend | Verificado |
+| Sin token valido | Error de sesion no activa | Verificado por API |
 
 ## Pendiente
 
-- Definir escenarios de prueba del flujo principal.
-- Definir escenarios alternativos y de error.
-- Registrar pruebas automatizadas cuando existan.
+- Automatizar el filtro visual cuando exista suite frontend.

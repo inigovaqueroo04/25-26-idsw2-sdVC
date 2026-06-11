@@ -1,9 +1,13 @@
-﻿# cerrarSesion > Pruebas
+# cerrarSesion > Pruebas
 
-Plantilla de pruebas del caso de uso $name().
+## Smoke ejecutado
+
+| Escenario | Resultado esperado | Estado |
+| --- | --- | --- |
+| Pulsar `Cerrar sesion` | Se muestra confirmacion antes de cerrar | Verificado |
+| Cancelar cierre | El usuario permanece en el panel | Verificado |
+| Confirmar cierre | Token eliminado y vuelta a `SESION_CERRADA` | Verificado |
 
 ## Pendiente
 
-- Definir escenarios de prueba del flujo principal.
-- Definir escenarios alternativos y de error.
-- Registrar pruebas automatizadas cuando existan.
+- Automatizar la confirmacion cuando exista suite frontend.
