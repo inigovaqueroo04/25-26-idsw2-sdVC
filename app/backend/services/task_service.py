@@ -16,7 +16,7 @@ class TaskError(Exception):
         self.status_code = status_code
 
 
-def tarea_row_to_response(row) -> dict:
+def tarea_row_to_response(row, conflictos_horario: list[dict] | None = None) -> dict:
     return {
         "id": row["id"],
         "grupo_id": row["grupo_id"],
@@ -32,6 +32,7 @@ def tarea_row_to_response(row) -> dict:
         "asignado_email": row["asignado_email"],
         "localizacion": row["localizacion"],
         "recordatorio_minutos": row["recordatorio_minutos"],
+        "conflictos_horario": conflictos_horario or [],
         "estado": row["estado"],
         "rol_grupo": row["rol_grupo"],
         "es_gestionable": row["rol_grupo"] in ROLES_GESTION_TAREAS,
@@ -113,6 +114,55 @@ def normalizar_texto_opcional(value: str | None) -> str | None:
     return (value or "").strip() or None
 
 
+def buscar_conflictos_horario(connection, tarea) -> list[dict]:
+    if (
+        tarea["asignado_usuario_id"] is None
+        or tarea["fecha"] is None
+        or tarea["hora_inicio"] is None
+        or tarea["hora_fin"] is None
+    ):
+        return []
+
+    rows = connection.execute(
+        """
+        SELECT
+            id,
+            titulo,
+            hora_inicio,
+            hora_fin
+        FROM tareas
+        WHERE id <> ?
+          AND asignado_usuario_id = ?
+          AND fecha = ?
+          AND estado NOT IN ('Finalizada', 'Cancelada')
+          AND hora_inicio < ?
+          AND hora_fin > ?
+        ORDER BY hora_inicio, titulo COLLATE NOCASE
+        """,
+        (
+            tarea["id"],
+            tarea["asignado_usuario_id"],
+            tarea["fecha"],
+            tarea["hora_fin"],
+            tarea["hora_inicio"],
+        ),
+    ).fetchall()
+
+    return [
+        {
+            "id": row["id"],
+            "titulo": row["titulo"],
+            "hora_inicio": row["hora_inicio"],
+            "hora_fin": row["hora_fin"],
+        }
+        for row in rows
+    ]
+
+
+def tarea_row_to_response_con_conflictos(connection, row) -> dict:
+    return tarea_row_to_response(row, buscar_conflictos_horario(connection, row))
+
+
 def listar_tareas_usuario(usuario: Usuario) -> list[dict]:
     with get_connection() as connection:
         rows = connection.execute(
@@ -154,7 +204,7 @@ def listar_tareas_usuario(usuario: Usuario) -> list[dict]:
             (usuario.id,),
         ).fetchall()
 
-    return [tarea_row_to_response(row) for row in rows]
+        return [tarea_row_to_response_con_conflictos(connection, row) for row in rows]
 
 
 def crear_tarea(
@@ -256,7 +306,7 @@ def crear_tarea(
             (usuario.id, tarea_id),
         ).fetchone()
 
-    return tarea_row_to_response(row)
+        return tarea_row_to_response_con_conflictos(connection, row)
 
 
 def editar_tarea(
@@ -390,7 +440,7 @@ def editar_tarea(
             (usuario.id, tarea_id),
         ).fetchone()
 
-    return tarea_row_to_response(row)
+        return tarea_row_to_response_con_conflictos(connection, row)
 
 
 def marcar_tarea_completada(usuario: Usuario, tarea_id: int) -> dict:
@@ -472,7 +522,7 @@ def marcar_tarea_completada(usuario: Usuario, tarea_id: int) -> dict:
             (usuario.id, tarea_id),
         ).fetchone()
 
-    return tarea_row_to_response(row)
+        return tarea_row_to_response_con_conflictos(connection, row)
 
 
 def eliminar_tarea(usuario: Usuario, tarea_id: int) -> int:

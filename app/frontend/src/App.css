@@ -535,6 +535,21 @@ select:focus {
   padding: 6px 10px;
 }
 
+.task-meta .warning-pill {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #9a3412;
+}
+
+.task-warning {
+  background: #fff7ed;
+  border-left: 4px solid #f97316;
+  color: #7c2d12;
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 10px 12px;
+}
+
 .task-actions {
   display: flex;
   flex-wrap: wrap;

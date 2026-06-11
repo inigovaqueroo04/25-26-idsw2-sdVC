@@ -1,9 +1,13 @@
-﻿# establecerHorario > Pruebas
+# establecerHorario > Pruebas
 
-Plantilla de pruebas del caso de uso $name().
+## Smoke ejecutado
+
+| Escenario | Resultado esperado | Estado |
+| --- | --- | --- |
+| Crear tarea con fecha y horario valido | Tarea `Programada` creada correctamente | Verificado en incrementos anteriores |
+| Editar tarea con horario valido | Cambios guardados y respuesta actualizada | Verificado |
+| Hora de inicio posterior o igual a hora fin | Error `horario_invalido` | Verificado en validaciones de tareas |
 
 ## Pendiente
 
-- Definir escenarios de prueba del flujo principal.
-- Definir escenarios alternativos y de error.
-- Registrar pruebas automatizadas cuando existan.
+- Automatizar pruebas de frontera de formato horario cuando exista suite.

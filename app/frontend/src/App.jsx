@@ -1272,10 +1272,22 @@ function Dashboard({
                       {tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0 ? (
                         <span>Recordatorio {tarea.recordatorio_minutos} min</span>
                       ) : null}
+                      {tarea.conflictos_horario?.length > 0 ? (
+                        <span className="warning-pill">Conflicto horario {tarea.conflictos_horario.length}</span>
+                      ) : null}
                       <span>{tarea.grupo_nombre}</span>
                       <span>{tarea.rol_grupo}</span>
                       {tarea.es_gestionable ? <span>Gestionable</span> : null}
                     </div>
+                    {tarea.conflictos_horario?.length > 0 ? (
+                      <p className="task-warning" role="status">
+                        Solapa con{" "}
+                        {tarea.conflictos_horario
+                          .map((conflicto) => `${conflicto.titulo} (${conflicto.hora_inicio}-${conflicto.hora_fin})`)
+                          .join(", ")}
+                        .
+                      </p>
+                    ) : null}
                     {!ESTADOS_TAREA_NO_EDITABLES.has(tarea.estado) ? (
                       <div className="task-actions">
                         <button

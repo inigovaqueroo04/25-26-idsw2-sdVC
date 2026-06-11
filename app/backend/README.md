@@ -43,7 +43,7 @@ Los endpoints `logout`, `me` y `groups` usan la cabecera `X-Session-Token` recib
 
 `GET /api/tasks` lista las tareas de los grupos a los que pertenece el usuario
 autenticado. Devuelve grupo, titulo, descripcion, estado, rol del usuario en
-ese grupo y si puede gestionar la tarea en incrementos posteriores.
+ese grupo, responsable, configuracion basica y conflictos horarios detectados.
 
 `POST /api/tasks` crea una tarea `Programada` dentro de un grupo gestionable.
 Valida titulo, fecha, hora de inicio, hora de fin, permisos de gestion y que
@@ -52,7 +52,8 @@ la hora de inicio sea anterior a la hora de fin.
 `PATCH /api/tasks/{task_id}` actualiza titulo, descripcion, fecha y horario de
 una tarea gestionable. Reutiliza las validaciones de creacion y bloquea tareas
 `Finalizada` o `Cancelada`. Tambien permite asignar responsable, localizacion
-textual y recordatorio simple en minutos.
+textual y recordatorio simple en minutos. Si el responsable tiene otra tarea
+solapada en el mismo dia, la respuesta incluye el aviso sin impedir el guardado.
 
 `PATCH /api/tasks/{task_id}/complete` marca como `Finalizada` una tarea visible
 para el usuario autenticado y registra `fecha_finalizacion`.

@@ -38,9 +38,11 @@ app/
 - `editarTarea()`: permite corregir titulo, descripcion, fecha y horario de una tarea gestionable.
 - `eliminarTarea()`: elimina una tarea gestionable tras confirmacion.
 - `marcarCompletada()`: finaliza una tarea visible y registra la fecha de finalizacion.
+- `validarConflicto()`: detecta solapamientos de horario para el responsable asignado sin bloquear el guardado.
 
 ### Planificacion y configuracion
 
+- `establecerHorario()`: valida fecha, hora de inicio y hora de fin como parte de crear o editar tareas.
 - `asignarTareaAUsuario()`: asigna una tarea gestionable a un miembro del grupo.
 - `definirLocalizacion()`: guarda una localizacion textual opcional para la tarea.
 - `configurarRecordatorio()`: guarda un recordatorio simple en minutos.
@@ -99,6 +101,6 @@ El usuario de prueba pertenece a:
 
 - Planificacion avanzada.
 - Notificaciones reales de recordatorio.
-- Conflictos horarios y relaciones entre tareas.
+- Resolucion guiada de conflictos horarios y relaciones entre tareas.
 - Seguridad de sesion mas robusta y persistente.
 - Pruebas automatizadas de backend y frontend.

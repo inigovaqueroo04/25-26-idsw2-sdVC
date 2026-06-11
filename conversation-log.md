@@ -585,3 +585,23 @@
 **Resultado:** Se anadio `recordatorio_minutos` a `tareas`, se amplio `PATCH /api/tasks/{task_id}` para aceptar el valor y se valida que este entre 0 y 10080 minutos. En React se incorporo el campo `Recordatorio` y la tarjeta muestra los minutos configurados.
 
 **Decision:** El recordatorio queda registrado como configuracion interna. El envio real de avisos se aplaza porque requiere un mecanismo de notificaciones que aun no existe en el proyecto.
+
+---
+
+## [2026-06-11 21:58] Horario validado en tareas
+
+**Prompt:** Tras publicar la planificacion basica, se continuo con otro avance compacto dentro de tareas y planificacion: reforzar `establecerHorario()` para que fecha, hora de inicio y hora de fin sigan siendo el punto comun al crear o editar tareas, preparando el resultado para informar tambien de posibles solapamientos.
+
+**Resultado:** Se mantuvieron las validaciones existentes de fecha y rango horario en el backend y se conecto el resultado con la nueva informacion de conflictos. La respuesta de tareas conserva el horario guardado y puede incluir avisos calculados sin cambiar el flujo de creacion o edicion en React. Se actualizaron README de app, backend, frontend, desarrollo, pruebas y seguimiento.
+
+**Decision:** No se crea una pantalla nueva de planificacion porque el caso ya queda cubierto desde `Mis tareas`. Esta decision reduce tiempo de implementacion y mantiene el comportamiento visible en el lugar donde el usuario ya crea y edita tareas.
+
+---
+
+## [2026-06-11 21:58] Aviso de conflictos horarios
+
+**Prompt:** En el mismo bloque se decidio trabajar `validarConflicto()`: detectar cuando una tarea asignada a un responsable se solapa con otra tarea activa del mismo responsable en el mismo dia, mostrando el problema al usuario sin bloquear el guardado.
+
+**Resultado:** El backend calcula `conflictos_horario` al listar, crear, editar o completar tareas. El frontend muestra una pildora de conflicto y un mensaje con la tarea solapada y su tramo horario. Se ejecuto un smoke con dos tareas temporales solapadas del usuario demo, se comprobo que el conflicto aparece al guardar y al listar, y se eliminaron los datos temporales.
+
+**Decision:** El conflicto se trata como aviso no bloqueante. La resolucion guiada, notificaciones reales y relaciones entre tareas quedan pendientes para incrementos posteriores porque requieren mas reglas de negocio y no son imprescindibles para este avance.

@@ -30,6 +30,7 @@ npm run dev
 - Crear una tarea programada desde `Mis tareas` en grupos gestionables.
 - Editar titulo, descripcion, fecha y horario de tareas gestionables desde `Mis tareas`.
 - Configurar responsable, localizacion y recordatorio simple al editar una tarea.
+- Ver avisos de conflicto cuando una tarea se solapa con otra del mismo responsable.
 - Eliminar tareas gestionables con confirmacion desde `Mis tareas`.
 - Marcar tareas visibles como completadas desde `Mis tareas`.
 - Crear un grupo nuevo desde el dashboard.
