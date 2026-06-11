@@ -219,6 +219,22 @@ function Dashboard({
     const coincideGrupo = filtroTareasGrupo === "Todos" || String(tarea.grupo_id) === filtroTareasGrupo;
     return coincideTexto && coincideEstado && coincideGrupo;
   });
+  const tareasPlanificacion = tareasFiltradas
+    .filter((tarea) => tarea.fecha && !ESTADOS_TAREA_NO_EDITABLES.has(tarea.estado))
+    .sort((firstTask, secondTask) =>
+      `${firstTask.fecha} ${firstTask.hora_inicio ?? ""}`.localeCompare(
+        `${secondTask.fecha} ${secondTask.hora_inicio ?? ""}`,
+      ),
+    );
+  const resumenPlanificacion = {
+    programadas: tareasPlanificacion.length,
+    conResponsable: tareasPlanificacion.filter((tarea) => tarea.asignado_usuario_id).length,
+    conRecordatorio: tareasPlanificacion.filter(
+      (tarea) => tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0,
+    ).length,
+    conDependencia: tareasPlanificacion.filter((tarea) => tarea.predecesora_tarea_id).length,
+    conConflicto: tareasPlanificacion.filter((tarea) => tarea.conflictos_horario?.length > 0).length,
+  };
 
   useEffect(() => {
     if (!tareaGrupoId && gruposGestionTareas.length > 0) {
@@ -1144,6 +1160,41 @@ function Dashboard({
         {completarTareaError ? <p className="error" role="alert">{completarTareaError}</p> : null}
         {eliminarTareaMensaje ? <p className="success" role="status">{eliminarTareaMensaje}</p> : null}
         {eliminarTareaError ? <p className="error" role="alert">{eliminarTareaError}</p> : null}
+
+        {!tareasLoading && !tareasError ? (
+          <div className="planning-panel" aria-labelledby="planning-title">
+            <div className="planning-panel-header">
+              <div>
+                <p className="eyebrow">Planificacion</p>
+                <h3 id="planning-title">Agenda filtrada</h3>
+              </div>
+              <div className="planning-stats">
+                <span>{resumenPlanificacion.programadas} programadas</span>
+                <span>{resumenPlanificacion.conResponsable} responsables</span>
+                <span>{resumenPlanificacion.conRecordatorio} recordatorios</span>
+                <span>{resumenPlanificacion.conDependencia} dependencias</span>
+                <span>{resumenPlanificacion.conConflicto} conflictos</span>
+              </div>
+            </div>
+
+            {tareasPlanificacion.length > 0 ? (
+              <div className="planning-list">
+                {tareasPlanificacion.slice(0, 5).map((tarea) => (
+                  <div className="planning-row" key={tarea.id}>
+                    <strong>{tarea.titulo}</strong>
+                    <span>{tarea.grupo_nombre}</span>
+                    <span>
+                      {tarea.fecha} {tarea.hora_inicio && tarea.hora_fin ? `${tarea.hora_inicio}-${tarea.hora_fin}` : ""}
+                    </span>
+                    <span>{tarea.asignado_nombre ? `Responsable ${tarea.asignado_nombre}` : "Sin responsable"}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="subtle">No hay tareas planificadas para este filtro.</p>
+            )}
+          </div>
+        ) : null}
 
         {!tareasLoading && !tareasError && tareasFiltradas.length === 0 ? (
           <p className="empty-state">No hay tareas para este filtro.</p>

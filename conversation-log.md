@@ -615,3 +615,13 @@
 **Resultado:** Se creo la tabla `relaciones_tareas`, una migracion ligera para bases SQLite existentes y el campo `predecesora_tarea_id` en la edicion de tareas. El backend guarda una unica predecesora por tarea, devuelve `predecesora_titulo`, limpia relaciones al borrar tareas y valida autorrelaciones, tareas de otro grupo y ciclos. En React se anadio el selector `Depende de` y la tarjeta muestra la dependencia cuando existe. Se actualizo la trazabilidad RUP y los README principales.
 
 **Decision:** La primera version cubre solo dependencia simple porque es suficiente para demostrar `relacionarTareas()` sin abrir demasiada complejidad. Subtareas, relaciones sucesoras explicitas, multiples dependencias y resolucion visual avanzada quedan para un incremento posterior.
+
+---
+
+## [2026-06-11 22:22] Agenda filtrada de planificacion
+
+**Prompt:** Se trabajo `abrirPlanificacion()` para cerrar el acceso a la planificacion sin crear una pantalla nueva: mostrar una agenda resumida dentro de `Mis tareas`, reutilizando los filtros existentes y destacando la informacion necesaria para revisar horarios, responsables, recordatorios, dependencias y conflictos.
+
+**Resultado:** El frontend incorpora una banda de planificacion con contadores y las proximas tareas planificadas del filtro actual. La agenda muestra fecha, tramo horario, grupo y responsable cuando existe. Se actualizaron README de app, frontend, desarrollo, pruebas y seguimiento RUP.
+
+**Decision:** La planificacion queda integrada en `Mis tareas` porque ahi ya se crean y editan los datos que la alimentan. Se evita una ruta separada para no duplicar flujos ni ampliar el alcance mas de lo necesario.

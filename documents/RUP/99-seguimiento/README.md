@@ -11,7 +11,7 @@ entender cada incremento.
 | Gestion de sesion y navegacion | Completo | Completo | Primer vertical implementado | Smoke manual | React + FastAPI + SQLite en `app/` |
 | Gestion de grupos y usuarios | Completo | Completo | En progreso | Smoke manual | CRUD basico, invitaciones recibidas/gestionables y gestion de miembros implementados |
 | Gestion de tareas | Completo | Completo | En progreso | Smoke manual | Tareas CRUD, finalizacion, conflictos iniciales y dependencia simple implementados |
-| Planificacion y configuracion | Completo | Completo | En progreso | Smoke manual | Horario, responsable, localizacion y recordatorio simple implementados |
+| Planificacion y configuracion | Completo | Completo | En progreso | Smoke manual | Agenda filtrada, horario, responsable, localizacion y recordatorio simple implementados |
 
 ## Regla de claridad visual
 

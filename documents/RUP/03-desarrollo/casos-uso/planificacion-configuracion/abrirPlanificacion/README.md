@@ -1,9 +1,19 @@
-﻿# abrirPlanificacion > Desarrollo
+# abrirPlanificacion > Desarrollo
 
-Plantilla de seguimiento de implementacion del caso de uso $name().
+## Implementacion
 
-## Pendiente
+La planificacion se abre como una agenda filtrada dentro de `Mis tareas`. Usa
+los mismos filtros de texto, grupo y estado para mostrar un resumen de tareas
+programadas, responsables, recordatorios, dependencias y conflictos.
 
-- Registrar archivos de codigo asociados.
-- Registrar decisiones tomadas durante la implementacion.
-- Vincular endpoints, componentes o comandos cuando existan.
+Archivos principales:
+
+- `app/frontend/src/App.jsx`
+- `app/frontend/src/App.css`
+- `app/frontend/README.md`
+
+## Decision
+
+No se crea una ruta ni pantalla separada. La agenda queda junto al listado de
+tareas porque las operaciones de horario, responsable, localizacion y
+recordatorio ya se ejecutan desde esa zona.

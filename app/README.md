@@ -43,6 +43,7 @@ app/
 
 ### Planificacion y configuracion
 
+- `abrirPlanificacion()`: muestra una agenda filtrada con resumen de tareas planificadas.
 - `establecerHorario()`: valida fecha, hora de inicio y hora de fin como parte de crear o editar tareas.
 - `asignarTareaAUsuario()`: asigna una tarea gestionable a un miembro del grupo.
 - `definirLocalizacion()`: guarda una localizacion textual opcional para la tarea.

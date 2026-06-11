@@ -1,9 +1,13 @@
-﻿# abrirPlanificacion > Pruebas
+# abrirPlanificacion > Pruebas
 
-Plantilla de pruebas del caso de uso $name().
+## Smoke ejecutado
+
+| Escenario | Resultado esperado | Estado |
+| --- | --- | --- |
+| Abrir `Mis tareas` con tareas cargadas | Se muestra la agenda filtrada | Verificado |
+| Cambiar filtros de tareas | La agenda usa el mismo subconjunto filtrado | Verificado por build y revision visual |
+| Sin tareas planificadas para el filtro | Se muestra estado vacio de planificacion | Pendiente visual especifico |
 
 ## Pendiente
 
-- Definir escenarios de prueba del flujo principal.
-- Definir escenarios alternativos y de error.
-- Registrar pruebas automatizadas cuando existan.
+- Automatizar la verificacion visual cuando exista suite frontend.
