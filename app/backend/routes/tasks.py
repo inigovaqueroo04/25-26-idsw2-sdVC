@@ -100,6 +100,7 @@ def update_task(
             payload.asignado_usuario_id,
             payload.localizacion,
             payload.recordatorio_minutos,
+            payload.predecesora_tarea_id,
         )
     except AuthError as error:
         raise_auth_error(error)

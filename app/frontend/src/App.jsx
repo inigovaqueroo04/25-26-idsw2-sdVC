@@ -164,6 +164,7 @@ function Dashboard({
   const [tareaEditadaAsignadoUsuarioId, setTareaEditadaAsignadoUsuarioId] = useState("");
   const [tareaEditadaLocalizacion, setTareaEditadaLocalizacion] = useState("");
   const [tareaEditadaRecordatorioMinutos, setTareaEditadaRecordatorioMinutos] = useState("");
+  const [tareaEditadaPredecesoraId, setTareaEditadaPredecesoraId] = useState("");
   const [editarTareaError, setEditarTareaError] = useState("");
   const [editarTareaMensaje, setEditarTareaMensaje] = useState("");
   const [completarTareaError, setCompletarTareaError] = useState("");
@@ -269,6 +270,7 @@ function Dashboard({
     setTareaEditadaRecordatorioMinutos(
       tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0 ? String(tarea.recordatorio_minutos) : "",
     );
+    setTareaEditadaPredecesoraId(tarea.predecesora_tarea_id ? String(tarea.predecesora_tarea_id) : "");
     setEditarTareaError("");
     setEditarTareaMensaje("");
     setCompletarTareaMensaje("");
@@ -297,6 +299,7 @@ function Dashboard({
     setTareaEditadaAsignadoUsuarioId("");
     setTareaEditadaLocalizacion("");
     setTareaEditadaRecordatorioMinutos("");
+    setTareaEditadaPredecesoraId("");
     setEditarTareaError("");
   }
 
@@ -325,6 +328,7 @@ function Dashboard({
         asignado_usuario_id: tareaEditadaAsignadoUsuarioId ? Number(tareaEditadaAsignadoUsuarioId) : null,
         localizacion: tareaEditadaLocalizacion,
         recordatorio_minutos: tareaEditadaRecordatorioMinutos ? Number(tareaEditadaRecordatorioMinutos) : null,
+        predecesora_tarea_id: tareaEditadaPredecesoraId ? Number(tareaEditadaPredecesoraId) : null,
       });
       cancelEditTask();
       setEditarTareaMensaje(result.mensaje);
@@ -1226,6 +1230,28 @@ function Dashboard({
                         />
                       </label>
 
+                      <label>
+                        Depende de
+                        <select
+                          onChange={(event) => setTareaEditadaPredecesoraId(event.target.value)}
+                          value={tareaEditadaPredecesoraId}
+                        >
+                          <option value="">Sin dependencia</option>
+                          {tareas
+                            .filter(
+                              (tareaCandidata) =>
+                                tareaCandidata.grupo_id === tarea.grupo_id &&
+                                tareaCandidata.id !== tarea.id &&
+                                !ESTADOS_TAREA_NO_EDITABLES.has(tareaCandidata.estado),
+                            )
+                            .map((tareaCandidata) => (
+                              <option key={tareaCandidata.id} value={tareaCandidata.id}>
+                                {tareaCandidata.titulo}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+
                       <label className="edit-task-description">
                         Localizacion
                         <input
@@ -1272,6 +1298,7 @@ function Dashboard({
                       {tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0 ? (
                         <span>Recordatorio {tarea.recordatorio_minutos} min</span>
                       ) : null}
+                      {tarea.predecesora_titulo ? <span>Depende de {tarea.predecesora_titulo}</span> : null}
                       {tarea.conflictos_horario?.length > 0 ? (
                         <span className="warning-pill">Conflicto horario {tarea.conflictos_horario.length}</span>
                       ) : null}

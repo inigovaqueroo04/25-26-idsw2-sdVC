@@ -39,6 +39,7 @@ app/
 - `eliminarTarea()`: elimina una tarea gestionable tras confirmacion.
 - `marcarCompletada()`: finaliza una tarea visible y registra la fecha de finalizacion.
 - `validarConflicto()`: detecta solapamientos de horario para el responsable asignado sin bloquear el guardado.
+- `relacionarTareas()`: permite indicar que una tarea depende de otra tarea activa del mismo grupo.
 
 ### Planificacion y configuracion
 
@@ -101,6 +102,6 @@ El usuario de prueba pertenece a:
 
 - Planificacion avanzada.
 - Notificaciones reales de recordatorio.
-- Resolucion guiada de conflictos horarios y relaciones entre tareas.
+- Resolucion guiada de conflictos horarios, subtareas y tipos avanzados de relaciones.
 - Seguridad de sesion mas robusta y persistente.
 - Pruebas automatizadas de backend y frontend.

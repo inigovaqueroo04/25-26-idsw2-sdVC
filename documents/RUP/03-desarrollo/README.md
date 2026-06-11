@@ -13,7 +13,7 @@ ya se han transformado en codigo ejecutable.
 | --- | --- | --- | --- |
 | Gestion de sesion y navegacion | Implementado | [`app/`](../../../app/README.md) | Primer vertical con React, FastAPI y SQLite |
 | Gestion de grupos y usuarios | En progreso | [`app/`](../../../app/README.md) | CRUD basico de grupos, invitaciones recibidas y gestion de miembros implementados |
-| Gestion de tareas | En progreso | [`app/`](../../../app/README.md) | Consulta, creacion, edicion, eliminacion, finalizacion y deteccion inicial de conflictos implementadas |
+| Gestion de tareas | En progreso | [`app/`](../../../app/README.md) | Consulta, creacion, edicion, eliminacion, finalizacion, conflictos iniciales y dependencia simple entre tareas implementadas |
 | Planificacion y configuracion | En progreso | [`app/`](../../../app/README.md) | Horario, responsable, localizacion y recordatorio simple implementados desde tareas |
 
 Casos cubiertos en codigo:
@@ -51,6 +51,8 @@ Casos cubiertos en codigo:
   registrando la fecha de finalizacion.
 - `validarConflicto()`: deteccion no bloqueante de solapamientos para el
   responsable asignado.
+- `relacionarTareas()`: relacion de dependencia simple entre una tarea y una
+  predecesora activa del mismo grupo.
 - `establecerHorario()`: validacion de fecha, hora de inicio y hora de fin al
   crear o editar tareas.
 - `asignarTareaAUsuario()`: asignacion de responsable dentro del grupo de la
@@ -64,8 +66,8 @@ Pendiente del modulo de grupos:
 
 Pendiente del modulo de tareas:
 
-- resolucion guiada de conflictos horarios, relaciones entre tareas,
-  mapas/rutas y notificaciones reales de recordatorio.
+- resolucion guiada de conflictos horarios, subtareas, tipos avanzados de
+  relaciones, mapas/rutas y notificaciones reales de recordatorio.
 
 ## Criterio de seguimiento
 

@@ -19,6 +19,7 @@ class TaskUpdateRequest(BaseModel):
     asignado_usuario_id: int | None = None
     localizacion: str | None = None
     recordatorio_minutos: int | None = None
+    predecesora_tarea_id: int | None = None
 
 
 class TaskScheduleConflictResponse(BaseModel):
@@ -43,6 +44,8 @@ class TaskResponse(BaseModel):
     asignado_email: str | None
     localizacion: str | None
     recordatorio_minutos: int | None
+    predecesora_tarea_id: int | None
+    predecesora_titulo: str | None
     conflictos_horario: list[TaskScheduleConflictResponse]
     estado: str
     rol_grupo: str

@@ -32,6 +32,8 @@ def tarea_row_to_response(row, conflictos_horario: list[dict] | None = None) -> 
         "asignado_email": row["asignado_email"],
         "localizacion": row["localizacion"],
         "recordatorio_minutos": row["recordatorio_minutos"],
+        "predecesora_tarea_id": row["predecesora_tarea_id"],
+        "predecesora_titulo": row["predecesora_titulo"],
         "conflictos_horario": conflictos_horario or [],
         "estado": row["estado"],
         "rol_grupo": row["rol_grupo"],
@@ -163,6 +165,65 @@ def tarea_row_to_response_con_conflictos(connection, row) -> dict:
     return tarea_row_to_response(row, buscar_conflictos_horario(connection, row))
 
 
+def validar_predecesora_tarea(
+    connection,
+    tarea_id: int,
+    grupo_id: int,
+    predecesora_tarea_id: int | None,
+) -> int | None:
+    if predecesora_tarea_id is None:
+        return None
+
+    if predecesora_tarea_id == tarea_id:
+        raise TaskError(
+            code="relacion_autorreferente",
+            message="Una tarea no puede depender de si misma.",
+            status_code=400,
+        )
+
+    predecesora = connection.execute(
+        """
+        SELECT id
+        FROM tareas
+        WHERE id = ?
+          AND grupo_id = ?
+        """,
+        (predecesora_tarea_id, grupo_id),
+    ).fetchone()
+
+    if predecesora is None:
+        raise TaskError(
+            code="predecesora_no_valida",
+            message="La tarea predecesora debe existir en el mismo grupo.",
+            status_code=400,
+        )
+
+    actual_id = predecesora_tarea_id
+    visitadas = {tarea_id}
+
+    while actual_id is not None:
+        if actual_id in visitadas:
+            raise TaskError(
+                code="relacion_circular",
+                message="La relacion entre tareas no puede crear un ciclo.",
+                status_code=400,
+            )
+
+        visitadas.add(actual_id)
+        row = connection.execute(
+            """
+            SELECT tarea_destino_id
+            FROM relaciones_tareas
+            WHERE tarea_origen_id = ?
+              AND tipo = 'predecesora'
+            """,
+            (actual_id,),
+        ).fetchone()
+        actual_id = row["tarea_destino_id"] if row is not None else None
+
+    return predecesora_tarea_id
+
+
 def listar_tareas_usuario(usuario: Usuario) -> list[dict]:
     with get_connection() as connection:
         rows = connection.execute(
@@ -182,6 +243,8 @@ def listar_tareas_usuario(usuario: Usuario) -> list[dict]:
                 asignado.email AS asignado_email,
                 t.localizacion,
                 t.recordatorio_minutos,
+                rel.tarea_destino_id AS predecesora_tarea_id,
+                predecesora.titulo AS predecesora_titulo,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -190,6 +253,10 @@ def listar_tareas_usuario(usuario: Usuario) -> list[dict]:
                 ON mg.grupo_id = t.grupo_id
                AND mg.usuario_id = ?
             LEFT JOIN usuarios asignado ON asignado.id = t.asignado_usuario_id
+            LEFT JOIN relaciones_tareas rel
+                ON rel.tarea_origen_id = t.id
+               AND rel.tipo = 'predecesora'
+            LEFT JOIN tareas predecesora ON predecesora.id = rel.tarea_destino_id
             ORDER BY
                 CASE t.estado
                     WHEN 'Creada' THEN 0
@@ -293,6 +360,8 @@ def crear_tarea(
                 asignado.email AS asignado_email,
                 t.localizacion,
                 t.recordatorio_minutos,
+                rel.tarea_destino_id AS predecesora_tarea_id,
+                predecesora.titulo AS predecesora_titulo,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -301,6 +370,10 @@ def crear_tarea(
                 ON mg.grupo_id = t.grupo_id
                AND mg.usuario_id = ?
             LEFT JOIN usuarios asignado ON asignado.id = t.asignado_usuario_id
+            LEFT JOIN relaciones_tareas rel
+                ON rel.tarea_origen_id = t.id
+               AND rel.tipo = 'predecesora'
+            LEFT JOIN tareas predecesora ON predecesora.id = rel.tarea_destino_id
             WHERE t.id = ?
             """,
             (usuario.id, tarea_id),
@@ -320,6 +393,7 @@ def editar_tarea(
     asignado_usuario_id: int | None,
     localizacion: str | None,
     recordatorio_minutos: int | None,
+    predecesora_tarea_id: int | None,
 ) -> dict:
     titulo_normalizado = validar_titulo_tarea(titulo)
     descripcion_normalizada = normalizar_texto_opcional(descripcion)
@@ -384,6 +458,13 @@ def editar_tarea(
                     status_code=400,
                 )
 
+        predecesora_normalizada = validar_predecesora_tarea(
+            connection,
+            tarea_id,
+            tarea["grupo_id"],
+            predecesora_tarea_id,
+        )
+
         connection.execute(
             """
             UPDATE tareas
@@ -410,6 +491,28 @@ def editar_tarea(
             ),
         )
 
+        connection.execute(
+            """
+            DELETE FROM relaciones_tareas
+            WHERE tarea_origen_id = ?
+              AND tipo = 'predecesora'
+            """,
+            (tarea_id,),
+        )
+
+        if predecesora_normalizada is not None:
+            connection.execute(
+                """
+                INSERT INTO relaciones_tareas (
+                    tarea_origen_id,
+                    tarea_destino_id,
+                    tipo
+                )
+                VALUES (?, ?, 'predecesora')
+                """,
+                (tarea_id, predecesora_normalizada),
+            )
+
         row = connection.execute(
             """
             SELECT
@@ -427,6 +530,8 @@ def editar_tarea(
                 asignado.email AS asignado_email,
                 t.localizacion,
                 t.recordatorio_minutos,
+                rel.tarea_destino_id AS predecesora_tarea_id,
+                predecesora.titulo AS predecesora_titulo,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -435,6 +540,10 @@ def editar_tarea(
                 ON mg.grupo_id = t.grupo_id
                AND mg.usuario_id = ?
             LEFT JOIN usuarios asignado ON asignado.id = t.asignado_usuario_id
+            LEFT JOIN relaciones_tareas rel
+                ON rel.tarea_origen_id = t.id
+               AND rel.tipo = 'predecesora'
+            LEFT JOIN tareas predecesora ON predecesora.id = rel.tarea_destino_id
             WHERE t.id = ?
             """,
             (usuario.id, tarea_id),
@@ -509,6 +618,8 @@ def marcar_tarea_completada(usuario: Usuario, tarea_id: int) -> dict:
                 asignado.email AS asignado_email,
                 t.localizacion,
                 t.recordatorio_minutos,
+                rel.tarea_destino_id AS predecesora_tarea_id,
+                predecesora.titulo AS predecesora_titulo,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -517,6 +628,10 @@ def marcar_tarea_completada(usuario: Usuario, tarea_id: int) -> dict:
                 ON mg.grupo_id = t.grupo_id
                AND mg.usuario_id = ?
             LEFT JOIN usuarios asignado ON asignado.id = t.asignado_usuario_id
+            LEFT JOIN relaciones_tareas rel
+                ON rel.tarea_origen_id = t.id
+               AND rel.tipo = 'predecesora'
+            LEFT JOIN tareas predecesora ON predecesora.id = rel.tarea_destino_id
             WHERE t.id = ?
             """,
             (usuario.id, tarea_id),
@@ -555,6 +670,14 @@ def eliminar_tarea(usuario: Usuario, tarea_id: int) -> int:
                 status_code=403,
             )
 
+        connection.execute(
+            """
+            DELETE FROM relaciones_tareas
+            WHERE tarea_origen_id = ?
+               OR tarea_destino_id = ?
+            """,
+            (tarea_id, tarea_id),
+        )
         connection.execute("DELETE FROM tareas WHERE id = ?", (tarea_id,))
 
     return tarea_id

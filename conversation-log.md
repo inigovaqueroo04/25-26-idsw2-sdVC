@@ -605,3 +605,13 @@
 **Resultado:** El backend calcula `conflictos_horario` al listar, crear, editar o completar tareas. El frontend muestra una pildora de conflicto y un mensaje con la tarea solapada y su tramo horario. Se ejecuto un smoke con dos tareas temporales solapadas del usuario demo, se comprobo que el conflicto aparece al guardar y al listar, y se eliminaron los datos temporales.
 
 **Decision:** El conflicto se trata como aviso no bloqueante. La resolucion guiada, notificaciones reales y relaciones entre tareas quedan pendientes para incrementos posteriores porque requieren mas reglas de negocio y no son imprescindibles para este avance.
+
+---
+
+## [2026-06-11 22:08] Dependencia simple entre tareas
+
+**Prompt:** Se avanzo el caso `relacionarTareas()` con un alcance reducido y util para la entrega: permitir que, al editar una tarea, se indique que depende de otra tarea activa del mismo grupo, sin crear todavia una pantalla separada de busqueda ni cubrir subtareas.
+
+**Resultado:** Se creo la tabla `relaciones_tareas`, una migracion ligera para bases SQLite existentes y el campo `predecesora_tarea_id` en la edicion de tareas. El backend guarda una unica predecesora por tarea, devuelve `predecesora_titulo`, limpia relaciones al borrar tareas y valida autorrelaciones, tareas de otro grupo y ciclos. En React se anadio el selector `Depende de` y la tarjeta muestra la dependencia cuando existe. Se actualizo la trazabilidad RUP y los README principales.
+
+**Decision:** La primera version cubre solo dependencia simple porque es suficiente para demostrar `relacionarTareas()` sin abrir demasiada complejidad. Subtareas, relaciones sucesoras explicitas, multiples dependencias y resolucion visual avanzada quedan para un incremento posterior.

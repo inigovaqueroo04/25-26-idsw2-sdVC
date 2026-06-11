@@ -62,12 +62,25 @@ CREATE TABLE IF NOT EXISTS tareas (
     FOREIGN KEY (creado_por) REFERENCES usuarios(id)
 );
 
+CREATE TABLE IF NOT EXISTS relaciones_tareas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tarea_origen_id INTEGER NOT NULL,
+    tarea_destino_id INTEGER NOT NULL,
+    tipo TEXT NOT NULL CHECK (tipo IN ('predecesora')),
+    creado_en TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tarea_origen_id) REFERENCES tareas(id),
+    FOREIGN KEY (tarea_destino_id) REFERENCES tareas(id),
+    UNIQUE (tarea_origen_id, tipo)
+);
+
 CREATE INDEX IF NOT EXISTS idx_grupos_creado_por ON grupos(creado_por);
 CREATE INDEX IF NOT EXISTS idx_miembros_grupo_usuario ON miembros_grupo(usuario_id);
 CREATE INDEX IF NOT EXISTS idx_miembros_grupo_grupo ON miembros_grupo(grupo_id);
 CREATE INDEX IF NOT EXISTS idx_invitaciones_grupo ON invitaciones(grupo_id);
 CREATE INDEX IF NOT EXISTS idx_tareas_grupo ON tareas(grupo_id);
 CREATE INDEX IF NOT EXISTS idx_tareas_estado ON tareas(estado);
+CREATE INDEX IF NOT EXISTS idx_relaciones_tareas_origen ON relaciones_tareas(tarea_origen_id);
+CREATE INDEX IF NOT EXISTS idx_relaciones_tareas_destino ON relaciones_tareas(tarea_destino_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_invitaciones_pendientes_email_grupo
 ON invitaciones(grupo_id, email_invitado)
 WHERE estado = 'Pendiente';

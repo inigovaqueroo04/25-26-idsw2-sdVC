@@ -54,12 +54,15 @@ una tarea gestionable. Reutiliza las validaciones de creacion y bloquea tareas
 `Finalizada` o `Cancelada`. Tambien permite asignar responsable, localizacion
 textual y recordatorio simple en minutos. Si el responsable tiene otra tarea
 solapada en el mismo dia, la respuesta incluye el aviso sin impedir el guardado.
+Tambien permite indicar una tarea predecesora del mismo grupo y rechaza
+autorrelaciones o ciclos.
 
 `PATCH /api/tasks/{task_id}/complete` marca como `Finalizada` una tarea visible
 para el usuario autenticado y registra `fecha_finalizacion`.
 
 `DELETE /api/tasks/{task_id}` elimina una tarea gestionable para el usuario
-autenticado y devuelve el listado al estado `TAREAS_ABIERTO`.
+autenticado, limpia las relaciones de precedencia asociadas y devuelve el
+listado al estado `TAREAS_ABIERTO`.
 
 `POST /api/groups` valida nombre obligatorio, evita duplicados para el usuario
 autenticado y crea la membresia inicial con rol `Administrador`.
