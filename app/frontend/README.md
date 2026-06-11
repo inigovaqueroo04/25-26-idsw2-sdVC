@@ -29,6 +29,7 @@ npm run dev
 - Filtrar tareas por texto, grupo y estado.
 - Crear una tarea programada desde `Mis tareas` en grupos gestionables.
 - Editar titulo, descripcion, fecha y horario de tareas gestionables desde `Mis tareas`.
+- Configurar responsable, localizacion y recordatorio simple al editar una tarea.
 - Eliminar tareas gestionables con confirmacion desde `Mis tareas`.
 - Marcar tareas visibles como completadas desde `Mis tareas`.
 - Crear un grupo nuevo desde el dashboard.

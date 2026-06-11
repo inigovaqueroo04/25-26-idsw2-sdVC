@@ -1,9 +1,9 @@
-﻿# definirLocalizacion > Pruebas
+# definirLocalizacion() > Pruebas
 
-Plantilla de pruebas del caso de uso $name().
+| Escenario | Resultado esperado | Estado |
+| --- | --- | --- |
+| Guardar localizacion | La tarea devuelve y muestra el texto guardado | Verificado en servicio |
+| Quitar localizacion | La tarea queda sin localizacion | Pendiente visual |
 
-## Pendiente
-
-- Definir escenarios de prueba del flujo principal.
-- Definir escenarios alternativos y de error.
-- Registrar pruebas automatizadas cuando existan.
+Verificado con smoke de servicio sobre SQLite temporal y compilacion de
+frontend/backend.

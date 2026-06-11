@@ -161,6 +161,9 @@ function Dashboard({
   const [tareaEditadaFecha, setTareaEditadaFecha] = useState("");
   const [tareaEditadaHoraInicio, setTareaEditadaHoraInicio] = useState("");
   const [tareaEditadaHoraFin, setTareaEditadaHoraFin] = useState("");
+  const [tareaEditadaAsignadoUsuarioId, setTareaEditadaAsignadoUsuarioId] = useState("");
+  const [tareaEditadaLocalizacion, setTareaEditadaLocalizacion] = useState("");
+  const [tareaEditadaRecordatorioMinutos, setTareaEditadaRecordatorioMinutos] = useState("");
   const [editarTareaError, setEditarTareaError] = useState("");
   const [editarTareaMensaje, setEditarTareaMensaje] = useState("");
   const [completarTareaError, setCompletarTareaError] = useState("");
@@ -254,17 +257,34 @@ function Dashboard({
     }
   }
 
-  function startEditTask(tarea) {
+  async function startEditTask(tarea) {
     setTareaEditandoId(tarea.id);
     setTareaEditadaTitulo(tarea.titulo);
     setTareaEditadaDescripcion(tarea.descripcion ?? "");
     setTareaEditadaFecha(tarea.fecha ?? "");
     setTareaEditadaHoraInicio(tarea.hora_inicio ?? "");
     setTareaEditadaHoraFin(tarea.hora_fin ?? "");
+    setTareaEditadaAsignadoUsuarioId(tarea.asignado_usuario_id ? String(tarea.asignado_usuario_id) : "");
+    setTareaEditadaLocalizacion(tarea.localizacion ?? "");
+    setTareaEditadaRecordatorioMinutos(
+      tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0 ? String(tarea.recordatorio_minutos) : "",
+    );
     setEditarTareaError("");
     setEditarTareaMensaje("");
     setCompletarTareaMensaje("");
     setCrearTareaMensaje("");
+
+    if (!miembrosPorGrupo[tarea.grupo_id]) {
+      try {
+        const result = await onLoadGroupMembers(tarea.grupo_id);
+        setMiembrosPorGrupo((currentMembers) => ({
+          ...currentMembers,
+          [tarea.grupo_id]: result.miembros,
+        }));
+      } catch (membersError) {
+        setEditarTareaError(membersError.message);
+      }
+    }
   }
 
   function cancelEditTask() {
@@ -274,6 +294,9 @@ function Dashboard({
     setTareaEditadaFecha("");
     setTareaEditadaHoraInicio("");
     setTareaEditadaHoraFin("");
+    setTareaEditadaAsignadoUsuarioId("");
+    setTareaEditadaLocalizacion("");
+    setTareaEditadaRecordatorioMinutos("");
     setEditarTareaError("");
   }
 
@@ -299,6 +322,9 @@ function Dashboard({
         fecha: tareaEditadaFecha,
         hora_inicio: tareaEditadaHoraInicio,
         hora_fin: tareaEditadaHoraFin,
+        asignado_usuario_id: tareaEditadaAsignadoUsuarioId ? Number(tareaEditadaAsignadoUsuarioId) : null,
+        localizacion: tareaEditadaLocalizacion,
+        recordatorio_minutos: tareaEditadaRecordatorioMinutos ? Number(tareaEditadaRecordatorioMinutos) : null,
       });
       cancelEditTask();
       setEditarTareaMensaje(result.mensaje);
@@ -1172,6 +1198,43 @@ function Dashboard({
                           value={tareaEditadaDescripcion}
                         />
                       </label>
+
+                      <label>
+                        Responsable
+                        <select
+                          onChange={(event) => setTareaEditadaAsignadoUsuarioId(event.target.value)}
+                          value={tareaEditadaAsignadoUsuarioId}
+                        >
+                          <option value="">Sin asignar</option>
+                          {(miembrosPorGrupo[tarea.grupo_id] ?? []).map((miembro) => (
+                            <option key={miembro.usuario_id} value={miembro.usuario_id}>
+                              {miembro.nombre}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <label>
+                        Recordatorio
+                        <input
+                          min="0"
+                          max="10080"
+                          onChange={(event) => setTareaEditadaRecordatorioMinutos(event.target.value)}
+                          placeholder="Minutos"
+                          type="number"
+                          value={tareaEditadaRecordatorioMinutos}
+                        />
+                      </label>
+
+                      <label className="edit-task-description">
+                        Localizacion
+                        <input
+                          maxLength={180}
+                          onChange={(event) => setTareaEditadaLocalizacion(event.target.value)}
+                          type="text"
+                          value={tareaEditadaLocalizacion}
+                        />
+                      </label>
                     </div>
 
                     {editarTareaError ? <p className="error" role="alert">{editarTareaError}</p> : null}
@@ -1204,6 +1267,11 @@ function Dashboard({
                         </span>
                       ) : null}
                       {tarea.fecha_finalizacion ? <span>Finalizada {tarea.fecha_finalizacion}</span> : null}
+                      {tarea.asignado_nombre ? <span>Responsable {tarea.asignado_nombre}</span> : null}
+                      {tarea.localizacion ? <span>{tarea.localizacion}</span> : null}
+                      {tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0 ? (
+                        <span>Recordatorio {tarea.recordatorio_minutos} min</span>
+                      ) : null}
                       <span>{tarea.grupo_nombre}</span>
                       <span>{tarea.rol_grupo}</span>
                       {tarea.es_gestionable ? <span>Gestionable</span> : null}

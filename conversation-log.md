@@ -555,3 +555,33 @@
 **Resultado:** Se implemento `marcarCompletada()`. La base de datos incorpora `fecha_finalizacion` con migracion ligera, el backend expone `PATCH /api/tasks/{task_id}/complete` y valida que la tarea exista para el usuario, que no este ya `Finalizada` y que no este `Cancelada`. En React se anadio `completeTask`, el boton `Completar`, el estado de guardado, el mensaje de exito y la visualizacion de la fecha de finalizacion en la tarjeta. Se actualizaron solo los README necesarios y el seguimiento RUP.
 
 **Decision:** La primera version permite completar cualquier tarea visible porque aun no existen asignaciones de tareas a usuarios. Cuando se implemente `asignarTareaAUsuario()`, la regla de finalizacion debera comprobar si la tarea esta asignada al usuario o si aplica a todo el grupo.
+
+---
+
+## [2026-06-11 16:53] Asignacion basica de responsable
+
+**Prompt:** Se continuo con planificacion basica de tareas para avanzar mas rapido y se decidio trabajar `asignarTareaAUsuario()`: permitir que, al editar una tarea gestionable, se seleccione como responsable a un miembro del mismo grupo o se deje la tarea sin asignar.
+
+**Resultado:** Se anadio `asignado_usuario_id` a `tareas`, se amplio `PATCH /api/tasks/{task_id}` para guardar el responsable y se valida que el usuario asignado pertenezca al grupo de la tarea. En React, al abrir la edicion de una tarea se cargan los miembros del grupo si hace falta y aparece el selector `Responsable`.
+
+**Decision:** La asignacion queda integrada dentro de la edicion inline de tarea para ahorrar pantalla y tiempo. No se crea todavia una vista separada de planificacion.
+
+---
+
+## [2026-06-11 16:53] Localizacion textual de tarea
+
+**Prompt:** Dentro del mismo bloque de planificacion basica se decidio trabajar `definirLocalizacion()`: permitir guardar una ubicacion textual opcional en una tarea gestionable y mostrarla en su tarjeta.
+
+**Resultado:** Se anadio `localizacion` a `tareas`, se amplio la edicion de tarea para guardar el texto normalizado y se incorporo el campo `Localizacion` al formulario inline. La tarjeta muestra la localizacion cuando existe.
+
+**Decision:** La localizacion queda como texto simple. Mapas, coordenadas, rutas y calculos por proximidad quedan fuera de esta entrega.
+
+---
+
+## [2026-06-11 16:53] Recordatorio simple de tarea
+
+**Prompt:** Para completar el bloque compacto de planificacion se decidio trabajar `configurarRecordatorio()`: permitir guardar un recordatorio basico en minutos antes de la tarea, sin enviar notificaciones reales todavia.
+
+**Resultado:** Se anadio `recordatorio_minutos` a `tareas`, se amplio `PATCH /api/tasks/{task_id}` para aceptar el valor y se valida que este entre 0 y 10080 minutos. En React se incorporo el campo `Recordatorio` y la tarjeta muestra los minutos configurados.
+
+**Decision:** El recordatorio queda registrado como configuracion interna. El envio real de avisos se aplaza porque requiere un mecanismo de notificaciones que aun no existe en el proyecto.

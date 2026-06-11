@@ -97,6 +97,9 @@ def update_task(
             payload.fecha,
             payload.hora_inicio,
             payload.hora_fin,
+            payload.asignado_usuario_id,
+            payload.localizacion,
+            payload.recordatorio_minutos,
         )
     except AuthError as error:
         raise_auth_error(error)

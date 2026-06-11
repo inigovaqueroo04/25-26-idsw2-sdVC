@@ -1,9 +1,17 @@
-﻿# definirLocalizacion > Desarrollo
+# definirLocalizacion() > Desarrollo
 
-Plantilla de seguimiento de implementacion del caso de uso $name().
+## Alcance
 
-## Pendiente
+- Registrar una localizacion textual opcional para una tarea gestionable.
+- Mostrar la localizacion en la tarjeta cuando exista.
 
-- Registrar archivos de codigo asociados.
-- Registrar decisiones tomadas durante la implementacion.
-- Vincular endpoints, componentes o comandos cuando existan.
+## Codigo
+
+- Columna `localizacion` en `tareas`, con migracion ligera.
+- `PATCH /api/tasks/{task_id}` acepta `localizacion`.
+- React añade el campo `Localizacion` al formulario inline de edicion.
+
+## Decision
+
+La localizacion se trata como texto simple. Mapas, coordenadas y rutas quedan
+fuera del alcance de esta entrega.

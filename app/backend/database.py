@@ -16,6 +16,9 @@ TASK_COLUMNS = {
     "hora_inicio": "TEXT",
     "hora_fin": "TEXT",
     "fecha_finalizacion": "TEXT",
+    "asignado_usuario_id": "INTEGER",
+    "localizacion": "TEXT",
+    "recordatorio_minutos": "INTEGER",
 }
 
 

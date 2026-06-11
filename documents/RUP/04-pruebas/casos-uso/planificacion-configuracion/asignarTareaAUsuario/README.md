@@ -1,9 +1,9 @@
-﻿# asignarTareaAUsuario > Pruebas
+# asignarTareaAUsuario() > Pruebas
 
-Plantilla de pruebas del caso de uso $name().
+| Escenario | Resultado esperado | Estado |
+| --- | --- | --- |
+| Asignar a miembro del grupo | Tarea actualizada con responsable | Verificado |
+| Asignar a usuario ajeno | Error `usuario_asignado_no_valido` | Verificado |
+| Quitar responsable | `asignado_usuario_id` queda vacio | Pendiente visual |
 
-## Pendiente
-
-- Definir escenarios de prueba del flujo principal.
-- Definir escenarios alternativos y de error.
-- Registrar pruebas automatizadas cuando existan.
+Verificado con smoke de servicio sobre SQLite temporal y `npm run build`.

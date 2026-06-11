@@ -27,6 +27,11 @@ def tarea_row_to_response(row) -> dict:
         "hora_inicio": row["hora_inicio"],
         "hora_fin": row["hora_fin"],
         "fecha_finalizacion": row["fecha_finalizacion"],
+        "asignado_usuario_id": row["asignado_usuario_id"],
+        "asignado_nombre": row["asignado_nombre"],
+        "asignado_email": row["asignado_email"],
+        "localizacion": row["localizacion"],
+        "recordatorio_minutos": row["recordatorio_minutos"],
         "estado": row["estado"],
         "rol_grupo": row["rol_grupo"],
         "es_gestionable": row["rol_grupo"] in ROLES_GESTION_TAREAS,
@@ -90,6 +95,24 @@ def validar_horario_tarea(hora_inicio: str, hora_fin: str) -> tuple[str, str]:
     return inicio, fin
 
 
+def validar_recordatorio_tarea(recordatorio_minutos: int | None) -> int | None:
+    if recordatorio_minutos is None:
+        return None
+
+    if recordatorio_minutos < 0 or recordatorio_minutos > 10080:
+        raise TaskError(
+            code="recordatorio_invalido",
+            message="El recordatorio debe estar entre 0 y 10080 minutos.",
+            status_code=400,
+        )
+
+    return recordatorio_minutos
+
+
+def normalizar_texto_opcional(value: str | None) -> str | None:
+    return (value or "").strip() or None
+
+
 def listar_tareas_usuario(usuario: Usuario) -> list[dict]:
     with get_connection() as connection:
         rows = connection.execute(
@@ -104,6 +127,11 @@ def listar_tareas_usuario(usuario: Usuario) -> list[dict]:
                 t.hora_inicio,
                 t.hora_fin,
                 t.fecha_finalizacion,
+                t.asignado_usuario_id,
+                asignado.nombre AS asignado_nombre,
+                asignado.email AS asignado_email,
+                t.localizacion,
+                t.recordatorio_minutos,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -111,6 +139,7 @@ def listar_tareas_usuario(usuario: Usuario) -> list[dict]:
             INNER JOIN miembros_grupo mg
                 ON mg.grupo_id = t.grupo_id
                AND mg.usuario_id = ?
+            LEFT JOIN usuarios asignado ON asignado.id = t.asignado_usuario_id
             ORDER BY
                 CASE t.estado
                     WHEN 'Creada' THEN 0
@@ -209,6 +238,11 @@ def crear_tarea(
                 t.hora_inicio,
                 t.hora_fin,
                 t.fecha_finalizacion,
+                t.asignado_usuario_id,
+                asignado.nombre AS asignado_nombre,
+                asignado.email AS asignado_email,
+                t.localizacion,
+                t.recordatorio_minutos,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -216,6 +250,7 @@ def crear_tarea(
             INNER JOIN miembros_grupo mg
                 ON mg.grupo_id = t.grupo_id
                AND mg.usuario_id = ?
+            LEFT JOIN usuarios asignado ON asignado.id = t.asignado_usuario_id
             WHERE t.id = ?
             """,
             (usuario.id, tarea_id),
@@ -232,17 +267,23 @@ def editar_tarea(
     fecha: str,
     hora_inicio: str,
     hora_fin: str,
+    asignado_usuario_id: int | None,
+    localizacion: str | None,
+    recordatorio_minutos: int | None,
 ) -> dict:
     titulo_normalizado = validar_titulo_tarea(titulo)
-    descripcion_normalizada = (descripcion or "").strip() or None
+    descripcion_normalizada = normalizar_texto_opcional(descripcion)
     fecha_normalizada = validar_fecha_tarea(fecha)
     inicio_normalizado, fin_normalizado = validar_horario_tarea(hora_inicio, hora_fin)
+    localizacion_normalizada = normalizar_texto_opcional(localizacion)
+    recordatorio_normalizado = validar_recordatorio_tarea(recordatorio_minutos)
 
     with get_connection() as connection:
         tarea = connection.execute(
             """
             SELECT
                 t.id,
+                t.grupo_id,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -275,6 +316,24 @@ def editar_tarea(
                 status_code=409,
             )
 
+        if asignado_usuario_id is not None:
+            miembro_asignado = connection.execute(
+                """
+                SELECT id
+                FROM miembros_grupo
+                WHERE grupo_id = ?
+                  AND usuario_id = ?
+                """,
+                (tarea["grupo_id"], asignado_usuario_id),
+            ).fetchone()
+
+            if miembro_asignado is None:
+                raise TaskError(
+                    code="usuario_asignado_no_valido",
+                    message="El responsable debe pertenecer al grupo de la tarea.",
+                    status_code=400,
+                )
+
         connection.execute(
             """
             UPDATE tareas
@@ -282,7 +341,10 @@ def editar_tarea(
                    descripcion = ?,
                    fecha = ?,
                    hora_inicio = ?,
-                   hora_fin = ?
+                   hora_fin = ?,
+                   asignado_usuario_id = ?,
+                   localizacion = ?,
+                   recordatorio_minutos = ?
              WHERE id = ?
             """,
             (
@@ -291,6 +353,9 @@ def editar_tarea(
                 fecha_normalizada,
                 inicio_normalizado,
                 fin_normalizado,
+                asignado_usuario_id,
+                localizacion_normalizada,
+                recordatorio_normalizado,
                 tarea_id,
             ),
         )
@@ -307,6 +372,11 @@ def editar_tarea(
                 t.hora_inicio,
                 t.hora_fin,
                 t.fecha_finalizacion,
+                t.asignado_usuario_id,
+                asignado.nombre AS asignado_nombre,
+                asignado.email AS asignado_email,
+                t.localizacion,
+                t.recordatorio_minutos,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -314,6 +384,7 @@ def editar_tarea(
             INNER JOIN miembros_grupo mg
                 ON mg.grupo_id = t.grupo_id
                AND mg.usuario_id = ?
+            LEFT JOIN usuarios asignado ON asignado.id = t.asignado_usuario_id
             WHERE t.id = ?
             """,
             (usuario.id, tarea_id),
@@ -383,6 +454,11 @@ def marcar_tarea_completada(usuario: Usuario, tarea_id: int) -> dict:
                 t.hora_inicio,
                 t.hora_fin,
                 t.fecha_finalizacion,
+                t.asignado_usuario_id,
+                asignado.nombre AS asignado_nombre,
+                asignado.email AS asignado_email,
+                t.localizacion,
+                t.recordatorio_minutos,
                 t.estado,
                 mg.rol AS rol_grupo
             FROM tareas t
@@ -390,6 +466,7 @@ def marcar_tarea_completada(usuario: Usuario, tarea_id: int) -> dict:
             INNER JOIN miembros_grupo mg
                 ON mg.grupo_id = t.grupo_id
                AND mg.usuario_id = ?
+            LEFT JOIN usuarios asignado ON asignado.id = t.asignado_usuario_id
             WHERE t.id = ?
             """,
             (usuario.id, tarea_id),

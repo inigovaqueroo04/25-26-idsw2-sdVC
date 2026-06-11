@@ -39,7 +39,13 @@ app/
 - `eliminarTarea()`: elimina una tarea gestionable tras confirmacion.
 - `marcarCompletada()`: finaliza una tarea visible y registra la fecha de finalizacion.
 
-No se han implementado todavia planificacion avanzada ni recordatorios.
+### Planificacion y configuracion
+
+- `asignarTareaAUsuario()`: asigna una tarea gestionable a un miembro del grupo.
+- `definirLocalizacion()`: guarda una localizacion textual opcional para la tarea.
+- `configurarRecordatorio()`: guarda un recordatorio simple en minutos.
+
+No se han implementado todavia notificaciones reales ni mapas/rutas.
 
 ## Inicializar la base de datos
 
@@ -91,7 +97,8 @@ El usuario de prueba pertenece a:
 
 ## Pendiente para siguientes iteraciones
 
-- Planificacion y configuracion.
-- Recordatorios.
+- Planificacion avanzada.
+- Notificaciones reales de recordatorio.
+- Conflictos horarios y relaciones entre tareas.
 - Seguridad de sesion mas robusta y persistente.
 - Pruebas automatizadas de backend y frontend.

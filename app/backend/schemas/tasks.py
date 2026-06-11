@@ -16,6 +16,9 @@ class TaskUpdateRequest(BaseModel):
     fecha: str
     hora_inicio: str
     hora_fin: str
+    asignado_usuario_id: int | None = None
+    localizacion: str | None = None
+    recordatorio_minutos: int | None = None
 
 
 class TaskResponse(BaseModel):
@@ -28,6 +31,11 @@ class TaskResponse(BaseModel):
     hora_inicio: str | None
     hora_fin: str | None
     fecha_finalizacion: str | None
+    asignado_usuario_id: int | None
+    asignado_nombre: str | None
+    asignado_email: str | None
+    localizacion: str | None
+    recordatorio_minutos: int | None
     estado: str
     rol_grupo: str
     es_gestionable: bool

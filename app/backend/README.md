@@ -51,7 +51,8 @@ la hora de inicio sea anterior a la hora de fin.
 
 `PATCH /api/tasks/{task_id}` actualiza titulo, descripcion, fecha y horario de
 una tarea gestionable. Reutiliza las validaciones de creacion y bloquea tareas
-`Finalizada` o `Cancelada`.
+`Finalizada` o `Cancelada`. Tambien permite asignar responsable, localizacion
+textual y recordatorio simple en minutos.
 
 `PATCH /api/tasks/{task_id}/complete` marca como `Finalizada` una tarea visible
 para el usuario autenticado y registra `fecha_finalizacion`.

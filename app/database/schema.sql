@@ -51,10 +51,14 @@ CREATE TABLE IF NOT EXISTS tareas (
     hora_inicio TEXT,
     hora_fin TEXT,
     fecha_finalizacion TEXT,
+    asignado_usuario_id INTEGER,
+    localizacion TEXT,
+    recordatorio_minutos INTEGER,
     estado TEXT NOT NULL CHECK (estado IN ('Creada', 'Programada', 'En ejecucion', 'Finalizada', 'Cancelada')),
     creado_por INTEGER NOT NULL,
     creado_en TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (grupo_id) REFERENCES grupos(id),
+    FOREIGN KEY (asignado_usuario_id) REFERENCES usuarios(id),
     FOREIGN KEY (creado_por) REFERENCES usuarios(id)
 );
 
