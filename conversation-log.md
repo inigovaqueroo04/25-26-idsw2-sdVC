@@ -645,3 +645,13 @@
 **Resultado:** Se actualizaron notas de `abrirTareas()`, `crearTarea()`, `editarTarea()`, `eliminarTarea()`, `marcarCompletada()`, `eliminarMiembro()` y pruebas relacionadas. La documentacion ya no afirma que no existan tareas, relaciones simples o comprobacion visual cuando esas partes ya estan cubiertas.
 
 **Decision:** Se mantuvieron como pendientes solo elementos que siguen fuera del alcance actual: notificaciones reales, mapas/rutas, subtareas avanzadas, resolucion guiada de conflictos y automatizacion completa de pruebas.
+
+---
+
+## [2026-06-13 14:31] Enfoque de recordatorios y conflictos en agenda
+
+**Prompt:** Para hacer la aplicacion mas fiel a `QUE_HACE.md`, se reforzo la parte de "menos olvidos y solapamientos" sin crear un modulo nuevo: permitir que la agenda de planificacion destaque tareas con recordatorio y tareas con conflicto horario.
+
+**Resultado:** La agenda filtrada incorpora accesos rapidos `Todas`, `Recordatorios` y `Conflictos`. Las filas de planificacion muestran recordatorio, dependencia y estado de conflicto, de forma que el usuario puede revisar rapidamente lo que puede provocar olvidos o solapamientos. Se actualizaron README de frontend, desarrollo y pruebas del caso `abrirPlanificacion()`.
+
+**Decision:** Se mantiene la solucion dentro de `Mis tareas` para no duplicar pantallas. Los avisos reales externos siguen fuera; esta mejora se centra en visibilidad operativa dentro de la app.

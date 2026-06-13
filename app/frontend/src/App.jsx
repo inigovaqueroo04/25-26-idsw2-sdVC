@@ -147,6 +147,7 @@ function Dashboard({
   const [filtroTareas, setFiltroTareas] = useState("");
   const [filtroTareasEstado, setFiltroTareasEstado] = useState("Todas");
   const [filtroTareasGrupo, setFiltroTareasGrupo] = useState("Todos");
+  const [filtroPlanificacion, setFiltroPlanificacion] = useState("Todas");
   const [tareaGrupoId, setTareaGrupoId] = useState("");
   const [tareaTitulo, setTareaTitulo] = useState("");
   const [tareaDescripcion, setTareaDescripcion] = useState("");
@@ -219,21 +220,32 @@ function Dashboard({
     const coincideGrupo = filtroTareasGrupo === "Todos" || String(tarea.grupo_id) === filtroTareasGrupo;
     return coincideTexto && coincideEstado && coincideGrupo;
   });
-  const tareasPlanificacion = tareasFiltradas
+  const tareasPlanificacionBase = tareasFiltradas
     .filter((tarea) => tarea.fecha && !ESTADOS_TAREA_NO_EDITABLES.has(tarea.estado))
     .sort((firstTask, secondTask) =>
       `${firstTask.fecha} ${firstTask.hora_inicio ?? ""}`.localeCompare(
         `${secondTask.fecha} ${secondTask.hora_inicio ?? ""}`,
       ),
     );
+  const tareasPlanificacion = tareasPlanificacionBase.filter((tarea) => {
+    if (filtroPlanificacion === "Recordatorios") {
+      return tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0;
+    }
+
+    if (filtroPlanificacion === "Conflictos") {
+      return tarea.conflictos_horario?.length > 0;
+    }
+
+    return true;
+  });
   const resumenPlanificacion = {
-    programadas: tareasPlanificacion.length,
-    conResponsable: tareasPlanificacion.filter((tarea) => tarea.asignado_usuario_id).length,
-    conRecordatorio: tareasPlanificacion.filter(
+    programadas: tareasPlanificacionBase.length,
+    conResponsable: tareasPlanificacionBase.filter((tarea) => tarea.asignado_usuario_id).length,
+    conRecordatorio: tareasPlanificacionBase.filter(
       (tarea) => tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0,
     ).length,
-    conDependencia: tareasPlanificacion.filter((tarea) => tarea.predecesora_tarea_id).length,
-    conConflicto: tareasPlanificacion.filter((tarea) => tarea.conflictos_horario?.length > 0).length,
+    conDependencia: tareasPlanificacionBase.filter((tarea) => tarea.predecesora_tarea_id).length,
+    conConflicto: tareasPlanificacionBase.filter((tarea) => tarea.conflictos_horario?.length > 0).length,
   };
 
   useEffect(() => {
@@ -1177,6 +1189,30 @@ function Dashboard({
               </div>
             </div>
 
+            <div className="planning-filter-actions" aria-label="Filtro de planificacion">
+              <button
+                className={filtroPlanificacion === "Todas" ? "planning-filter active" : "planning-filter"}
+                type="button"
+                onClick={() => setFiltroPlanificacion("Todas")}
+              >
+                Todas
+              </button>
+              <button
+                className={filtroPlanificacion === "Recordatorios" ? "planning-filter active" : "planning-filter"}
+                type="button"
+                onClick={() => setFiltroPlanificacion("Recordatorios")}
+              >
+                Recordatorios
+              </button>
+              <button
+                className={filtroPlanificacion === "Conflictos" ? "planning-filter active" : "planning-filter"}
+                type="button"
+                onClick={() => setFiltroPlanificacion("Conflictos")}
+              >
+                Conflictos
+              </button>
+            </div>
+
             {tareasPlanificacion.length > 0 ? (
               <div className="planning-list">
                 {tareasPlanificacion.slice(0, 5).map((tarea) => (
@@ -1187,6 +1223,17 @@ function Dashboard({
                       {tarea.fecha} {tarea.hora_inicio && tarea.hora_fin ? `${tarea.hora_inicio}-${tarea.hora_fin}` : ""}
                     </span>
                     <span>{tarea.asignado_nombre ? `Responsable ${tarea.asignado_nombre}` : "Sin responsable"}</span>
+                    <span>
+                      {tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0
+                        ? `Recordatorio ${tarea.recordatorio_minutos} min`
+                        : "Sin recordatorio"}
+                    </span>
+                    <span>{tarea.predecesora_titulo ? `Depende de ${tarea.predecesora_titulo}` : "Sin dependencia"}</span>
+                    <span className={tarea.conflictos_horario?.length > 0 ? "planning-alert" : ""}>
+                      {tarea.conflictos_horario?.length > 0
+                        ? `${tarea.conflictos_horario.length} conflicto`
+                        : "Sin conflicto"}
+                    </span>
                   </div>
                 ))}
               </div>

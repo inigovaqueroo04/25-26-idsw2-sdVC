@@ -27,7 +27,7 @@ npm run dev
 - Filtrar grupos por nombre desde el frontend.
 - Mostrar la seccion `Mis tareas` con tareas de los grupos accesibles.
 - Filtrar tareas por texto, grupo y estado.
-- Mostrar una agenda filtrada con resumen de planificacion.
+- Mostrar una agenda filtrada con resumen de planificacion y accesos rapidos a recordatorios o conflictos.
 - Crear una tarea programada desde `Mis tareas` en grupos gestionables.
 - Editar titulo, descripcion, fecha y horario de tareas gestionables desde `Mis tareas`.
 - Configurar responsable, localizacion y recordatorio simple al editar una tarea.

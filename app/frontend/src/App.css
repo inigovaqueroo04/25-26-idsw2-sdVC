@@ -535,6 +535,30 @@ select:focus {
   padding: 6px 10px;
 }
 
+.planning-filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.planning-filter {
+  background: #ffffff;
+  border: 1px solid #b9c3d0;
+  border-radius: 6px;
+  color: #283345;
+  cursor: pointer;
+  font-weight: 800;
+  min-height: 38px;
+  padding: 0 12px;
+}
+
+.planning-filter:hover,
+.planning-filter.active {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #ffffff;
+}
+
 .planning-list {
   display: grid;
   gap: 8px;
@@ -547,7 +571,14 @@ select:focus {
   border-radius: 8px;
   display: grid;
   gap: 10px;
-  grid-template-columns: minmax(160px, 1fr) minmax(120px, 0.7fr) minmax(130px, 0.75fr) minmax(150px, 0.9fr);
+  grid-template-columns:
+    minmax(150px, 1fr)
+    minmax(110px, 0.65fr)
+    minmax(120px, 0.75fr)
+    minmax(140px, 0.85fr)
+    minmax(130px, 0.8fr)
+    minmax(130px, 0.8fr)
+    minmax(95px, 0.55fr);
   padding: 10px 12px;
 }
 
@@ -560,6 +591,11 @@ select:focus {
 .planning-row span {
   color: #536173;
   font-size: 0.9rem;
+}
+
+.planning-row .planning-alert {
+  color: #9a3412;
+  font-weight: 800;
 }
 
 .task-item {
