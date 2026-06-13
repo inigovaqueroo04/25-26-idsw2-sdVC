@@ -1391,7 +1391,7 @@ function Dashboard({
                         </span>
                       ) : null}
                       {tarea.fecha_finalizacion ? <span>Finalizada {tarea.fecha_finalizacion}</span> : null}
-                      {tarea.asignado_nombre ? <span>Responsable {tarea.asignado_nombre}</span> : null}
+                      <span>{tarea.asignado_nombre ? `Responsable ${tarea.asignado_nombre}` : "Sin responsable"}</span>
                       {tarea.localizacion ? <span>{tarea.localizacion}</span> : null}
                       {tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0 ? (
                         <span>Recordatorio {tarea.recordatorio_minutos} min</span>
@@ -1876,6 +1876,7 @@ export default function App() {
     try {
       const result = await deleteGroupMember(token, groupId, memberId);
       await cargarGrupos(token);
+      await cargarTareas(token);
       setEstado(result.estado);
       setGestionMensaje(result.mensaje);
       return result;

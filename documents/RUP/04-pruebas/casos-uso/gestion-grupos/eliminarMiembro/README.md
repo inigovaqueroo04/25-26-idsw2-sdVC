@@ -14,6 +14,7 @@ grupo sin borrar usuarios globales ni dejar el grupo sin administracion.
 | Miembro inexistente | La API devuelve error funcional `miembro_no_disponible` | Verificado |
 | Eliminacion de un gestor cuando queda otro gestor | La baja se permite | Verificado |
 | Intento de eliminar el ultimo gestor | La API devuelve `grupo_sin_gestion` y conserva la pertenencia | Verificado |
+| Miembro retirado con tareas asignadas | Las tareas quedan visibles como `Sin responsable` | Verificado por prueba funcional y navegador integrado |
 | Confirmacion desde interfaz | La eliminacion no se ejecuta hasta confirmar en la fila del miembro | Verificado en navegador integrado |
 
 ## Verificacion ejecutada
@@ -38,6 +39,6 @@ temporales se limpiaron al terminar.
 
 ## Observaciones
 
-La prueba funcional se centra en la tabla `miembros_grupo`, porque el caso de
-uso elimina una pertenencia al grupo. No cubre reasignacion de tareas asociadas
-al miembro retirado; esa regularizacion queda como mejora posterior.
+La prueba funcional comprueba `miembros_grupo` y la limpieza de
+`tareas.asignado_usuario_id`. No se reasignan tareas automaticamente a otro
+miembro; quedan sin responsable para que un gestor decida la nueva asignacion.

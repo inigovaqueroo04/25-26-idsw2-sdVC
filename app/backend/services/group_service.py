@@ -825,3 +825,13 @@ def eliminar_miembro(usuario: Usuario, grupo_id: int, miembro_id: int) -> None:
             """,
             (miembro_id, grupo_id),
         )
+
+        connection.execute(
+            """
+            UPDATE tareas
+               SET asignado_usuario_id = NULL
+             WHERE grupo_id = ?
+               AND asignado_usuario_id = ?
+            """,
+            (grupo_id, miembro["usuario_id"]),
+        )

@@ -94,7 +94,9 @@ cancelar invitaciones pendientes.
 evita dejar el grupo sin ningun miembro con permisos de gestion.
 `DELETE /api/groups/{group_id}/members/{member_id}` retira la pertenencia del
 miembro al grupo, sin borrar el usuario global, y aplica la misma proteccion
-para conservar al menos un gestor.
+para conservar al menos un gestor. Si tenia tareas asignadas en ese grupo, las
+deja sin responsable para evitar asignaciones a personas que ya no pertenecen
+al grupo.
 
 ## Usuario de prueba
 

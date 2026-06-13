@@ -655,3 +655,13 @@
 **Resultado:** La agenda filtrada incorpora accesos rapidos `Todas`, `Recordatorios` y `Conflictos`. Las filas de planificacion muestran recordatorio, dependencia y estado de conflicto, de forma que el usuario puede revisar rapidamente lo que puede provocar olvidos o solapamientos. Se actualizaron README de frontend, desarrollo y pruebas del caso `abrirPlanificacion()`.
 
 **Decision:** Se mantiene la solucion dentro de `Mis tareas` para no duplicar pantallas. Los avisos reales externos siguen fuera; esta mejora se centra en visibilidad operativa dentro de la app.
+
+---
+
+## [2026-06-13 14:42] Limpieza de asignaciones al retirar miembros
+
+**Prompt:** Para reforzar la parte de "asignen y sigan tareas compartidas" de `QUE_HACE.md`, se trabajo el caso `eliminarMiembro()` para que, al retirar a una persona de un grupo, no queden tareas del grupo asignadas a alguien que ya no pertenece a el.
+
+**Resultado:** El backend deja en `NULL` el responsable de las tareas del grupo asignadas al usuario retirado. El frontend recarga grupos y tareas despues de confirmar la baja, de modo que las tarjetas pasan a mostrar `Sin responsable` sin esperar a otra accion. Se actualizaron README de backend, frontend, desarrollo y pruebas del caso.
+
+**Decision:** No se reasigna automaticamente a otro miembro porque podria introducir una responsabilidad falsa. La opcion mas clara para el usuario es liberar la tarea y permitir que un gestor la asigne de nuevo.
