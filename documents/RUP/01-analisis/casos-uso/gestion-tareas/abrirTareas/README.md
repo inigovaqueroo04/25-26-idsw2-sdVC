@@ -69,8 +69,21 @@ permitida por su rol o volver a `SISTEMA_DISPONIBLE`.
 - Diagrama de estados de tarea: aporta estados útiles para la lista, como
   `Creada`, `Programada`, `En ejecución`, `Finalizada` y `Cancelada`.
 
-No se ha usado `sdvc` como referencia principal. No hay implementación directa
-en código; el análisis se obtiene de los diagramas y documentación del SdR.
+El análisis se obtiene de los diagramas y documentación del SdR.
+
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
 
 ## Observaciones
 

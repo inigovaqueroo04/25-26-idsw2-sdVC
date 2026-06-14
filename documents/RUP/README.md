@@ -8,8 +8,8 @@ pruebas.
 
 - [00-casos-uso](./00-casos-uso/README.md): requisitos, modelo del dominio,
   actores, contexto, detalle y prototipos.
-- [01-analisis](./01-analisis/README.md): analisis de casos de uso y plantillas
-  MVC.
+- [01-analisis](./01-analisis/README.md): analisis de casos de uso,
+  colaboraciones MVC y secuencias renderizadas.
 - [02-diseño](./02-diseño/README.md): decisiones de diseño y arquitectura.
 - [03-desarrollo](./03-desarrollo/README.md): seguimiento de implementacion por
   caso de uso.
@@ -19,5 +19,6 @@ pruebas.
 ## Criterio de organizacion
 
 La capa `00-casos-uso` conserva los datos de SdR. La capa `01-analisis`
-mantiene los analisis existentes y deja las plantillas de colaboracion y
-secuencia preparadas para convertir cada caso al estilo MVC de pySigHor.
+transforma esos datos en artefactos de analisis con README, colaboracion y
+secuencia para cada caso, siguiendo el estilo MVC usado como referencia en
+pySigHor.

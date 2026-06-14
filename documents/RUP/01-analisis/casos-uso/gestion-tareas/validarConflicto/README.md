@@ -74,9 +74,23 @@ La tarea conserva su ciclo de vida y los cambios válidos pueden guardarse.
 
 No hay implementación directa en código ni un detalle independiente para este
 caso. El análisis se ha inferido desde la documentación, los diagramas y la
-estructura del repositorio SdR, nunca desde `sdvc`. La reutilización al crear
+estructura del repositorio SdR. La reutilización al crear
 una tarea se infiere de la obligatoriedad del horario y del requisito general
 de detectar solapamientos.
+
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
 
 ## Observaciones
 

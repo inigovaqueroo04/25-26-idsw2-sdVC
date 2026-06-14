@@ -76,6 +76,20 @@ No se ha localizado una implementacion directa en codigo dentro de SdR; el caso
 de uso se ha inferido a partir de la documentacion, diagramas de actividad,
 prototipos, diagramas de contexto y modelo de dominio.
 
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
+
 ## Observaciones
 
 SdR no concreta qué ocurre con los datos asociados. Para el primer diseño, la

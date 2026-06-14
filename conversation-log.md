@@ -685,3 +685,13 @@
 **Resultado:** El frontend calcula solapes visibles entre tareas activas aunque esten sin responsable o pertenezcan a grupos distintos. Al crear una tarea con horario solapado muestra un aviso con opcion de cambiar horario o crear igualmente. El backend acepta `recordatorio_minutos` en `POST /api/tasks`, lo valida y lo guarda desde el alta. Se actualizaron README de backend, frontend y RUP de `crearTarea()`, `configurarRecordatorio()` y `abrirPlanificacion()`.
 
 **Decision:** Los solapes no bloquean el guardado porque el usuario puede decidir mantenerlos. Los recordatorios siguen siendo configuracion interna de la app; no generan notificaciones reales externas.
+
+---
+
+## [2026-06-14 17:05] Revision RUP de analisis y diseno
+
+**Prompt:** Se inicio una revision documental centrada en que el analisis y el diseno de casos de uso mantengan una estructura comparable a PySigHor, que los diagramas PlantUML tengan una imagen SVG visible y que no queden archivos vacios o textos internos innecesarios para la entrega.
+
+**Resultado:** Se comprobaron los 24 casos de uso en analisis y los 24 en diseno, sin desajustes entre fases. Se generaron los SVG que faltaban para los PUML de actores, contexto y analisis, se añadieron las imagenes de colaboracion y secuencia en cada README de analisis, y se actualizaron indices RUP para enlazar PUML y SVG. Tambien se verifico que no hubiera archivos vacios, SVG de error ni PUML sin imagen asociada.
+
+**Decision:** Se mantiene el analisis con estructura funcional mas diagramas MVC de vista, controlador, repositorio y entidad, mientras que el diseno conserva su plantilla de responsabilidades, decisiones, validaciones, trazabilidad y secuencia. Se eliminaron referencias internas que no aportaban a la entrega para que el material quede centrado en SdR/RUP.

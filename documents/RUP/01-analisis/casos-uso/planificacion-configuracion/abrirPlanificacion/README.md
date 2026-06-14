@@ -70,7 +70,21 @@ localizaciones, recordatorios o asignaciones.
 
 No se ha localizado implementación directa en código. El análisis se ha
 inferido desde la documentación, los diagramas y la estructura del repositorio
-SdR, nunca desde `sdvc`.
+SdR.
+
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
 
 ## Observaciones
 

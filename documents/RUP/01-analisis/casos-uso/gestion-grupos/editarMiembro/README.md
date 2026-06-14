@@ -44,7 +44,21 @@ Si el caso termina correctamente, el miembro queda actualizado con el rol o perm
 - `documents/modelosUML/modeloDeDominio/diagramaObjetos/diagramaObjetosRol.puml`
 - `documents/modelosUML/modeloDeDominio/diagramaClases/diagramaClases.md`
 
-No se ha usado el repositorio `sdvc` como referencia principal. No se ha localizado una implementacion directa en codigo, por lo que el analisis se ha inferido a partir de diagramas de actividad, diagramas de contexto, descripcion de roles y modelo de dominio del repositorio SdR.
+El analisis se ha inferido a partir de diagramas de actividad, diagramas de contexto, descripcion de roles y modelo de dominio del repositorio SdR.
+
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
 
 ## Observaciones
 Para el primer diseño se conservarán los roles `Administrador`, `Miembro

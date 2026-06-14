@@ -62,7 +62,21 @@ también finaliza si la tarea se completa o cancela.
 - `documents/minutas/primeraReunion/notasTomadas.md`
 
 No existe implementación directa en código. El caso de uso se ha inferido
-exclusivamente desde los artefactos de SdR indicados, nunca desde `sdvc`.
+exclusivamente desde los artefactos de SdR indicados.
+
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
 
 ## Observaciones
 

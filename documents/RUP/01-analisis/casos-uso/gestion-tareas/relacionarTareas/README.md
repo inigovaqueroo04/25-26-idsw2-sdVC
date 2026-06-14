@@ -70,6 +70,20 @@ recursiva; si es precedencia, se registra como vínculo lógico independiente.
 No hay implementación directa en código; el análisis se obtiene de los
 diagramas, el prototipo y la documentación del SdR.
 
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
+
 ## Observaciones
 
 SdR no mantiene una única interpretación del caso: el README de contexto lo

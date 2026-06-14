@@ -66,6 +66,20 @@ cancela o falla, el sistema continua en `SESION_CERRADA`.
   aporta las clases `Usuario` y `Rol`, necesarias para entender la
   autenticacion y permisos.
 
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
+
 ## Observaciones
 
 El caso esta bien situado como puerta de entrada al sistema. Para mantener

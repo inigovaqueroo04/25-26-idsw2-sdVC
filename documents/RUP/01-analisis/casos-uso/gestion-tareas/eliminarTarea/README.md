@@ -66,6 +66,20 @@ retiran las relaciones y datos auxiliares exclusivos que ya no sean válidos.
 No hay implementación directa en código; el análisis se obtiene de los
 diagramas, el prototipo y la documentación del SdR.
 
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
+
 ## Observaciones
 
 SdR modela además el estado `Cancelada`. Para la futura implementación se

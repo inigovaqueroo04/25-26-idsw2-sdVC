@@ -74,8 +74,21 @@ registrados de forma paralela al ciclo de vida de la tarea.
 - Modelo de dominio y estados de conflicto horario: justifican registrar el
   conflicto como componente paralelo con resolución propia.
 
-No se ha usado `sdvc` como referencia principal. No hay implementación directa
-en código; el análisis se obtiene de los diagramas y documentación del SdR.
+El análisis se obtiene de los diagramas y documentación del SdR.
+
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
 
 ## Observaciones
 

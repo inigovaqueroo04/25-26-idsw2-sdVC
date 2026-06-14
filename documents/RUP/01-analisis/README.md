@@ -1,13 +1,14 @@
 # 01-analisis
 
-Analisis de casos de uso preparado para evolucionar :
-clases de vista, controladores, repositorios y entidades del dominio.
+Analisis de casos de uso preparado al estilo de pySigHor: cada caso separa
+descripcion funcional, colaboracion de analisis y secuencia entre vista,
+controlador, repositorio y entidades del dominio.
 
 Cada caso contiene:
 
-- `README.md`: analisis textual existente.
-- `colaboracion.puml`: plantilla de colaboracion MVC pendiente de completar.
-- `secuencia.puml`: plantilla de secuencia de analisis pendiente de completar.
+- `README.md`: analisis textual del caso, enlaces e imagenes de sus diagramas.
+- `colaboracion.puml` / `colaboracion.svg`: colaboracion MVC de analisis.
+- `secuencia.puml` / `secuencia.svg`: secuencia de analisis del caso.
 
 Los diagramas originales de SdR estan en
 [00-casos-uso/02-detalle](../00-casos-uso/02-detalle/README.md).

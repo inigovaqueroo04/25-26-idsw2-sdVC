@@ -63,8 +63,21 @@ volver a `SISTEMA_DISPONIBLE`.
 - Modelo de dominio de invitación: justifica que una invitación se relaciona
   con un usuario y un grupo, y que puede tener distintos estados.
 
-No se ha usado `sdvc` como referencia principal. No hay implementación directa
-en código; el análisis se obtiene de los diagramas y documentación del SdR.
+El análisis se obtiene de los diagramas y documentación del SdR.
+
+## Diagramas de análisis
+
+### Colaboración
+
+![Colaboración de análisis](./colaboracion.svg)
+
+Código fuente: [colaboracion.puml](./colaboracion.puml)
+
+### Secuencia
+
+![Secuencia de análisis](./secuencia.svg)
+
+Código fuente: [secuencia.puml](./secuencia.puml)
 
 ## Observaciones
 
