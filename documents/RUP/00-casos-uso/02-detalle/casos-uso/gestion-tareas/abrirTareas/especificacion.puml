@@ -59,19 +59,11 @@ state "TAREA_ABIERTO" as FinDetalle
 state "TAREAS_ABIERTO" as SalidaLista
 state "SISTEMA_DISPONIBLE" as SalidaSistema
 
-<<<<<<<<< Temporary merge branch 1
 Inicio --> AbrirTareasContainer
 EntradaLista --> AbrirTareasContainer
 GrupoAbierto --> AbrirTareasContainer
 
 AbrirTareasContainer --> FinDetalle
-=========
-
-GRUPO_ABIERTO --> abrirTareas
-SISTEMA_DISPONIBLE--> abrirTareas
-TAREA_ABIERTO --> abrirTareas
-abrirTareas --> TAREAS_ABIERTO
->>>>>>>>> Temporary merge branch 2
 note on link
   crearTarea()
 end note
