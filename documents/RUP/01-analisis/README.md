@@ -1,6 +1,6 @@
 # 01-analisis
 
-Analisis de casos de uso preparado para evolucionar al estilo de pySigHor:
+Analisis de casos de uso preparado para evolucionar :
 clases de vista, controladores, repositorios y entidades del dominio.
 
 Cada caso contiene:
