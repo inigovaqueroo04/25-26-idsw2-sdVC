@@ -695,3 +695,13 @@
 **Resultado:** Se comprobaron los 24 casos de uso en analisis y los 24 en diseno, sin desajustes entre fases. Se generaron los SVG que faltaban para los PUML de actores, contexto y analisis, se añadieron las imagenes de colaboracion y secuencia en cada README de analisis, y se actualizaron indices RUP para enlazar PUML y SVG. Tambien se verifico que no hubiera archivos vacios, SVG de error ni PUML sin imagen asociada.
 
 **Decision:** Se mantiene el analisis con estructura funcional mas diagramas MVC de vista, controlador, repositorio y entidad, mientras que el diseno conserva su plantilla de responsabilidades, decisiones, validaciones, trazabilidad y secuencia. Se eliminaron referencias internas que no aportaban a la entrega para que el material quede centrado en SdR/RUP.
+
+---
+
+## [2026-06-14 17:22] Galerias visibles en analisis y diseno
+
+**Prompt:** Se pidio ajustar la documentacion porque, aunque los SVG existian, desde GitHub habia que entrar en demasiadas carpetas para verlos. El objetivo era que al abrir los README principales de analisis o diseno aparecieran directamente las imagenes correspondientes, como en la estructura de referencia de PySigHor.
+
+**Resultado:** `documents/RUP/01-analisis/README.md` ahora muestra los diagramas generales de SdR y una galeria por caso de uso con colaboracion y secuencia de analisis. `documents/RUP/02-diseño/README.md` y `documents/RUP/02-diseño/casos-uso/README.md` muestran la arquitectura, el modelo de clases y las secuencias de diseno de los 24 casos sin obligar a navegar carpeta por carpeta.
+
+**Decision:** Se duplica de forma intencionada la visualizacion de diagramas en indices y README de caso para favorecer la lectura en GitHub. Los archivos fuente `.puml` y los README detallados siguen siendo la fuente documental de cada caso; las galerias son una capa de acceso rapido para evaluacion.

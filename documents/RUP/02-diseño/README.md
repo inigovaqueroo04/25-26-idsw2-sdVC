@@ -36,43 +36,116 @@ Código fuente: [clases-diseno.puml](./clases-diseno.puml)
 
 Cada caso de uso parte de su README de análisis, su diagrama de colaboración y su secuencia de análisis. En diseño se transforma esa información en una colaboración conceptual entre interfaz, coordinador del caso, servicios, dominio, persistencia conceptual y estado de aplicación.
 
-## Módulos funcionales
+## Galeria de diseño por caso de uso
 
-### Gestión de sesión y navegación
+Esta vista evita tener que entrar carpeta por carpeta desde GitHub. Para el detalle textual de cada caso, abre el enlace del titulo.
 
-- [iniciarSesion()](./casos-uso/gestion-sesion/iniciarSesion/README.md)
-- [cerrarSesion()](./casos-uso/gestion-sesion/cerrarSesion/README.md)
-- [completarGestion()](./casos-uso/gestion-sesion/completarGestion/README.md)
+### Gestion de grupos
 
-### Gestión de grupos y usuarios
+#### [abrirGrupos()](./casos-uso/gestion-grupos/abrirGrupos/README.md)
 
-- [abrirGrupos()](./casos-uso/gestion-grupos/abrirGrupos/README.md)
-- [crearGrupo()](./casos-uso/gestion-grupos/crearGrupo/README.md)
-- [editarGrupo()](./casos-uso/gestion-grupos/editarGrupo/README.md)
-- [eliminarGrupo()](./casos-uso/gestion-grupos/eliminarGrupo/README.md)
-- [invitarUsuario()](./casos-uso/gestion-grupos/invitarUsuario/README.md)
-- [editarMiembro()](./casos-uso/gestion-grupos/editarMiembro/README.md)
-- [eliminarMiembro()](./casos-uso/gestion-grupos/eliminarMiembro/README.md)
-- [abrirInvitaciones()](./casos-uso/gestion-grupos/abrirInvitaciones/README.md)
-- [editarInvitacion()](./casos-uso/gestion-grupos/editarInvitacion/README.md)
+![Secuencia de diseño de abrirGrupos()](./casos-uso/gestion-grupos/abrirGrupos/secuencia.svg)
 
-### Gestión de tareas
+#### [abrirInvitaciones()](./casos-uso/gestion-grupos/abrirInvitaciones/README.md)
 
-- [abrirTareas()](./casos-uso/gestion-tareas/abrirTareas/README.md)
-- [crearTarea()](./casos-uso/gestion-tareas/crearTarea/README.md)
-- [editarTarea()](./casos-uso/gestion-tareas/editarTarea/README.md)
-- [relacionarTareas()](./casos-uso/gestion-tareas/relacionarTareas/README.md)
-- [eliminarTarea()](./casos-uso/gestion-tareas/eliminarTarea/README.md)
-- [marcarCompletada()](./casos-uso/gestion-tareas/marcarCompletada/README.md)
-- [validarConflicto()](./casos-uso/gestion-tareas/validarConflicto/README.md)
+![Secuencia de diseño de abrirInvitaciones()](./casos-uso/gestion-grupos/abrirInvitaciones/secuencia.svg)
 
-### Planificación y configuración
+#### [crearGrupo()](./casos-uso/gestion-grupos/crearGrupo/README.md)
 
-- [abrirPlanificacion()](./casos-uso/planificacion-configuracion/abrirPlanificacion/README.md)
-- [establecerHorario()](./casos-uso/planificacion-configuracion/establecerHorario/README.md)
-- [definirLocalizacion()](./casos-uso/planificacion-configuracion/definirLocalizacion/README.md)
-- [configurarRecordatorio()](./casos-uso/planificacion-configuracion/configurarRecordatorio/README.md)
-- [asignarTareaAUsuario()](./casos-uso/planificacion-configuracion/asignarTareaAUsuario/README.md)
+![Secuencia de diseño de crearGrupo()](./casos-uso/gestion-grupos/crearGrupo/secuencia.svg)
+
+#### [editarGrupo()](./casos-uso/gestion-grupos/editarGrupo/README.md)
+
+![Secuencia de diseño de editarGrupo()](./casos-uso/gestion-grupos/editarGrupo/secuencia.svg)
+
+#### [editarInvitacion()](./casos-uso/gestion-grupos/editarInvitacion/README.md)
+
+![Secuencia de diseño de editarInvitacion()](./casos-uso/gestion-grupos/editarInvitacion/secuencia.svg)
+
+#### [editarMiembro()](./casos-uso/gestion-grupos/editarMiembro/README.md)
+
+![Secuencia de diseño de editarMiembro()](./casos-uso/gestion-grupos/editarMiembro/secuencia.svg)
+
+#### [eliminarGrupo()](./casos-uso/gestion-grupos/eliminarGrupo/README.md)
+
+![Secuencia de diseño de eliminarGrupo()](./casos-uso/gestion-grupos/eliminarGrupo/secuencia.svg)
+
+#### [eliminarMiembro()](./casos-uso/gestion-grupos/eliminarMiembro/README.md)
+
+![Secuencia de diseño de eliminarMiembro()](./casos-uso/gestion-grupos/eliminarMiembro/secuencia.svg)
+
+#### [invitarUsuario()](./casos-uso/gestion-grupos/invitarUsuario/README.md)
+
+![Secuencia de diseño de invitarUsuario()](./casos-uso/gestion-grupos/invitarUsuario/secuencia.svg)
+
+
+### Gestion de sesion
+
+#### [cerrarSesion()](./casos-uso/gestion-sesion/cerrarSesion/README.md)
+
+![Secuencia de diseño de cerrarSesion()](./casos-uso/gestion-sesion/cerrarSesion/secuencia.svg)
+
+#### [completarGestion()](./casos-uso/gestion-sesion/completarGestion/README.md)
+
+![Secuencia de diseño de completarGestion()](./casos-uso/gestion-sesion/completarGestion/secuencia.svg)
+
+#### [iniciarSesion()](./casos-uso/gestion-sesion/iniciarSesion/README.md)
+
+![Secuencia de diseño de iniciarSesion()](./casos-uso/gestion-sesion/iniciarSesion/secuencia.svg)
+
+
+### Gestion de tareas
+
+#### [abrirTareas()](./casos-uso/gestion-tareas/abrirTareas/README.md)
+
+![Secuencia de diseño de abrirTareas()](./casos-uso/gestion-tareas/abrirTareas/secuencia.svg)
+
+#### [crearTarea()](./casos-uso/gestion-tareas/crearTarea/README.md)
+
+![Secuencia de diseño de crearTarea()](./casos-uso/gestion-tareas/crearTarea/secuencia.svg)
+
+#### [editarTarea()](./casos-uso/gestion-tareas/editarTarea/README.md)
+
+![Secuencia de diseño de editarTarea()](./casos-uso/gestion-tareas/editarTarea/secuencia.svg)
+
+#### [eliminarTarea()](./casos-uso/gestion-tareas/eliminarTarea/README.md)
+
+![Secuencia de diseño de eliminarTarea()](./casos-uso/gestion-tareas/eliminarTarea/secuencia.svg)
+
+#### [marcarCompletada()](./casos-uso/gestion-tareas/marcarCompletada/README.md)
+
+![Secuencia de diseño de marcarCompletada()](./casos-uso/gestion-tareas/marcarCompletada/secuencia.svg)
+
+#### [relacionarTareas()](./casos-uso/gestion-tareas/relacionarTareas/README.md)
+
+![Secuencia de diseño de relacionarTareas()](./casos-uso/gestion-tareas/relacionarTareas/secuencia.svg)
+
+#### [validarConflicto()](./casos-uso/gestion-tareas/validarConflicto/README.md)
+
+![Secuencia de diseño de validarConflicto()](./casos-uso/gestion-tareas/validarConflicto/secuencia.svg)
+
+
+### Planificacion y configuracion
+
+#### [abrirPlanificacion()](./casos-uso/planificacion-configuracion/abrirPlanificacion/README.md)
+
+![Secuencia de diseño de abrirPlanificacion()](./casos-uso/planificacion-configuracion/abrirPlanificacion/secuencia.svg)
+
+#### [asignarTareaAUsuario()](./casos-uso/planificacion-configuracion/asignarTareaAUsuario/README.md)
+
+![Secuencia de diseño de asignarTareaAUsuario()](./casos-uso/planificacion-configuracion/asignarTareaAUsuario/secuencia.svg)
+
+#### [configurarRecordatorio()](./casos-uso/planificacion-configuracion/configurarRecordatorio/README.md)
+
+![Secuencia de diseño de configurarRecordatorio()](./casos-uso/planificacion-configuracion/configurarRecordatorio/secuencia.svg)
+
+#### [definirLocalizacion()](./casos-uso/planificacion-configuracion/definirLocalizacion/README.md)
+
+![Secuencia de diseño de definirLocalizacion()](./casos-uso/planificacion-configuracion/definirLocalizacion/secuencia.svg)
+
+#### [establecerHorario()](./casos-uso/planificacion-configuracion/establecerHorario/README.md)
+
+![Secuencia de diseño de establecerHorario()](./casos-uso/planificacion-configuracion/establecerHorario/secuencia.svg)
 
 ## Pendiente antes de implementación
 
