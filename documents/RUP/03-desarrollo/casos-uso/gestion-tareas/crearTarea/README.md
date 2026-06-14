@@ -1,39 +1,38 @@
 # crearTarea() > Desarrollo
 
-Implementado como segundo incremento vertical de gestion de tareas, despues de
-`abrirTareas()`.
+Implementado como incremento vertical de gestion de tareas, apoyado en los
+grupos gestionables del usuario autenticado.
 
 ## Alcance implementado
 
-- Crear tareas dentro de grupos gestionables por el usuario autenticado.
-- Solicitar grupo, titulo, descripcion opcional, fecha, hora de inicio y hora
-  de fin.
-- Validar datos obligatorios y coherencia del horario.
+- Crear tareas dentro de grupos donde el usuario tiene permisos de gestion.
+- Solicitar grupo, titulo, descripcion opcional, fecha, hora de inicio, hora
+  de fin y recordatorio opcional en minutos.
+- Validar datos obligatorios, coherencia del horario y rango del recordatorio.
 - Registrar la tarea en estado `Programada`.
-- Mostrar la tarea nueva en `Mis tareas` sin recargar la aplicacion.
+- Mostrar la tarea nueva en `Tareas` sin recargar la aplicacion.
+- Avisar antes de guardar si el horario se solapa con otra tarea activa visible.
 
 ## Backend
 
 Archivos principales:
 
-- `app/database/schema.sql`
-- `app/database/seed.sql`
-- `app/backend/database.py`
 - `app/backend/routes/tasks.py`
 - `app/backend/services/task_service.py`
 - `app/backend/schemas/tasks.py`
 
-Endpoint incorporado:
+Endpoint:
 
 ```http
 POST /api/tasks
 ```
 
 La ruta valida sesion y delega en `crear_tarea()`. El servicio comprueba que el
-grupo exista para el usuario, que su rol en el grupo sea `Administrador` o
+grupo exista para el usuario, que su rol sea `Administrador` o
 `Miembro Administrador`, que el titulo no este vacio, que la fecha tenga
-formato `AAAA-MM-DD`, que las horas tengan formato `HH:MM` y que inicio sea
-anterior a fin.
+formato `AAAA-MM-DD`, que las horas tengan formato `HH:MM`, que inicio sea
+anterior a fin y que el recordatorio, si se informa, este entre 0 y 10080
+minutos.
 
 ## Frontend
 
@@ -43,21 +42,20 @@ Archivos principales:
 - `app/frontend/src/App.jsx`
 - `app/frontend/src/App.css`
 
-La seccion `Mis tareas` incorpora un formulario de creacion cuando el usuario
-tiene al menos un grupo gestionable. Tras guardar, se añade la tarea creada a
-la lista y se muestran fecha, horario, grupo, rol y estado.
+La pantalla `Tareas` incorpora un formulario de creacion cuando el usuario
+tiene al menos un grupo gestionable. Tras guardar, se anade la tarea creada a
+la lista y se muestran fecha, horario, grupo, estado, responsable y
+recordatorio si existe.
 
 ## Decisiones
 
-- La tarea creada queda `Programada`, porque el analisis exige fecha y horario
-  validos al guardar.
-- Los conflictos horarios no bloquean la creacion; cuando existe responsable,
-  se informan como aviso no bloqueante en la respuesta de tareas.
-- Se añade una migracion ligera para columnas nuevas de `tareas`, evitando
-  borrar la SQLite local existente durante el avance iterativo.
+- La tarea creada queda `Programada`, porque el flujo exige fecha y horario al
+  guardar.
+- Los solapes horarios no bloquean por defecto. El frontend avisa antes de
+  crear y permite cambiar el horario o crear igualmente.
+- El recordatorio se guarda como dato interno; no dispara notificaciones reales.
 
 ## Estado resultante
 
-`crearTarea()` queda implementado en backend y frontend dentro de una gestion
-de tareas que ya cubre consulta, edicion, borrado, finalizacion y planificacion
-basica.
+`crearTarea()` queda implementado en backend y frontend con alta, validacion,
+recordatorio opcional y aviso de solape en la interfaz.

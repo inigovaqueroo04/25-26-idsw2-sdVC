@@ -47,7 +47,8 @@ ese grupo, responsable, configuracion basica y conflictos horarios detectados.
 
 `POST /api/tasks` crea una tarea `Programada` dentro de un grupo gestionable.
 Valida titulo, fecha, hora de inicio, hora de fin, permisos de gestion y que
-la hora de inicio sea anterior a la hora de fin.
+la hora de inicio sea anterior a la hora de fin. Tambien acepta un
+`recordatorio_minutos` opcional para dejar configurado el aviso desde el alta.
 
 `PATCH /api/tasks/{task_id}` actualiza titulo, descripcion, fecha y horario de
 una tarea gestionable. Reutiliza las validaciones de creacion y bloquea tareas

@@ -68,6 +68,7 @@ def create_task(
             payload.fecha,
             payload.hora_inicio,
             payload.hora_fin,
+            payload.recordatorio_minutos,
         )
     except AuthError as error:
         raise_auth_error(error)

@@ -282,11 +282,13 @@ def crear_tarea(
     fecha: str,
     hora_inicio: str,
     hora_fin: str,
+    recordatorio_minutos: int | None = None,
 ) -> dict:
     titulo_normalizado = validar_titulo_tarea(titulo)
     descripcion_normalizada = (descripcion or "").strip() or None
     fecha_normalizada = validar_fecha_tarea(fecha)
     inicio_normalizado, fin_normalizado = validar_horario_tarea(hora_inicio, hora_fin)
+    recordatorio_normalizado = validar_recordatorio_tarea(recordatorio_minutos)
 
     with get_connection() as connection:
         grupo = connection.execute(
@@ -326,10 +328,11 @@ def crear_tarea(
                 fecha,
                 hora_inicio,
                 hora_fin,
+                recordatorio_minutos,
                 estado,
                 creado_por
             )
-            VALUES (?, ?, ?, ?, ?, ?, 'Programada', ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'Programada', ?)
             """,
             (
                 grupo_id,
@@ -338,6 +341,7 @@ def crear_tarea(
                 fecha_normalizada,
                 inicio_normalizado,
                 fin_normalizado,
+                recordatorio_normalizado,
                 usuario.id,
             ),
         )

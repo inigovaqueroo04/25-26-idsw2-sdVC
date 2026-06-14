@@ -8,6 +8,7 @@ class TaskCreateRequest(BaseModel):
     fecha: str
     hora_inicio: str
     hora_fin: str
+    recordatorio_minutos: int | None = None
 
 
 class TaskUpdateRequest(BaseModel):

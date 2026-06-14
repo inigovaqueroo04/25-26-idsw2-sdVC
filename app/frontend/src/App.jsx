@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 
 import { getCurrentUser, login, logout } from "./api/auth";
 import {
@@ -19,14 +19,14 @@ import { completeTask, createTask, deleteTask, getTasks, updateTask } from "./ap
 const SESSION_TOKEN_KEY = "brenotask_session_token";
 
 const ESTADO_LABELS = {
-  SESION_CERRADA: "Sesión cerrada",
-  SISTEMA_DISPONIBLE: "Sesión activa",
+  SESION_CERRADA: "Sesion cerrada",
+  SISTEMA_DISPONIBLE: "Sesion activa",
   GRUPOS_ABIERTO: "Grupos disponibles",
   GRUPO_ABIERTO: "Grupo abierto",
   TAREAS_ABIERTO: "Tareas abiertas",
   TAREA_ABIERTO: "Tarea abierta",
   INVITACIONES_ABIERTO: "Invitaciones abiertas",
-  INVITACION_ABIERTA: "Invitación abierta",
+  INVITACION_ABIERTA: "Invitacion abierta",
 };
 
 const ROLES_GESTION_GRUPO = new Set(["Administrador", "Miembro Administrador"]);
@@ -36,6 +36,74 @@ const ESTADOS_TAREA_NO_EDITABLES = new Set(["Finalizada", "Cancelada"]);
 
 function formatEstado(estado) {
   return ESTADO_LABELS[estado] ?? estado;
+}
+
+function horaAMinutos(hora) {
+  if (!hora) {
+    return null;
+  }
+
+  const [horas, minutos] = hora.split(":").map(Number);
+
+  if (Number.isNaN(horas) || Number.isNaN(minutos)) {
+    return null;
+  }
+
+  return horas * 60 + minutos;
+}
+
+
+function seSolapan(firstTask, secondTask) {
+  if (
+    !firstTask.fecha ||
+    !secondTask.fecha ||
+    firstTask.fecha !== secondTask.fecha ||
+    ESTADOS_TAREA_NO_EDITABLES.has(firstTask.estado) ||
+    ESTADOS_TAREA_NO_EDITABLES.has(secondTask.estado)
+  ) {
+    return false;
+  }
+
+  const firstStart = horaAMinutos(firstTask.hora_inicio);
+  const firstEnd = horaAMinutos(firstTask.hora_fin);
+  const secondStart = horaAMinutos(secondTask.hora_inicio);
+  const secondEnd = horaAMinutos(secondTask.hora_fin);
+
+  if ([firstStart, firstEnd, secondStart, secondEnd].some((value) => value === null)) {
+    return false;
+  }
+
+  return firstStart < secondEnd && firstEnd > secondStart;
+}
+
+
+function buscarSolapes(tarea, tareas) {
+  return tareas
+    .filter((tareaComparada) => tareaComparada.id !== tarea.id && seSolapan(tarea, tareaComparada))
+    .map((tareaComparada) => ({
+      id: tareaComparada.id,
+      titulo: tareaComparada.titulo,
+      grupo_nombre: tareaComparada.grupo_nombre,
+      hora_inicio: tareaComparada.hora_inicio,
+      hora_fin: tareaComparada.hora_fin,
+    }));
+}
+
+
+function combinarConflictos(tarea, tareas) {
+  const conflictos = [...(tarea.conflictos_horario ?? []), ...buscarSolapes(tarea, tareas)];
+  const vistos = new Set();
+
+  return conflictos.filter((conflicto) => {
+    const key = conflicto.id ?? `${conflicto.titulo}-${conflicto.hora_inicio}-${conflicto.hora_fin}`;
+
+    if (vistos.has(key)) {
+      return false;
+    }
+
+    vistos.add(key);
+    return true;
+  });
 }
 
 
@@ -49,7 +117,7 @@ function LoginForm({ onLogin, loading }) {
     setError("");
 
     if (!email.trim() || !password.trim()) {
-      setError("Email y contraseña son obligatorios.");
+      setError("Email y contrasena son obligatorios.");
       return;
     }
 
@@ -63,9 +131,9 @@ function LoginForm({ onLogin, loading }) {
   return (
     <section className="login-panel" aria-labelledby="login-title">
       <div>
-        <p className="eyebrow">Inicio de sesión</p>
-        <h1 id="login-title">BreñoTask</h1>
-        <p className="subtle">Accede a tu espacio de trabajo en BreñoTask.</p>
+        <p className="eyebrow">Inicio de sesion</p>
+        <h1 id="login-title">BrenoTask</h1>
+        <p className="subtle">Accede a tu espacio de trabajo en BrenoTask.</p>
       </div>
 
       <form className="login-form" onSubmit={handleSubmit}>
@@ -81,7 +149,7 @@ function LoginForm({ onLogin, loading }) {
         </label>
 
         <label>
-          Contraseña
+          Contrasena
           <input
             autoComplete="current-password"
             onChange={(event) => setPassword(event.target.value)}
@@ -93,7 +161,7 @@ function LoginForm({ onLogin, loading }) {
         {error ? <p className="error" role="alert">{error}</p> : null}
 
         <button className="primary-button" disabled={loading} type="submit">
-          {loading ? "Iniciando..." : "Iniciar sesión"}
+          {loading ? "Iniciando..." : "Iniciar sesion"}
         </button>
       </form>
     </section>
@@ -143,6 +211,7 @@ function Dashboard({
   onUpdateGroupMember,
   usuario,
 }) {
+  const [moduloActivo, setModuloActivo] = useState("inicio");
   const [filtroGrupos, setFiltroGrupos] = useState("");
   const [filtroTareas, setFiltroTareas] = useState("");
   const [filtroTareasEstado, setFiltroTareasEstado] = useState("Todas");
@@ -154,8 +223,10 @@ function Dashboard({
   const [tareaFecha, setTareaFecha] = useState("");
   const [tareaHoraInicio, setTareaHoraInicio] = useState("");
   const [tareaHoraFin, setTareaHoraFin] = useState("");
+  const [tareaRecordatorioMinutos, setTareaRecordatorioMinutos] = useState("");
   const [crearTareaError, setCrearTareaError] = useState("");
   const [crearTareaMensaje, setCrearTareaMensaje] = useState("");
+  const [solapesCrearTarea, setSolapesCrearTarea] = useState([]);
   const [tareaEditandoId, setTareaEditandoId] = useState(null);
   const [tareaEditadaTitulo, setTareaEditadaTitulo] = useState("");
   const [tareaEditadaDescripcion, setTareaEditadaDescripcion] = useState("");
@@ -220,8 +291,16 @@ function Dashboard({
     const coincideGrupo = filtroTareasGrupo === "Todos" || String(tarea.grupo_id) === filtroTareasGrupo;
     return coincideTexto && coincideEstado && coincideGrupo;
   });
+  const tareasFiltradasConConflictos = tareasFiltradas.map((tarea) => ({
+    ...tarea,
+    conflictos_visibles: combinarConflictos(tarea, tareas),
+  }));
   const tareasPlanificacionBase = tareasFiltradas
     .filter((tarea) => tarea.fecha && !ESTADOS_TAREA_NO_EDITABLES.has(tarea.estado))
+    .map((tarea) => ({
+      ...tarea,
+      conflictos_visibles: combinarConflictos(tarea, tareas),
+    }))
     .sort((firstTask, secondTask) =>
       `${firstTask.fecha} ${firstTask.hora_inicio ?? ""}`.localeCompare(
         `${secondTask.fecha} ${secondTask.hora_inicio ?? ""}`,
@@ -233,7 +312,7 @@ function Dashboard({
     }
 
     if (filtroPlanificacion === "Conflictos") {
-      return tarea.conflictos_horario?.length > 0;
+      return tarea.conflictos_visibles.length > 0;
     }
 
     return true;
@@ -245,8 +324,54 @@ function Dashboard({
       (tarea) => tarea.recordatorio_minutos || tarea.recordatorio_minutos === 0,
     ).length,
     conDependencia: tareasPlanificacionBase.filter((tarea) => tarea.predecesora_tarea_id).length,
-    conConflicto: tareasPlanificacionBase.filter((tarea) => tarea.conflictos_horario?.length > 0).length,
+    conConflicto: tareasPlanificacionBase.filter((tarea) => tarea.conflictos_visibles.length > 0).length,
   };
+  const tareasPendientes = tareas.filter((tarea) => !ESTADOS_TAREA_NO_EDITABLES.has(tarea.estado));
+  const invitacionesPendientes = invitaciones.filter((invitacion) => invitacion.estado === "Pendiente");
+  const gruposGestionables = grupos.filter((grupo) => ROLES_GESTION_GRUPO.has(grupo.rol));
+  const resumenInicio = [
+    {
+      etiqueta: "Tareas pendientes",
+      valor: tareasPendientes.length,
+      detalle: `${resumenPlanificacion.conConflicto} solapes`,
+      modulo: "tareas",
+    },
+    {
+      etiqueta: "Grupos activos",
+      valor: grupos.length,
+      detalle: `${gruposGestionables.length} gestionables`,
+      modulo: "grupos",
+    },
+    {
+      etiqueta: "Invitaciones",
+      valor: invitacionesPendientes.length,
+      detalle: "pendientes de revisar",
+      modulo: "invitaciones",
+    },
+    {
+      etiqueta: "Planificacion",
+      valor: resumenPlanificacion.programadas,
+      detalle: `${resumenPlanificacion.conRecordatorio} con recordatorio`,
+      modulo: "planificacion",
+    },
+  ];
+  const tareasProximas = tareasPlanificacionBase.slice(0, 4);
+  const tituloModulo = {
+    inicio: "Inicio",
+    sesion: "Sesion",
+    grupos: "Grupos",
+    invitaciones: "Invitaciones",
+    tareas: "Tareas",
+    planificacion: "Planificacion",
+  }[moduloActivo];
+  const descripcionModulo = {
+    inicio: "Resumen de tareas, grupos e invitaciones.",
+    sesion: "Datos de la cuenta activa.",
+    grupos: "Organiza grupos, miembros e invitaciones.",
+    invitaciones: "Revisa solicitudes pendientes.",
+    tareas: "Crea, asigna y completa tareas.",
+    planificacion: "Revisa horarios, avisos y solapes.",
+  }[moduloActivo];
 
   useEffect(() => {
     if (!tareaGrupoId && gruposGestionTareas.length > 0) {
@@ -254,15 +379,36 @@ function Dashboard({
     }
   }, [gruposGestionTareas, tareaGrupoId]);
 
-  async function handleCreateTask(event) {
-    event.preventDefault();
+  useEffect(() => {
+    setSolapesCrearTarea([]);
+  }, [tareaGrupoId, tareaTitulo, tareaFecha, tareaHoraInicio, tareaHoraFin]);
+
+  async function crearTareaDesdeFormulario({ ignorarSolapes = false } = {}) {
     setCrearTareaError("");
     setCrearTareaMensaje("");
     setEditarTareaMensaje("");
     setCompletarTareaMensaje("");
+    setEliminarTareaMensaje("");
 
     if (!tareaGrupoId || !tareaTitulo.trim() || !tareaFecha || !tareaHoraInicio || !tareaHoraFin) {
       setCrearTareaError("Grupo, titulo, fecha, hora de inicio y hora de fin son obligatorios.");
+      return;
+    }
+
+    const borradorTarea = {
+      id: "nueva",
+      grupo_id: Number(tareaGrupoId),
+      grupo_nombre: grupos.find((grupo) => String(grupo.id) === tareaGrupoId)?.nombre ?? "",
+      titulo: tareaTitulo,
+      fecha: tareaFecha,
+      hora_inicio: tareaHoraInicio,
+      hora_fin: tareaHoraFin,
+      estado: "Programada",
+    };
+    const solapes = buscarSolapes(borradorTarea, tareas);
+
+    if (solapes.length > 0 && !ignorarSolapes) {
+      setSolapesCrearTarea(solapes);
       return;
     }
 
@@ -274,16 +420,24 @@ function Dashboard({
         fecha: tareaFecha,
         hora_inicio: tareaHoraInicio,
         hora_fin: tareaHoraFin,
+        recordatorio_minutos: tareaRecordatorioMinutos ? Number(tareaRecordatorioMinutos) : null,
       });
       setTareaTitulo("");
       setTareaDescripcion("");
       setTareaFecha("");
       setTareaHoraInicio("");
       setTareaHoraFin("");
+      setTareaRecordatorioMinutos("");
+      setSolapesCrearTarea([]);
       setCrearTareaMensaje(result.mensaje);
     } catch (taskError) {
       setCrearTareaError(taskError.message);
     }
+  }
+
+  async function handleCreateTask(event) {
+    event.preventDefault();
+    await crearTareaDesdeFormulario();
   }
 
   async function startEditTask(tarea) {
@@ -685,17 +839,17 @@ function Dashboard({
     <section className="workspace" aria-labelledby="dashboard-title">
       <header className="dashboard-header">
         <div>
-          <p className="eyebrow">{formatEstado(estado)}</p>
-          <h1 id="dashboard-title">Bienvenido a BreñoTask, {usuario.nombre}</h1>
+          <p className="eyebrow">BrenoTask</p>
+          <h1 id="dashboard-title">Hola, {usuario.nombre}</h1>
         </div>
         <button className="secondary-button" type="button" onClick={onRequestLogout}>
-          Cerrar sesión
+          Cerrar sesion
         </button>
       </header>
 
       {confirmingLogout ? (
         <div className="logout-confirmation" role="alert">
-          <p>Confirmar cierre de sesión actual.</p>
+          <p>Confirmar cierre de sesion actual.</p>
           <div className="confirmation-actions">
             <button className="secondary-button" type="button" onClick={onCancelLogout}>
               Cancelar
@@ -712,32 +866,137 @@ function Dashboard({
         </div>
       ) : null}
 
-      <div className="status-grid">
-        <article className="status-item">
-          <span>Usuario</span>
-          <strong>{usuario.email}</strong>
-        </article>
-        <article className="status-item">
-          <span>Rol</span>
-          <strong>{usuario.rol}</strong>
-        </article>
-        <article className="status-item">
-          <span>Estado</span>
-          <strong>{formatEstado(estado)}</strong>
-        </article>
-      </div>
+      <div className="workspace-layout">
+        <aside className="module-sidebar" aria-label="Navegacion principal">
+          {[
+            ["inicio", "Inicio"],
+            ["sesion", "Sesion"],
+            ["grupos", "Grupos"],
+            ["invitaciones", "Invitaciones"],
+            ["tareas", "Tareas"],
+            ["planificacion", "Planificacion"],
+          ].map(([modulo, etiqueta]) => (
+            <button
+              className={moduloActivo === modulo ? "module-nav-button active" : "module-nav-button"}
+              key={modulo}
+              type="button"
+              onClick={() => setModuloActivo(modulo)}
+            >
+              {etiqueta}
+            </button>
+          ))}
+        </aside>
 
-      <div className="navigation-band">
-        <div>
-          <h2>Panel principal</h2>
-          <p>{gestionMensaje}</p>
-        </div>
-      </div>
+        <main className="module-content" aria-labelledby="module-title">
+          <div className="navigation-band">
+            <div>
+              <h2 id="module-title">{tituloModulo}</h2>
+              <p>{descripcionModulo}</p>
+            </div>
+          </div>
 
+          {moduloActivo === "inicio" ? (
+            <section className="home-section" aria-labelledby="home-title">
+              <div className="home-heading">
+                <div>
+                  <p className="eyebrow">Resumen operativo</p>
+                  <h2 id="home-title">Trabajo de hoy</h2>
+                </div>
+                <button className="primary-button compact" type="button" onClick={() => setModuloActivo("tareas")}>
+                  Nueva tarea
+                </button>
+              </div>
+
+              <div className="overview-grid">
+                {resumenInicio.map((item) => (
+                  <button
+                    className="overview-card"
+                    key={item.etiqueta}
+                    type="button"
+                    onClick={() => setModuloActivo(item.modulo)}
+                  >
+                    <span>{item.etiqueta}</span>
+                    <strong>{item.valor}</strong>
+                    <small>{item.detalle}</small>
+                  </button>
+                ))}
+              </div>
+
+              <div className="home-panels">
+                <section className="home-panel" aria-labelledby="next-tasks-title">
+                  <div className="panel-heading">
+                    <h3 id="next-tasks-title">Proximas tareas</h3>
+                    <button className="text-button" type="button" onClick={() => setModuloActivo("planificacion")}>
+                      Ver agenda
+                    </button>
+                  </div>
+                  {tareasProximas.length > 0 ? (
+                    <div className="compact-list">
+                      {tareasProximas.map((tarea) => (
+                        <div className="compact-row" key={tarea.id}>
+                          <strong>{tarea.titulo}</strong>
+                          <span>
+                            {tarea.fecha} {tarea.hora_inicio && tarea.hora_fin ? `${tarea.hora_inicio}-${tarea.hora_fin}` : ""}
+                          </span>
+                          <small>{tarea.asignado_nombre ? `Responsable ${tarea.asignado_nombre}` : "Sin responsable"}</small>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="empty-state">No hay tareas planificadas.</p>
+                  )}
+                </section>
+
+                <section className="home-panel" aria-labelledby="quick-actions-title">
+                  <div className="panel-heading">
+                    <h3 id="quick-actions-title">Acciones frecuentes</h3>
+                  </div>
+                  <div className="quick-actions">
+                    <button className="secondary-button" type="button" onClick={() => setModuloActivo("grupos")}>
+                      Gestionar grupos
+                    </button>
+                    <button className="secondary-button" type="button" onClick={() => setModuloActivo("invitaciones")}>
+                      Revisar invitaciones
+                    </button>
+                    <button className="secondary-button" type="button" onClick={() => setModuloActivo("planificacion")}>
+                      Revisar conflictos
+                    </button>
+                  </div>
+                </section>
+              </div>
+            </section>
+          ) : null}
+
+          {moduloActivo === "sesion" ? (
+            <section className="session-section" aria-labelledby="session-title">
+              <div className="section-header">
+                <div>
+                  <p className="eyebrow">Sesion</p>
+                  <h2 id="session-title">Datos de acceso</h2>
+                </div>
+              </div>
+              <div className="status-grid">
+                <article className="status-item">
+                  <span>Usuario</span>
+                  <strong>{usuario.email}</strong>
+                </article>
+                <article className="status-item">
+                  <span>Rol</span>
+                  <strong>{usuario.rol}</strong>
+                </article>
+                <article className="status-item">
+                  <span>Estado</span>
+                  <strong>{formatEstado(estado)}</strong>
+                </article>
+              </div>
+            </section>
+          ) : null}
+
+      {moduloActivo === "grupos" ? (
       <section className="groups-section" aria-labelledby="groups-title">
         <div className="section-header">
           <div>
-            <p className="eyebrow">Gestión de grupos</p>
+            <p className="eyebrow">Gestion de grupos</p>
             <h2 id="groups-title">Mis grupos</h2>
           </div>
           <label className="filter-field">
@@ -764,7 +1023,7 @@ function Dashboard({
             </label>
 
             <label>
-              Descripción
+              Descripcion
               <input
                 maxLength={160}
                 onChange={(event) => setGrupoDescripcion(event.target.value)}
@@ -816,7 +1075,7 @@ function Dashboard({
                     </label>
 
                     <label>
-                      Descripción
+                      Descripcion
                       <input
                         maxLength={160}
                         onChange={(event) => setGrupoEditadoDescripcion(event.target.value)}
@@ -845,7 +1104,7 @@ function Dashboard({
                     <div className="group-card-header">
                       <div>
                         <h3>{grupo.nombre}</h3>
-                        <p>{grupo.descripcion ?? "Sin descripción."}</p>
+                        <p>{grupo.descripcion ?? "Sin descripcion."}</p>
                       </div>
                       {ROLES_GESTION_GRUPO.has(grupo.rol) ? (
                         <div className="group-card-actions">
@@ -1042,12 +1301,14 @@ function Dashboard({
           </div>
         ) : null}
       </section>
+      ) : null}
 
+      {moduloActivo === "tareas" || moduloActivo === "planificacion" ? (
       <section className="tasks-section" aria-labelledby="tasks-title">
         <div className="section-header">
           <div>
-            <p className="eyebrow">Tareas</p>
-            <h2 id="tasks-title">Mis tareas</h2>
+            <p className="eyebrow">{moduloActivo === "planificacion" ? "Planificacion" : "Tareas"}</p>
+            <h2 id="tasks-title">{moduloActivo === "planificacion" ? "Agenda" : "Mis tareas"}</h2>
           </div>
           <div className="tasks-filters">
             <label>
@@ -1089,7 +1350,7 @@ function Dashboard({
           </div>
         </div>
 
-        {gruposGestionTareas.length > 0 ? (
+        {moduloActivo === "tareas" && gruposGestionTareas.length > 0 ? (
           <form className="create-task-form" onSubmit={handleCreateTask}>
             <div className="create-task-fields">
               <label>
@@ -1143,6 +1404,18 @@ function Dashboard({
                 />
               </label>
 
+              <label>
+                Recordatorio
+                <input
+                  min="0"
+                  max="10080"
+                  onChange={(event) => setTareaRecordatorioMinutos(event.target.value)}
+                  placeholder="Minutos"
+                  type="number"
+                  value={tareaRecordatorioMinutos}
+                />
+              </label>
+
               <label className="create-task-description">
                 Descripcion
                 <input
@@ -1153,6 +1426,39 @@ function Dashboard({
                 />
               </label>
             </div>
+
+            {solapesCrearTarea.length > 0 ? (
+              <div className="schedule-warning" role="alert">
+                <div>
+                  <strong>Horario solapado</strong>
+                  <p>Ya hay tareas en ese tramo. Cambia fecha u hora, o crea la tarea igualmente.</p>
+                </div>
+                <div className="warning-list">
+                  {solapesCrearTarea.map((solape) => (
+                    <span key={solape.id}>
+                      {solape.titulo} Â· {solape.grupo_nombre} Â· {solape.hora_inicio}-{solape.hora_fin}
+                    </span>
+                  ))}
+                </div>
+                <div className="create-task-actions">
+                  <button
+                    className="secondary-button compact"
+                    type="button"
+                    onClick={() => setSolapesCrearTarea([])}
+                  >
+                    Cambiar horario
+                  </button>
+                  <button
+                    className="primary-button compact"
+                    disabled={tareaCreando}
+                    type="button"
+                    onClick={() => crearTareaDesdeFormulario({ ignorarSolapes: true })}
+                  >
+                    Crear igualmente
+                  </button>
+                </div>
+              </div>
+            ) : null}
 
             {crearTareaError ? <p className="error" role="alert">{crearTareaError}</p> : null}
             {crearTareaMensaje ? <p className="success" role="status">{crearTareaMensaje}</p> : null}
@@ -1167,25 +1473,25 @@ function Dashboard({
 
         {tareasLoading ? <p className="subtle">Cargando tareas...</p> : null}
         {tareasError ? <p className="error" role="alert">{tareasError}</p> : null}
-        {editarTareaMensaje ? <p className="success" role="status">{editarTareaMensaje}</p> : null}
-        {completarTareaMensaje ? <p className="success" role="status">{completarTareaMensaje}</p> : null}
-        {completarTareaError ? <p className="error" role="alert">{completarTareaError}</p> : null}
-        {eliminarTareaMensaje ? <p className="success" role="status">{eliminarTareaMensaje}</p> : null}
-        {eliminarTareaError ? <p className="error" role="alert">{eliminarTareaError}</p> : null}
+        {moduloActivo === "tareas" && editarTareaMensaje ? <p className="success" role="status">{editarTareaMensaje}</p> : null}
+        {moduloActivo === "tareas" && completarTareaMensaje ? <p className="success" role="status">{completarTareaMensaje}</p> : null}
+        {moduloActivo === "tareas" && completarTareaError ? <p className="error" role="alert">{completarTareaError}</p> : null}
+        {moduloActivo === "tareas" && eliminarTareaMensaje ? <p className="success" role="status">{eliminarTareaMensaje}</p> : null}
+        {moduloActivo === "tareas" && eliminarTareaError ? <p className="error" role="alert">{eliminarTareaError}</p> : null}
 
-        {!tareasLoading && !tareasError ? (
+        {moduloActivo === "planificacion" && !tareasLoading && !tareasError ? (
           <div className="planning-panel" aria-labelledby="planning-title">
             <div className="planning-panel-header">
               <div>
                 <p className="eyebrow">Planificacion</p>
-                <h3 id="planning-title">Agenda filtrada</h3>
+                <h3 id="planning-title">Agenda</h3>
               </div>
               <div className="planning-stats">
-                <span>{resumenPlanificacion.programadas} programadas</span>
-                <span>{resumenPlanificacion.conResponsable} responsables</span>
-                <span>{resumenPlanificacion.conRecordatorio} recordatorios</span>
+                <span>{resumenPlanificacion.programadas} tareas</span>
+                <span>{resumenPlanificacion.conResponsable} asignadas</span>
+                <span>{resumenPlanificacion.conRecordatorio} avisos</span>
                 <span>{resumenPlanificacion.conDependencia} dependencias</span>
-                <span>{resumenPlanificacion.conConflicto} conflictos</span>
+                <span>{resumenPlanificacion.conConflicto} solapes</span>
               </div>
             </div>
 
@@ -1209,7 +1515,7 @@ function Dashboard({
                 type="button"
                 onClick={() => setFiltroPlanificacion("Conflictos")}
               >
-                Conflictos
+                Solapes
               </button>
             </div>
 
@@ -1229,10 +1535,10 @@ function Dashboard({
                         : "Sin recordatorio"}
                     </span>
                     <span>{tarea.predecesora_titulo ? `Depende de ${tarea.predecesora_titulo}` : "Sin dependencia"}</span>
-                    <span className={tarea.conflictos_horario?.length > 0 ? "planning-alert" : ""}>
-                      {tarea.conflictos_horario?.length > 0
-                        ? `${tarea.conflictos_horario.length} conflicto`
-                        : "Sin conflicto"}
+                    <span className={tarea.conflictos_visibles.length > 0 ? "planning-alert" : ""}>
+                      {tarea.conflictos_visibles.length > 0
+                        ? `${tarea.conflictos_visibles.length} solape`
+                        : "Sin solape"}
                     </span>
                   </div>
                 ))}
@@ -1243,13 +1549,13 @@ function Dashboard({
           </div>
         ) : null}
 
-        {!tareasLoading && !tareasError && tareasFiltradas.length === 0 ? (
+        {moduloActivo === "tareas" && !tareasLoading && !tareasError && tareasFiltradas.length === 0 ? (
           <p className="empty-state">No hay tareas para este filtro.</p>
         ) : null}
 
-        {!tareasLoading && !tareasError && tareasFiltradas.length > 0 ? (
+        {moduloActivo === "tareas" && !tareasLoading && !tareasError && tareasFiltradas.length > 0 ? (
           <div className="tasks-list">
-            {tareasFiltradas.map((tarea) => (
+            {tareasFiltradasConConflictos.map((tarea) => (
               <article className="task-item" key={tarea.id}>
                 {tareaEditandoId === tarea.id ? (
                   <form className="edit-task-form" onSubmit={handleUpdateTask}>
@@ -1397,18 +1703,20 @@ function Dashboard({
                         <span>Recordatorio {tarea.recordatorio_minutos} min</span>
                       ) : null}
                       {tarea.predecesora_titulo ? <span>Depende de {tarea.predecesora_titulo}</span> : null}
-                      {tarea.conflictos_horario?.length > 0 ? (
-                        <span className="warning-pill">Conflicto horario {tarea.conflictos_horario.length}</span>
+                      {tarea.conflictos_visibles.length > 0 ? (
+                        <span className="warning-pill">Solape {tarea.conflictos_visibles.length}</span>
                       ) : null}
                       <span>{tarea.grupo_nombre}</span>
                       <span>{tarea.rol_grupo}</span>
                       {tarea.es_gestionable ? <span>Gestionable</span> : null}
                     </div>
-                    {tarea.conflictos_horario?.length > 0 ? (
+                    {tarea.conflictos_visibles.length > 0 ? (
                       <p className="task-warning" role="status">
                         Solapa con{" "}
-                        {tarea.conflictos_horario
-                          .map((conflicto) => `${conflicto.titulo} (${conflicto.hora_inicio}-${conflicto.hora_fin})`)
+                        {tarea.conflictos_visibles
+                          .map((conflicto) =>
+                            `${conflicto.titulo}${conflicto.grupo_nombre ? ` Â· ${conflicto.grupo_nombre}` : ""} (${conflicto.hora_inicio}-${conflicto.hora_fin})`
+                          )
                           .join(", ")}
                         .
                       </p>
@@ -1469,7 +1777,9 @@ function Dashboard({
           </div>
         ) : null}
       </section>
+      ) : null}
 
+      {moduloActivo === "invitaciones" ? (
       <section className="invitations-section" aria-labelledby="invitations-title">
         <div className="section-header">
           <div>
@@ -1575,6 +1885,9 @@ function Dashboard({
           </div>
         ) : null}
       </section>
+      ) : null}
+        </main>
+      </div>
     </section>
   );
 }
@@ -1584,7 +1897,7 @@ export default function App() {
   const [usuario, setUsuario] = useState(null);
   const [token, setToken] = useState(() => localStorage.getItem(SESSION_TOKEN_KEY));
   const [estado, setEstado] = useState(token ? "SISTEMA_DISPONIBLE" : "SESION_CERRADA");
-  const [gestionMensaje, setGestionMensaje] = useState("Todo listo. Has iniciado sesión correctamente.");
+  const [gestionMensaje, setGestionMensaje] = useState("Todo listo. Has iniciado sesion correctamente.");
   const [grupos, setGrupos] = useState([]);
   const [gruposError, setGruposError] = useState("");
   const [gruposLoading, setGruposLoading] = useState(false);
@@ -1708,7 +2021,7 @@ export default function App() {
     localStorage.setItem(SESSION_TOKEN_KEY, result.token);
     setToken(result.token);
     setUsuario(result.usuario);
-    setGestionMensaje("Todo listo. Has iniciado sesión correctamente.");
+    setGestionMensaje("Todo listo. Has iniciado sesion correctamente.");
     setConfirmingLogout(false);
     await cargarGrupos(result.token);
     await cargarInvitaciones(result.token);
@@ -1937,7 +2250,7 @@ export default function App() {
       setToken(null);
       setUsuario(null);
       setEstado("SESION_CERRADA");
-      setGestionMensaje("Todo listo. Has iniciado sesión correctamente.");
+      setGestionMensaje("Todo listo. Has iniciado sesion correctamente.");
       setGrupos([]);
       setGruposError("");
       setInvitaciones([]);

@@ -665,3 +665,23 @@
 **Resultado:** El backend deja en `NULL` el responsable de las tareas del grupo asignadas al usuario retirado. El frontend recarga grupos y tareas despues de confirmar la baja, de modo que las tarjetas pasan a mostrar `Sin responsable` sin esperar a otra accion. Se actualizaron README de backend, frontend, desarrollo y pruebas del caso.
 
 **Decision:** No se reasigna automaticamente a otro miembro porque podria introducir una responsabilidad falsa. La opcion mas clara para el usuario es liberar la tarea y permitir que un gestor la asigne de nuevo.
+
+---
+
+## [2026-06-14 16:28] Reordenacion final del frontend
+
+**Prompt:** Se trabajo una pasada final de interfaz para que BreñoTask dejara de verse como una lista vertical de modulos y se comportara mas como una aplicacion real: dashboard inicial, navegacion clara y pantallas separadas para sesion, grupos, invitaciones, tareas y planificacion.
+
+**Resultado:** El frontend ahora muestra un inicio con resumen operativo, acciones frecuentes y proximas tareas. Cada modulo se abre desde una navegacion lateral y solo muestra la informacion correspondiente. Se limpiaron textos tecnicos repetidos, mensajes antiguos en pantallas donde no correspondian y problemas de overflow horizontal en la agenda.
+
+**Decision:** La reorganizacion se hizo sin cambiar endpoints ni duplicar logica de backend. La separacion entre pantallas es de interfaz, para mejorar uso y claridad sin ampliar innecesariamente la arquitectura.
+
+---
+
+## [2026-06-14 16:29] Solapes visibles y recordatorio en alta
+
+**Prompt:** Se corrigio la experiencia de planificacion para que tareas de grupos distintos tambien avisen si coinciden en fecha y hora, y se completo el flujo de recordatorios para que puedan configurarse al crear una tarea, no solo al editarla.
+
+**Resultado:** El frontend calcula solapes visibles entre tareas activas aunque esten sin responsable o pertenezcan a grupos distintos. Al crear una tarea con horario solapado muestra un aviso con opcion de cambiar horario o crear igualmente. El backend acepta `recordatorio_minutos` en `POST /api/tasks`, lo valida y lo guarda desde el alta. Se actualizaron README de backend, frontend y RUP de `crearTarea()`, `configurarRecordatorio()` y `abrirPlanificacion()`.
+
+**Decision:** Los solapes no bloquean el guardado porque el usuario puede decidir mantenerlos. Los recordatorios siguen siendo configuracion interna de la app; no generan notificaciones reales externas.
