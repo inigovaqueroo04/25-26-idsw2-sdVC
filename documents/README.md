@@ -2,7 +2,7 @@
 
 Esta carpeta contiene los artefactos de trabajo del proyecto. La documentacion
 RUP queda organizada por disciplina para mantener trazabilidad entre requisitos,
-analisis, diseño, desarrollo y pruebas.
+analisis, diseño y desarrollo.
 
 ## RUP
 

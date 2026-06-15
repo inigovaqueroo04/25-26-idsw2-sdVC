@@ -1,7 +1,7 @@
 # Desarrollo de casos de uso
 
-Plantillas para registrar, por caso de uso, los archivos de codigo asociados,
-decisiones de implementacion y estado de avance.
+Indice de casos de uso implementados o trazados contra el codigo de la
+aplicacion.
 
 ## Gestion de grupos
 

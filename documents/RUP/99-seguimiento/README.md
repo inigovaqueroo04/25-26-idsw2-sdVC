@@ -6,12 +6,12 @@ entender cada incremento.
 
 ## Dashboard de avance por modulo
 
-| Modulo | Analisis | Diseño | Desarrollo | Pruebas | Observacion |
-| --- | --- | --- | --- | --- | --- |
-| Gestion de sesion y navegacion | Completo | Completo | Primer vertical implementado | Smoke manual | React + FastAPI + SQLite en `app/` |
-| Gestion de grupos y usuarios | Completo | Completo | En progreso | Smoke manual | CRUD basico, invitaciones recibidas/gestionables y gestion de miembros implementados |
-| Gestion de tareas | Completo | Completo | En progreso | Smoke manual | Tareas CRUD, finalizacion, conflictos iniciales y dependencia simple implementados |
-| Planificacion y configuracion | Completo | Completo | En progreso | Smoke manual | Agenda filtrada, horario, responsable, localizacion y recordatorio simple implementados |
+| Modulo | Analisis | Diseño | Desarrollo | Observacion |
+| --- | --- | --- | --- | --- |
+| Gestion de sesion y navegacion | Completo | Completo | Implementado | React + FastAPI + SQLite en `app/` |
+| Gestion de grupos y usuarios | Completo | Completo | En progreso | CRUD basico, invitaciones recibidas/gestionables y gestion de miembros implementados |
+| Gestion de tareas | Completo | Completo | En progreso | Tareas CRUD, finalizacion, conflictos iniciales y dependencia simple implementados |
+| Planificacion y configuracion | Completo | Completo | En progreso | Agenda filtrada, horario, responsable, localizacion y recordatorio simple implementados |
 
 ## Regla de claridad visual
 
@@ -20,7 +20,7 @@ entender cada incremento.
 - El README de la carpeta debe mostrar el `.svg` y enlazar tambien el `.puml`
   fuente.
 - Si se implementa un nuevo incremento, este dashboard y el
-  `conversation-log.md` deben actualizarse en la misma tanda de trabajo.
+  `conversation-log.md` se actualizan en la misma tanda de trabajo.
 - Los estados internos de RUP pueden aparecer en documentacion tecnica, pero la
   interfaz de usuario debe mostrarlos con texto entendible.
 
@@ -32,10 +32,7 @@ Fuente editable: [diagrama-contexto-admin.puml](./diagrama-contexto-admin.puml)
 
 Vista SVG: [diagrama-contexto-admin.svg](./diagrama-contexto-admin.svg)
 
-## Pendiente
+## Alcance actual
 
-- Mantener este dashboard en cada nuevo avance.
-- Añadir nuevas vistas visuales cuando se implementen grupos, tareas o
-  planificacion.
-- Registrar pruebas ejecutables cuando el proyecto crezca mas alla del smoke
-  manual.
+El proyecto queda preparado para presentacion con documentacion de requisitos,
+analisis, diseño, desarrollo y una aplicacion funcional de prototipo.

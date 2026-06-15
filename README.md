@@ -19,9 +19,9 @@ día a día con menos olvidos, solapamientos y desorganización.
 ## Vista general
 
 Este repositorio desarrolla **BreñoTask** siguiendo una estructura RUP:
-requisitos y casos de uso, análisis, diseño, implementación incremental y
-pruebas. La aplicación funcional se encuentra en `app/`, con frontend React y
-backend FastAPI sobre SQLite.
+requisitos y casos de uso, análisis, diseño e implementación incremental. La
+aplicación funcional se encuentra en `app/`, con frontend React y backend
+FastAPI sobre SQLite.
 
 El objetivo del proyecto no es solo tener una app funcionando, sino mantener
 trazabilidad entre lo que se pide, lo que se analiza, lo que se diseña y lo que
@@ -36,7 +36,6 @@ finalmente se implementa.
 | Análisis | [01-analisis](./documents/RUP/01-analisis/README.md) | Índice de casos; cada caso incluye análisis y diagramas. |
 | Diseño | [02-diseño](./documents/RUP/02-diseño/README.md) | Arquitectura, modelo de diseño, trazabilidad y diseño por caso. |
 | Desarrollo | [03-desarrollo](./documents/RUP/03-desarrollo/README.md) | Seguimiento de implementación por caso de uso. |
-| Pruebas | [04-pruebas](./documents/RUP/04-pruebas/README.md) | Validaciones y pruebas documentadas por caso. |
 | Aplicación | [app](./app/README.md) | Código ejecutable: frontend, backend y base de datos. |
 | Log de trabajo | [conversation-log.md](./conversation-log.md) | Registro de decisiones y avances realizados con IA. |
 

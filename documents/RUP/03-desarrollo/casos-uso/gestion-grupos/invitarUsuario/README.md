@@ -25,9 +25,9 @@ Implementado como primer incremento vertical de invitaciones.
 
 ## Decision de implementacion
 
-La invitacion se registra como `Pendiente` y no crea ningun miembro todavia.
-Esto sigue la decision de diseno: la pertenencia al grupo se producira en un
-caso posterior de aceptacion o gestion de invitaciones.
+La invitacion se registra como `Pendiente` y mantiene separada la pertenencia
+al grupo. Esto sigue la decision de diseno: la relacion como miembro se crea al
+aceptar la invitacion.
 
 Los usuarios con rol `Administrador` o `Miembro Administrador` dentro del grupo
 pueden invitar. El email se normaliza a minusculas, la fecha limite debe ser
@@ -67,10 +67,9 @@ Respuesta correcta:
 }
 ```
 
-## Alcance no incluido
+## Alcance del prototipo
 
 - Envio real de email.
-- Aceptacion o rechazo de invitaciones.
-- Listado y administracion de invitaciones existentes.
-- Conversion de invitacion aceptada en miembro.
-- Pruebas automatizadas.
+- Invitacion registrada desde grupos gestionables.
+- Aceptacion, rechazo, listado y administracion cubiertos en sus casos de uso
+  correspondientes.

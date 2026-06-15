@@ -48,7 +48,7 @@ documents/RUP/02-diseño/
 - Las entidades de dominio se mantienen independientes de la interfaz.
 - La persistencia se mantiene conceptual hasta decidir tecnología en implementación.
 - Los estados de navegación proceden de los diagramas de contexto y análisis.
-- Si falta información se marca como [PENDIENTE] en lugar de inventar requisitos.
+- Si falta información, se documenta como fuera de alcance del prototipo.
 
 ## Mapeo posterior esperado
 
@@ -61,10 +61,10 @@ documents/RUP/02-diseño/
 | Repositorio conceptual | Adaptador de almacenamiento. |
 | Estado de aplicación | Mecanismo real de sesión/navegación. |
 
-## Pendiente antes de construir
+## Traslado a construcción
 
-- Elegir tecnología concreta.
-- Definir estructura real de src/.
-- Definir almacenamiento físico.
-- Priorizar el primer incremento implementable.
-- Crear pruebas ejecutables a partir de los escenarios diseñados.
+- La construccion queda organizada en `app/backend`, `app/frontend` y
+  `app/database`.
+- Las decisiones tecnologicas se concretan en React, FastAPI y SQLite.
+- El primer incremento implementable cubre sesion, grupos, tareas y
+  planificacion basica.

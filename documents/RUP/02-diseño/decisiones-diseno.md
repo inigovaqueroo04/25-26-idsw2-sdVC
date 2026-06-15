@@ -50,10 +50,9 @@
 - Se registran como avisos idempotentes.
 - No bloquean por defecto la creación o edición de tareas, salvo decisión futura.
 
-## Pendiente para implementación
+## Decisiones trasladadas a implementación
 
-- Tecnología concreta de interfaz.
-- Tecnología concreta de almacenamiento.
-- Formato final de identificadores.
-- Reglas detalladas de permisos para casos límite.
-- Estrategia de datos iniciales y pruebas ejecutables.
+- Interfaz implementada con React y Vite.
+- Backend implementado con FastAPI.
+- Almacenamiento implementado con SQLite.
+- Datos iniciales definidos en `app/database/seed.sql`.

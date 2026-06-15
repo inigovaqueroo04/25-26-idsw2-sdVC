@@ -17,5 +17,5 @@
 ## Decision
 
 La asignacion queda integrada en la edicion de tarea para ahorrar pantalla y
-tiempo de implementacion. No se crea todavia una vista separada de
-planificacion.
+tiempo de implementacion. La planificacion se apoya en esa misma informacion
+sin crear una vista separada de asignaciones.

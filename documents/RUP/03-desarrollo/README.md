@@ -62,14 +62,12 @@ Casos cubiertos en codigo:
 - `definirLocalizacion()`: localizacion textual opcional en la tarea.
 - `configurarRecordatorio()`: recordatorio simple expresado en minutos.
 
-Pendiente del modulo de grupos:
+Alcance del incremento:
 
-- sin pendientes funcionales inmediatos en grupos antes de iniciar tareas.
-
-Pendiente del modulo de tareas:
-
-- resolucion guiada de conflictos horarios, subtareas, tipos avanzados de
-  relaciones, mapas/rutas y notificaciones reales de recordatorio.
+- Se cubren los flujos principales de sesion, grupos, invitaciones, miembros,
+  tareas y planificacion basica.
+- Quedan fuera del alcance del prototipo las notificaciones externas, mapas,
+  rutas, subtareas y resolucion guiada avanzada de conflictos.
 
 ## Criterio de seguimiento
 

@@ -29,8 +29,8 @@ GET /api/tasks
 ```
 
 La consulta usa la sesion activa y solo devuelve tareas de grupos donde existe
-una fila en `miembros_grupo` para el usuario. No acepta todavia parametros de
-modificacion porque este caso de uso es de apertura y consulta.
+una fila en `miembros_grupo` para el usuario. Las modificaciones se resuelven
+en los casos de uso de creacion, edicion, finalizacion y eliminacion.
 
 ## Frontend
 

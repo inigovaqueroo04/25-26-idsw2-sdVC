@@ -19,5 +19,5 @@
 
 ## Decision
 
-El recordatorio no envia avisos reales todavia; queda guardado como
-configuracion interna para que la planificacion ayude a reducir olvidos.
+El recordatorio se guarda como configuracion interna de la tarea. Los avisos
+externos quedan fuera del alcance del prototipo.

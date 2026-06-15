@@ -9,7 +9,7 @@ backend o base de datos.
 
 - Definir una arquitectura conceptual que guíe la implementación posterior.
 - Identificar participantes de diseño y responsabilidades por caso de uso.
-- Mantener trazabilidad entre análisis, diseño y futuras pruebas.
+- Mantener trazabilidad entre análisis, diseño e implementación.
 - Evitar mezclar decisiones tecnológicas con decisiones de dominio antes de
   iniciar código.
 
@@ -67,10 +67,9 @@ dominio, persistencia conceptual y estado de aplicación.
 - [definirLocalizacion()](./casos-uso/planificacion-configuracion/definirLocalizacion/README.md)
 - [establecerHorario()](./casos-uso/planificacion-configuracion/establecerHorario/README.md)
 
-## Pendiente antes de implementación
+## Continuidad con implementación
 
-- Seleccionar tecnología concreta y documentarla en la fase de implementación.
-- Convertir los participantes conceptuales en componentes, servicios y
-  almacenamiento reales.
-- Priorizar el primer incremento de construcción.
-- Añadir pruebas ejecutables cuando exista código.
+- La implementación se recoge en [03-desarrollo](../03-desarrollo/README.md).
+- Los participantes conceptuales se trasladan a componentes React, rutas
+  FastAPI, servicios de aplicación y persistencia SQLite.
+- La trazabilidad por caso se conserva en los README de diseño y desarrollo.

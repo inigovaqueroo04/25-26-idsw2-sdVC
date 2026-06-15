@@ -49,7 +49,8 @@ app/
 - `definirLocalizacion()`: guarda una localizacion textual opcional para la tarea.
 - `configurarRecordatorio()`: guarda un recordatorio simple en minutos.
 
-No se han implementado todavia notificaciones reales ni mapas/rutas.
+El prototipo mantiene localizacion textual y recordatorios simples dentro de la
+propia tarea.
 
 ## Inicializar la base de datos
 
@@ -99,10 +100,9 @@ El usuario de prueba pertenece a:
 - `Casa Breñosa` como `Administrador`.
 - `Proyecto Universidad` como `Miembro Administrador`.
 
-## Pendiente para siguientes iteraciones
+## Alcance del prototipo
 
-- Planificacion avanzada.
-- Notificaciones reales de recordatorio.
-- Resolucion guiada de conflictos horarios, subtareas y tipos avanzados de relaciones.
-- Seguridad de sesion mas robusta y persistente.
-- Pruebas automatizadas de backend y frontend.
+- Sesion, grupos, invitaciones, miembros, tareas y planificacion basica.
+- Persistencia SQLite con datos iniciales para demostracion.
+- Quedan fuera las notificaciones externas, mapas/rutas, subtareas y seguridad
+  avanzada de sesion.
