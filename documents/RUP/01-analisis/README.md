@@ -1,6 +1,6 @@
 # 01-analisis
 
-Analisis de casos de uso siguiendo la estructura de referencia de PySigHor.
+Analisis de casos de uso 
 
 Desde este indice se accede a cada caso de uso. Cada README de caso contiene
 el analisis textual y sus diagramas correspondientes:
