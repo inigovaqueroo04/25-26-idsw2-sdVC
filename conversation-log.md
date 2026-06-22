@@ -735,3 +735,13 @@
 **Resultado:** Se contrastaron los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `completarGestion()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-sesion/completarGestion/secuencia.puml` para eliminar ramas de error, validaciones no descritas y referencias concretas a usuario o estado no trazadas como pasos del analisis. Se regenero `secuencia.svg`.
 
 **Decision:** El diseno mantiene el flujo funcional del analisis y lo expresa solo como reparto conceptual de responsabilidades. Con este ajuste queda revisado el bloque de gestion de sesion y navegacion sin modificar `src`.
+
+---
+
+## [2026-06-22 20:33] Revision de trazabilidad de diseno: abrirGrupos()
+
+**Prompt:** El usuario recordo que la revision debe avanzar estrictamente uno a uno; si se agrupan varios casos, el conversation log debe dejar una evidencia temporal real de al menos 3 minutos entre avances. A continuacion pidio `siguiente`.
+
+**Resultado:** Se reviso un unico caso: `abrirGrupos()`. Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` con el diagrama de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-grupos/abrirGrupos/secuencia.puml` para retirar ramas de validacion, referencias concretas a `Usuario`, `Grupo` y `MiembroGrupo`, y pasos no trazados en el analisis. Se regenero `secuencia.svg`.
+
+**Decision:** A partir de este punto cada `siguiente` se tratara como un unico caso de uso. El diseno de `abrirGrupos()` queda como reparto conceptual de responsabilidades manteniendo el flujo lineal del analisis. No se modifico `src`.
