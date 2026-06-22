@@ -755,3 +755,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `crearGrupo()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-grupos/crearGrupo/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Usuario`, `Grupo` y `MiembroGrupo` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
 
 **Decision:** El diseno mantiene la misma secuencia funcional del analisis y solo distribuye responsabilidades conceptuales entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-22 20:46] Revision de trazabilidad de diseno: editarGrupo()
+
+**Prompt:** Se continuo la revision incremental de los diagramas de diseno del modulo de gestion de grupos y usuarios, tomando `editarGrupo()` como siguiente caso individual.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `editarGrupo()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-grupos/editarGrupo/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Grupo`, `MiembroGrupo` y `Usuario` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
