@@ -725,3 +725,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `cerrarSesion()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-sesion/cerrarSesion/secuencia.puml` para retirar validaciones alternativas, referencias concretas a `Usuario`/`Sesion` y pasos no presentes en el analisis. Se regenero `secuencia.svg` desde el PUML corregido.
 
 **Decision:** El diseno queda alineado con el flujo lineal del analisis y solo reparte responsabilidades conceptuales entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-22 20:29] Revision de trazabilidad de diseno: completarGestion()
+
+**Prompt:** Se continuo con el bloque de gestion de sesion y navegacion, revisando `completarGestion()` con el mismo criterio aplicado a los casos anteriores.
+
+**Resultado:** Se contrastaron los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `completarGestion()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-sesion/completarGestion/secuencia.puml` para eliminar ramas de error, validaciones no descritas y referencias concretas a usuario o estado no trazadas como pasos del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno mantiene el flujo funcional del analisis y lo expresa solo como reparto conceptual de responsabilidades. Con este ajuste queda revisado el bloque de gestion de sesion y navegacion sin modificar `src`.
