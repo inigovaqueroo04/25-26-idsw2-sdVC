@@ -705,3 +705,13 @@
 **Resultado:** `documents/RUP/01-analisis/README.md` ahora muestra los diagramas generales de SdR y una galeria por caso de uso con colaboracion y secuencia de analisis. `documents/RUP/02-diseño/README.md` y `documents/RUP/02-diseño/casos-uso/README.md` muestran la arquitectura, el modelo de clases y las secuencias de diseno de los 24 casos sin obligar a navegar carpeta por carpeta.
 
 **Decision:** Se duplica de forma intencionada la visualizacion de diagramas en indices y README de caso para favorecer la lectura en GitHub. Los archivos fuente `.puml` y los README detallados siguen siendo la fuente documental de cada caso; las galerias son una capa de acceso rapido para evaluacion.
+
+---
+
+## [2026-06-22 20:02] Revision de trazabilidad de diseno: iniciarSesion()
+
+**Prompt:** El usuario pidio continuar la revision de diagramas caso a caso, corrigiendo los diagramas de diseno para que sean fieles al analisis y manteniendo las entradas correspondientes en el conversation log.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `iniciarSesion()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-sesion/iniciarSesion/secuencia.puml` para eliminar ramas de validacion, entidades concretas y referencias a `Usuario`/`Sesion` que no estaban justificadas por el analisis. Se regenero `secuencia.svg` desde el PUML actualizado.
+
+**Decision:** El diseno conserva el mismo flujo del analisis: solicitud, coordinacion del caso, consulta o modificacion conceptual del dominio, resultado, respuesta y presentacion. Las responsabilidades de diseno se mantienen en nivel conceptual mediante interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
