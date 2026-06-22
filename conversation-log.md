@@ -715,3 +715,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `iniciarSesion()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-sesion/iniciarSesion/secuencia.puml` para eliminar ramas de validacion, entidades concretas y referencias a `Usuario`/`Sesion` que no estaban justificadas por el analisis. Se regenero `secuencia.svg` desde el PUML actualizado.
 
 **Decision:** El diseno conserva el mismo flujo del analisis: solicitud, coordinacion del caso, consulta o modificacion conceptual del dominio, resultado, respuesta y presentacion. Las responsabilidades de diseno se mantienen en nivel conceptual mediante interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-22 20:28] Revision de trazabilidad de diseno: cerrarSesion()
+
+**Prompt:** Tras cerrar y subir el ajuste de `iniciarSesion()`, el usuario pidio continuar con la revision caso a caso de los diagramas de diseno frente a los de analisis.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `cerrarSesion()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-sesion/cerrarSesion/secuencia.puml` para retirar validaciones alternativas, referencias concretas a `Usuario`/`Sesion` y pasos no presentes en el analisis. Se regenero `secuencia.svg` desde el PUML corregido.
+
+**Decision:** El diseno queda alineado con el flujo lineal del analisis y solo reparte responsabilidades conceptuales entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
