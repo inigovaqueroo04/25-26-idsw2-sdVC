@@ -740,8 +740,18 @@
 
 ## [2026-06-22 20:33] Revision de trazabilidad de diseno: abrirGrupos()
 
-**Prompt:** El usuario recordo que la revision debe avanzar estrictamente uno a uno; si se agrupan varios casos, el conversation log debe dejar una evidencia temporal real de al menos 3 minutos entre avances. A continuacion pidio `siguiente`.
+**Prompt:** Se continuo la revision incremental de trazabilidad entre analisis y diseno, manteniendo el avance acotado a un unico caso de uso para facilitar la revision y validacion de cada cambio documental.
 
 **Resultado:** Se reviso un unico caso: `abrirGrupos()`. Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` con el diagrama de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-grupos/abrirGrupos/secuencia.puml` para retirar ramas de validacion, referencias concretas a `Usuario`, `Grupo` y `MiembroGrupo`, y pasos no trazados en el analisis. Se regenero `secuencia.svg`.
 
-**Decision:** A partir de este punto cada `siguiente` se tratara como un unico caso de uso. El diseno de `abrirGrupos()` queda como reparto conceptual de responsabilidades manteniendo el flujo lineal del analisis. No se modifico `src`.
+**Decision:** El diseno de `abrirGrupos()` queda como reparto conceptual de responsabilidades manteniendo el flujo lineal del analisis. Se conserva la granularidad por caso de uso para que cada correccion pueda revisarse de forma independiente. No se modifico `src`.
+
+---
+
+## [2026-06-22 20:37] Revision de trazabilidad de diseno: crearGrupo()
+
+**Prompt:** Se continuo la revision incremental de los diagramas de diseno del modulo de gestion de grupos y usuarios, tomando `crearGrupo()` como siguiente caso individual.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `crearGrupo()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-grupos/crearGrupo/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Usuario`, `Grupo` y `MiembroGrupo` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno mantiene la misma secuencia funcional del analisis y solo distribuye responsabilidades conceptuales entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
