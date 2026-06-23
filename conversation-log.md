@@ -825,3 +825,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `editarInvitacion()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-grupos/editarInvitacion/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Invitacion`, `Usuario`, `Grupo` y `MiembroGrupo` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
 
 **Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-23 17:07] Revision de trazabilidad de diseno: abrirTareas()
+
+**Prompt:** Se inicio la revision incremental de los diagramas de diseno del modulo de gestion de tareas, tomando `abrirTareas()` como siguiente caso individual.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `abrirTareas()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-tareas/abrirTareas/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `Grupo`, `MiembroGrupo`, `Usuario` y `EstadoAplicacion` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
