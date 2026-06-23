@@ -885,3 +885,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `marcarCompletada()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-tareas/marcarCompletada/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `Usuario` y `MiembroGrupo` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
 
 **Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-23 17:36] Revision de trazabilidad de diseno: validarConflicto()
+
+**Prompt:** Se continuo la revision incremental de los diagramas de diseno del modulo de gestion de tareas, tomando `validarConflicto()` como siguiente caso individual.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `validarConflicto()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-tareas/validarConflicto/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `Horario`, `ConflictoHorario` y `Usuario` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
