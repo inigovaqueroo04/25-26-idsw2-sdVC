@@ -895,3 +895,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `validarConflicto()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-tareas/validarConflicto/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `Horario`, `ConflictoHorario` y `Usuario` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
 
 **Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-23 17:50] Revision de trazabilidad de diseno: abrirPlanificacion()
+
+**Prompt:** Se inicio la revision incremental de los diagramas de diseno del modulo de planificacion y configuracion, tomando `abrirPlanificacion()` como siguiente caso individual.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `abrirPlanificacion()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/planificacion-configuracion/abrirPlanificacion/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `Horario`, `Grupo`, `Usuario` y `EstadoAplicacion` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
