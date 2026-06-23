@@ -795,3 +795,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `editarMiembro()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-grupos/editarMiembro/secuencia.puml` para retirar ramas de validacion y referencias concretas a `MiembroGrupo`, `Usuario` y `Grupo` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
 
 **Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-23 16:48] Revision de trazabilidad de diseno: eliminarMiembro()
+
+**Prompt:** Se continuo la revision incremental de los diagramas de diseno del modulo de gestion de grupos y usuarios, tomando `eliminarMiembro()` como siguiente caso individual.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `eliminarMiembro()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-grupos/eliminarMiembro/secuencia.puml` para retirar ramas de validacion y referencias concretas a `MiembroGrupo`, `Grupo`, `Usuario` y `Tarea` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
