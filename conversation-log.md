@@ -865,3 +865,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `relacionarTareas()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-tareas/relacionarTareas/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `RelacionTareas` y `Grupo` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
 
 **Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-23 17:23] Revision de trazabilidad de diseno: eliminarTarea()
+
+**Prompt:** Se continuo la revision incremental de los diagramas de diseno del modulo de gestion de tareas, tomando `eliminarTarea()` como siguiente caso individual.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `eliminarTarea()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/gestion-tareas/eliminarTarea/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `RelacionTareas`, `Recordatorio` y `ConflictoHorario` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
