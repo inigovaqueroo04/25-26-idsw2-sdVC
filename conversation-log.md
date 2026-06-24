@@ -935,3 +935,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `configurarRecordatorio()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/planificacion-configuracion/configurarRecordatorio/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `Recordatorio` y `Horario` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
 
 **Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-24 19:34] Revision de trazabilidad de diseno: asignarTareaAUsuario()
+
+**Prompt:** Se completo la revision incremental de los diagramas de diseno del modulo de planificacion y configuracion, tomando `asignarTareaAUsuario()` como siguiente caso individual.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `asignarTareaAUsuario()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/planificacion-configuracion/asignarTareaAUsuario/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `Usuario`, `MiembroGrupo`, `Grupo` y `ConflictoHorario` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
