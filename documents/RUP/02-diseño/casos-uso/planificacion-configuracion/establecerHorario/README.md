@@ -1,122 +1,111 @@
-# establecerHorario() > Diseño
+# establecerHorario() > Diseno
 
-## Información del artefacto
+## Informacion del artefacto
 
 | Campo | Valor |
 | --- | --- |
-| Proyecto | BreñoTask |
-| Fase RUP | Elaboración |
-| Disciplina | Diseño |
-| Versión | 1.0 |
+| Proyecto | BrenoTask |
+| Fase RUP | Elaboracion |
+| Disciplina | Diseno |
+| Version | 1.1 |
 | Autor | Equipo de desarrollo |
 | Caso de uso relacionado | establecerHorario() |
-| Módulo funcional | Planificación y configuración |
+| Modulo funcional | Planificacion y configuracion |
 
-## Propósito
+## Proposito
 
-Diseñar la asignación o modificación de horario para una tarea.
+Documentar el diseno conceptual de establecerHorario() manteniendo trazabilidad directa con los diagramas de analisis. Este artefacto no introduce entidades concretas, ramas alternativas ni validaciones que no esten representadas en el analisis del caso.
 
-## Participantes de diseño
+## Participantes de diseno
 
 | Participante | Tipo | Responsabilidad |
 | --- | --- | --- |
-| Usuario | Actor | Inicia el caso de uso y recibe el resultado funcional. |
-| Interfaz de usuario | Límite conceptual | Recoge datos, muestra validaciones y presenta el resultado. |
-| Coordinador del caso de uso | Control | Ordena el flujo de establecerHorario() y decide qué servicio invocar. |
-| Servicio de aplicación | Aplicación | Ejecuta la operación de diseño y coordina persistencia, dominio y estado. |
-| Servicio de dominio | Dominio | Aplica reglas, permisos y validaciones del modelo. |
-| Repositorio conceptual / persistencia conceptual | Persistencia conceptual | Consulta o registra los datos necesarios sin fijar tecnología. |
-| Estado de aplicación o sesión | Estado | Mantiene el estado navegacional y operativo afectado por el caso. |
-| Entidades de dominio implicadas | Dominio | Tarea, Horario, ConflictoHorario. |
+| Actor SdR | Actor | Inicia el caso de uso y recibe el resultado. |
+| Interfaz | Limite conceptual | Recibe la solicitud y presenta la respuesta. |
+| CoordinadorEstablecerHorario | Control | Coordina el caso de uso y delega en servicios conceptuales. |
+| ServicioAplicacion | Aplicacion | Ordena la responsabilidad de aplicacion sin fijar tecnologia. |
+| ServicioDominio | Dominio | Representa la consulta o modificacion del dominio indicada por analisis. |
+| PersistenciaConceptual | Persistencia conceptual | Representa el acceso conceptual a persistencia sin concretar repositorios reales. |
+| EstadoAplicacion | Estado | Representa el estado de aplicacion usado como soporte conceptual. |
 
-## Decisiones de diseño
+## Decisiones de diseno
 
-- Datos necesarios: tarea seleccionada, fecha, hora de inicio y hora de fin.
-- Entidades afectadas: Tarea, Horario, ConflictoHorario.
-- Cambios de estado: PLANIFICACION_ABIERTO, TAREA_ABIERTO.
-- Relación con otros casos de uso: el caso se integra dentro del módulo Planificación y configuración y respeta las transiciones definidas en análisis.
-- Decisión específica: Guardar horario dispara validación conceptual de conflictos sin bloquear necesariamente la tarea.
-- Aspectos pendientes para implementación: concretar componentes, almacenamiento y mecanismo técnico sin cambiar la responsabilidad conceptual diseñada.
+- Se conserva el orden de interaccion definido por la secuencia de analisis.
+- Se mantiene la separacion entre limite, control y dominio indicada por la colaboracion de analisis.
+- No se modelan ramas `alt/else` porque el analisis solo fija el flujo principal.
+- No se anclan entidades concretas si no aparecen como colaboraciones del analisis.
+- El detalle de validaciones, permisos, almacenamiento y reglas concretas queda para especificaciones auxiliares o implementacion.
 
-## Flujo de diseño
+## Flujo de diseno
 
-1. El usuario solicita establecerHorario() desde la interfaz.
-2. La interfaz recoge los datos necesarios y los entrega al coordinador del caso de uso.
-3. El coordinador invoca el servicio de aplicación correspondiente.
-4. El servicio de aplicación solicita al servicio de dominio la validación de reglas, permisos y consistencia.
-5. El servicio de dominio consulta el repositorio conceptual o el estado de aplicación cuando necesita datos previos.
-6. Si las validaciones son correctas, el servicio de aplicación registra los cambios conceptuales y actualiza los estados afectados.
-7. La interfaz presenta el resultado al usuario.
-8. Si aparece un error funcional, se informa sin aplicar cambios no válidos.
+1. Actor SdR solicita establecerHorario() en la interfaz.
+2. Interfaz delega la coordinacion del caso de uso.
+3. CoordinadorEstablecerHorario coordina la responsabilidad de aplicacion.
+4. ServicioAplicacion consulta o modifica el dominio mediante ServicioDominio.
+5. ServicioDominio accede a PersistenciaConceptual.
+6. PersistenciaConceptual usa EstadoAplicacion como soporte conceptual.
+7. EstadoAplicacion devuelve resultado.
+8. PersistenciaConceptual devuelve resultado al dominio.
+9. ServicioDominio devuelve resultado de dominio.
+10. ServicioAplicacion devuelve resultado al coordinador.
+11. CoordinadorEstablecerHorario devuelve respuesta a la interfaz.
+12. Interfaz presenta resultado al Actor SdR.
 
 ## Estados afectados
 
-PLANIFICACION_ABIERTO, TAREA_ABIERTO
+- Estado origen SdR.
+- Estado destino SdR.
+- EstadoAplicacion como abstraccion conceptual de soporte en diseno.
 
 ## Validaciones
 
-- La tarea debe existir.
-- La hora de inicio debe ser anterior a la hora de fin.
-- La fecha debe ser válida.
-- El usuario debe poder modificar la tarea.
+No se detallan validaciones concretas en este diagrama de diseno para mantener la trazabilidad directa con el analisis.
 
 ## Excepciones o errores
 
-- Tarea inexistente.
-- Horario inválido.
-- Permisos insuficientes.
-- Fallo al guardar horario.
+No se modelan ramas de error en la secuencia de diseno porque el analisis revisado solo establece el flujo principal.
 
 ## Resultado esperado
 
-La tarea queda con horario actualizado y preparada para reevaluar conflictos.
+El Actor SdR recibe una respuesta coherente con el resultado conceptual del caso de uso.
 
 ## Trazabilidad
 
-| Elemento de análisis usado | Decisión de diseño derivada | Entidad o módulo afectado | Estado |
+| Elemento de analisis usado | Decision de diseno derivada | Elemento de diseno afectado | Estado |
 | --- | --- | --- | --- |
-| [README de análisis](../../../../01-analisis/casos-uso/planificacion-configuracion/establecerHorario/README.md) | Convertir el comportamiento funcional en colaboración entre interfaz, coordinador y servicios conceptuales. | Planificación y configuración | diseñado |
-| [Diagrama de colaboración](../../../../01-analisis/casos-uso/planificacion-configuracion/establecerHorario/colaboracion.puml) | Mantener separación entre límite, control y dominio sin fijar tecnología. | CoordinadorEstablecerHorario, ServicioAplicacion, ServicioDominio | diseñado |
-| [Secuencia de análisis](../../../../01-analisis/casos-uso/planificacion-configuracion/establecerHorario/secuencia.puml) | Preservar orden de interacción y estados principales. | EstadoAplicacion, Tarea, Horario, ConflictoHorario | diseñado |
-| Revisión previa al diseño | Aplicar criterios transversales de permisos, estados y consistencia. | Modelo de dominio de diseño | diseñado |
+| [README de analisis](../../../../01-analisis/casos-uso/planificacion-configuracion/establecerHorario/README.md) | Mantener el alcance funcional del caso sin anadir detalles no trazados. | Planificacion y configuracion | disenado |
+| [Diagrama de colaboracion](../../../../01-analisis/casos-uso/planificacion-configuracion/establecerHorario/colaboracion.puml) | Preservar la separacion entre vista, control y dominio. | Interfaz, CoordinadorEstablecerHorario, ServicioAplicacion, ServicioDominio | disenado |
+| [Secuencia de analisis](../../../../01-analisis/casos-uso/planificacion-configuracion/establecerHorario/secuencia.puml) | Preservar el orden principal de interaccion. | secuencia.puml, secuencia.svg | disenado |
+| Revision integral de trazabilidad | Retirar ramas y concreciones no presentes en analisis. | PersistenciaConceptual, EstadoAplicacion | revisado |
 
-## PlantUML del flujo de diseño
+## PlantUML del flujo de diseno
 
-![Secuencia de diseño de establecerHorario()](./secuencia.svg)
+![Secuencia de diseno de establecerHorario()](./secuencia.svg)
 
 ```plantuml
 @startuml establecerHorario-diseno-secuencia
-title Diseño conceptual: establecerHorario()
+title Diseno conceptual: establecerHorario()
 
-actor "Usuario" as Usuario
+actor "Actor SdR" as Actor
 participant "Interfaz" as Interfaz
 participant "CoordinadorEstablecerHorario" as Coordinador
 participant "ServicioAplicacion" as ServicioAplicacion
 participant "ServicioDominio" as ServicioDominio
-database "RepositorioConceptual" as Repositorio
 participant "EstadoAplicacion" as EstadoAplicacion
+database "PersistenciaConceptual" as Persistencia
 
-Usuario -> Interfaz : solicita establecerHorario()
-Interfaz -> Coordinador : enviar datos de entrada
-Coordinador -> ServicioAplicacion : ejecutar establecerHorario()
-ServicioAplicacion -> ServicioDominio : validar reglas del caso
-ServicioDominio -> Repositorio : consultar Tarea, Horario, ConflictoHorario
-Repositorio --> ServicioDominio : datos conceptuales
-
-alt validaciones correctas
-  ServicioDominio --> ServicioAplicacion : resultado de dominio
-  ServicioAplicacion -> Repositorio : registrar cambios conceptuales
-  ServicioAplicacion -> EstadoAplicacion : actualizar estados afectados
-  EstadoAplicacion --> ServicioAplicacion : estado actualizado
-  ServicioAplicacion --> Coordinador : resultado correcto
-  Coordinador --> Interfaz : preparar respuesta
-  Interfaz --> Usuario : mostrar resultado esperado
-else error funcional
-  ServicioDominio --> ServicioAplicacion : error de validacion
-  ServicioAplicacion --> Coordinador : resultado rechazado
-  Coordinador --> Interfaz : preparar mensaje de error
-  Interfaz --> Usuario : mostrar error sin cambios no validos
-end
+Actor -> Interfaz : 1: solicita establecerHorario()
+Interfaz -> Coordinador : 2: coordinarCasoUso()
+Coordinador -> ServicioAplicacion : 3: coordinar responsabilidad de aplicacion
+ServicioAplicacion -> ServicioDominio : 4: consultarOModificarDominio()
+ServicioDominio -> Persistencia : 5: acceder a persistencia conceptual
+Persistencia -> EstadoAplicacion : 6: usa estado de aplicacion
+EstadoAplicacion --> Persistencia : 7: resultado
+Persistencia --> ServicioDominio : 8: resultado
+ServicioDominio --> ServicioAplicacion : 9: resultado de dominio
+ServicioAplicacion --> Coordinador : 10: resultado
+Coordinador --> Interfaz : 11: respuesta
+Interfaz --> Actor : 12: presenta resultado
 
 @enduml
 ```
