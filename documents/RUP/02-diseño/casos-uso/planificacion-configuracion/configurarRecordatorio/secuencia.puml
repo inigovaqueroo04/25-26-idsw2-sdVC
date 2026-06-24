@@ -1,34 +1,25 @@
 @startuml configurarRecordatorio-diseno-secuencia
-title Diseño conceptual: configurarRecordatorio()
+title Diseno conceptual: configurarRecordatorio()
 
-actor "Usuario" as Usuario
+actor "Actor SdR" as Actor
 participant "Interfaz" as Interfaz
 participant "CoordinadorConfigurarRecordatorio" as Coordinador
 participant "ServicioAplicacion" as ServicioAplicacion
 participant "ServicioDominio" as ServicioDominio
-database "RepositorioConceptual" as Repositorio
 participant "EstadoAplicacion" as EstadoAplicacion
+database "PersistenciaConceptual" as Persistencia
 
-Usuario -> Interfaz : solicita configurarRecordatorio()
-Interfaz -> Coordinador : enviar datos de entrada
-Coordinador -> ServicioAplicacion : ejecutar configurarRecordatorio()
-ServicioAplicacion -> ServicioDominio : validar reglas del caso
-ServicioDominio -> Repositorio : consultar Tarea, Recordatorio, Horario
-Repositorio --> ServicioDominio : datos conceptuales
-
-alt validaciones correctas
-  ServicioDominio --> ServicioAplicacion : resultado de dominio
-  ServicioAplicacion -> Repositorio : registrar cambios conceptuales
-  ServicioAplicacion -> EstadoAplicacion : actualizar estados afectados
-  EstadoAplicacion --> ServicioAplicacion : estado actualizado
-  ServicioAplicacion --> Coordinador : resultado correcto
-  Coordinador --> Interfaz : preparar respuesta
-  Interfaz --> Usuario : mostrar resultado esperado
-else error funcional
-  ServicioDominio --> ServicioAplicacion : error de validacion
-  ServicioAplicacion --> Coordinador : resultado rechazado
-  Coordinador --> Interfaz : preparar mensaje de error
-  Interfaz --> Usuario : mostrar error sin cambios no validos
-end
+Actor -> Interfaz : 1: solicita configurarRecordatorio()
+Interfaz -> Coordinador : 2: coordinarCasoUso()
+Coordinador -> ServicioAplicacion : 3: coordinar responsabilidad de aplicacion
+ServicioAplicacion -> ServicioDominio : 4: consultarOModificarDominio()
+ServicioDominio -> Persistencia : 5: acceder a persistencia conceptual
+Persistencia -> EstadoAplicacion : 6: usa estado de aplicacion
+EstadoAplicacion --> Persistencia : 7: resultado
+Persistencia --> ServicioDominio : 8: resultado
+ServicioDominio --> ServicioAplicacion : 9: resultado de dominio
+ServicioAplicacion --> Coordinador : 10: resultado
+Coordinador --> Interfaz : 11: respuesta
+Interfaz --> Actor : 12: presenta resultado
 
 @enduml
