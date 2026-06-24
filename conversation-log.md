@@ -915,3 +915,13 @@
 **Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `establecerHorario()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/planificacion-configuracion/establecerHorario/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea`, `Horario` y `ConflictoHorario` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
 
 **Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
+
+---
+
+## [2026-06-24 19:19] Revision de trazabilidad de diseno: definirLocalizacion()
+
+**Prompt:** Se continuo la revision incremental de los diagramas de diseno del modulo de planificacion y configuracion, tomando `definirLocalizacion()` como siguiente caso individual.
+
+**Resultado:** Se compararon los diagramas de analisis `secuencia.puml` y `colaboracion.puml` de `definirLocalizacion()` con su secuencia de diseno. Se corrigio `documents/RUP/02-diseño/casos-uso/planificacion-configuracion/definirLocalizacion/secuencia.puml` para retirar ramas de validacion y referencias concretas a `Tarea` y `Localizacion` que no aparecen como colaboraciones del analisis. Se regenero `secuencia.svg`.
+
+**Decision:** El diseno conserva el flujo funcional del analisis y lo expresa como reparto conceptual de responsabilidades entre interfaz, coordinador, servicios, estado de aplicacion y persistencia conceptual. No se modifico `src`.
